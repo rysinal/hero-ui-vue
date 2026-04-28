@@ -13,3 +13,11 @@ export * from './components/separator'
 export * from './components/spinner'
 export * from './components/kbd'
 export * from './components/close-button'
+
+// Form Components (Tier 2)
+export * from './components/input'
+export * from './components/checkbox'
+export * from './components/radio'
+export * from './components/radio-group'
+export * from './components/switch'
+export * from './components/textarea'
