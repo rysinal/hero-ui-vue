@@ -1,6 +1,8 @@
-// Export all component variants
-// export * from './components/button';
-// export * from './components/link';
-// etc.
+// Re-export tailwind-variants for convenience
+export { tv, cn, type VariantProps } from 'tailwind-variants'
 
-export const version = '0.0.1';
+// Export utility classes
+export * from './utils'
+
+// Export all component variants
+export * from './components'
