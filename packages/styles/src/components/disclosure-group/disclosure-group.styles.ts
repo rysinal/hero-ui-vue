@@ -1,13 +1,13 @@
-import type {VariantProps} from 'tailwind-variants';
+import type { VariantProps } from 'tailwind-variants'
 
-import {tv} from 'tailwind-variants';
+import { tv } from 'tailwind-variants'
 
 export const disclosureGroupVariants = tv({
   defaultVariants: {},
   slots: {
-    base: "disclosure-group",
+    base: 'disclosure-group',
   },
   variants: {},
-});
+})
 
-export type DisclosureGroupVariants = VariantProps<typeof disclosureGroupVariants>;
+export type DisclosureGroupVariants = VariantProps<typeof disclosureGroupVariants>

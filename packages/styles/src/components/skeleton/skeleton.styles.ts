@@ -1,21 +1,21 @@
-import type {VariantProps} from 'tailwind-variants';
+import type { VariantProps } from 'tailwind-variants'
 
-import {tv} from 'tailwind-variants';
+import { tv } from 'tailwind-variants'
 
 export const skeletonVariants = tv({
   defaultVariants: {
-    animationType: "shimmer",
+    animationType: 'shimmer',
   },
   slots: {
-    base: "skeleton",
+    base: 'skeleton',
   },
   variants: {
     animationType: {
-      none: "skeleton--none",
-      pulse: "skeleton--pulse",
-      shimmer: "skeleton--shimmer",
+      none: 'skeleton--none',
+      pulse: 'skeleton--pulse',
+      shimmer: 'skeleton--shimmer',
     },
   },
-});
+})
 
-export type SkeletonVariants = VariantProps<typeof skeletonVariants>;
+export type SkeletonVariants = VariantProps<typeof skeletonVariants>

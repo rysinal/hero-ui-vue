@@ -1,37 +1,37 @@
-import type {VariantProps} from 'tailwind-variants';
+import type { VariantProps } from 'tailwind-variants'
 
-import {tv} from 'tailwind-variants';
+import { tv } from 'tailwind-variants'
 
 export const tagVariants = tv({
   defaultVariants: {
-    size: "md",
-    variant: "default",
+    size: 'md',
+    variant: 'default',
   },
   slots: {
-    base: "tag",
-    removeButton: "tag__remove-button",
+    base: 'tag',
+    removeButton: 'tag__remove-button',
   },
   variants: {
     size: {
       lg: {
-        base: "tag--lg",
+        base: 'tag--lg',
       },
       md: {
-        base: "tag--md",
+        base: 'tag--md',
       },
       sm: {
-        base: "tag--sm",
+        base: 'tag--sm',
       },
     },
     variant: {
       default: {
-        base: "tag--default",
+        base: 'tag--default',
       },
       surface: {
-        base: "tag--surface",
+        base: 'tag--surface',
       },
     },
   },
-});
+})
 
-export type TagVariants = VariantProps<typeof tagVariants>;
+export type TagVariants = VariantProps<typeof tagVariants>

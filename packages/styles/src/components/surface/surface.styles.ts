@@ -1,20 +1,20 @@
-import type {VariantProps} from 'tailwind-variants';
+import type { VariantProps } from 'tailwind-variants'
 
-import {tv} from 'tailwind-variants';
+import { tv } from 'tailwind-variants'
 
 export const surfaceVariants = tv({
-  base: "surface",
+  base: 'surface',
   defaultVariants: {
-    variant: "default",
+    variant: 'default',
   },
   variants: {
     variant: {
-      default: "surface--default",
-      secondary: "surface--secondary",
-      tertiary: "surface--tertiary",
-      transparent: "surface--transparent",
+      default: 'surface--default',
+      secondary: 'surface--secondary',
+      tertiary: 'surface--tertiary',
+      transparent: 'surface--transparent',
     },
   },
-});
+})
 
-export type SurfaceVariants = VariantProps<typeof surfaceVariants>;
+export type SurfaceVariants = VariantProps<typeof surfaceVariants>

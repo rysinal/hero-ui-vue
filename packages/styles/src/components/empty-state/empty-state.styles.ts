@@ -1,9 +1,9 @@
-import type {VariantProps} from 'tailwind-variants';
+import type { VariantProps } from 'tailwind-variants'
 
-import {tv} from 'tailwind-variants';
+import { tv } from 'tailwind-variants'
 
 export const emptyStateVariants = tv({
-  base: "empty-state",
-});
+  base: 'empty-state',
+})
 
-export type EmptyStateVariants = VariantProps<typeof emptyStateVariants>;
+export type EmptyStateVariants = VariantProps<typeof emptyStateVariants>

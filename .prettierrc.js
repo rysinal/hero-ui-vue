@@ -1,10 +1,8 @@
-module.exports = {
-  semi: true,
+export default {
+  semi: false,
   singleQuote: true,
-  tabWidth: 2,
-  trailingComma: 'es5',
+  trailingComma: 'all',
   printWidth: 100,
-  arrowParens: 'always',
-  endOfLine: 'lf',
-  vueIndentScriptAndStyle: false,
-};
+  tabWidth: 2,
+  arrowParens: 'avoid',
+}

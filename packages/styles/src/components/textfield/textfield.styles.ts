@@ -1,18 +1,18 @@
-import type {VariantProps} from 'tailwind-variants';
+import type { VariantProps } from 'tailwind-variants'
 
-import {tv} from 'tailwind-variants';
+import { tv } from 'tailwind-variants'
 
 export const textFieldVariants = tv({
-  base: "textfield",
+  base: 'textfield',
   defaultVariants: {
     fullWidth: false,
   },
   variants: {
     fullWidth: {
-      false: "",
-      true: "textfield--full-width",
+      false: '',
+      true: 'textfield--full-width',
     },
   },
-});
+})
 
-export type TextFieldVariants = VariantProps<typeof textFieldVariants>;
+export type TextFieldVariants = VariantProps<typeof textFieldVariants>

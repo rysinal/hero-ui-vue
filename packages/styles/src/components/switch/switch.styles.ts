@@ -1,31 +1,31 @@
-import type {VariantProps} from 'tailwind-variants';
+import type { VariantProps } from 'tailwind-variants'
 
-import {tv} from 'tailwind-variants';
+import { tv } from 'tailwind-variants'
 
 export const switchVariants = tv({
   defaultVariants: {
-    size: "md",
+    size: 'md',
   },
   slots: {
-    base: "switch",
-    content: "switch__content",
-    control: "switch__control",
-    icon: "switch__icon",
-    thumb: "switch__thumb",
+    base: 'switch',
+    content: 'switch__content',
+    control: 'switch__control',
+    icon: 'switch__icon',
+    thumb: 'switch__thumb',
   },
   variants: {
     size: {
       lg: {
-        base: "switch--lg",
+        base: 'switch--lg',
       },
       md: {
-        base: "switch--md",
+        base: 'switch--md',
       },
       sm: {
-        base: "switch--sm",
+        base: 'switch--sm',
       },
     },
   },
-});
+})
 
-export type SwitchVariants = VariantProps<typeof switchVariants>;
+export type SwitchVariants = VariantProps<typeof switchVariants>

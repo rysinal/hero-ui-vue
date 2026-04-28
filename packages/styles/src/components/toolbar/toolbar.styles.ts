@@ -1,23 +1,23 @@
-import type {VariantProps} from 'tailwind-variants';
+import type { VariantProps } from 'tailwind-variants'
 
-import {tv} from 'tailwind-variants';
+import { tv } from 'tailwind-variants'
 
 const toolbarVariants = tv({
-  base: "toolbar",
+  base: 'toolbar',
   defaultVariants: {
     isAttached: false,
-    orientation: "horizontal",
+    orientation: 'horizontal',
   },
   variants: {
     isAttached: {
-      true: "toolbar--attached",
+      true: 'toolbar--attached',
     },
     orientation: {
-      horizontal: "toolbar--horizontal",
-      vertical: "toolbar--vertical",
+      horizontal: 'toolbar--horizontal',
+      vertical: 'toolbar--vertical',
     },
   },
-});
+})
 
-export {toolbarVariants};
-export type ToolbarVariants = VariantProps<typeof toolbarVariants>;
+export { toolbarVariants }
+export type ToolbarVariants = VariantProps<typeof toolbarVariants>
