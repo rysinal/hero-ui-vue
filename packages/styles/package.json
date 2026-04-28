@@ -1,0 +1,39 @@
+{
+  "name": "@heroui-vue/styles",
+  "version": "0.0.1",
+  "description": "Styles for HeroUI Vue components",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./dist/index.d.ts"
+    },
+    "./components/*": {
+      "import": "./src/components/*/index.ts"
+    },
+    "./styles.css": "./src/styles.css"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "tailwind-variants": "^3.2.2"
+  },
+  "devDependencies": {
+    "@heroui-vue/standard": "workspace:*",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.8.3"
+  },
+  "peerDependencies": {
+    "tailwindcss": ">=4.0.0"
+  }
+}

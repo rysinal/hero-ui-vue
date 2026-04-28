@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+/* Base styles */
+@layer base {
+  :root {
+    /* Color tokens will be defined here */
+  }
+}
+
+/* Component styles will be imported here */
+/* @import "./components/button.css"; */
+/* @import "./components/link.css"; */

@@ -1,0 +1,22 @@
+{
+  "name": "@heroui-vue/standard",
+  "version": "0.0.1",
+  "description": "Shared configurations for HeroUI Vue",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "./eslint": "./eslint.config.js",
+    "./tsconfig": "./tsconfig.base.json"
+  },
+  "files": [
+    "eslint.config.js",
+    "tsconfig.base.json"
+  ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "@typescript-eslint/parser": "^8.18.2",
+    "eslint": "^9.17.0",
+    "eslint-plugin-vue": "^9.31.0",
+    "typescript": "^5.8.3"
+  }
+}

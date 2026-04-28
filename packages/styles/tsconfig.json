@@ -1,0 +1,9 @@
+{
+  "extends": "@heroui-vue/standard/tsconfig",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
