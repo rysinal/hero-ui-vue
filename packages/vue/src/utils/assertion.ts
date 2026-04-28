@@ -1,0 +1,35 @@
+export type Dict<T = any> = Record<string, T>
+
+export function isArray<T>(value: any): value is Array<T> {
+  return Array.isArray(value)
+}
+
+export function isEmptyArray(value: any) {
+  return isArray(value) && value.length === 0
+}
+
+export function isObject(value: any): value is Dict {
+  const type = typeof value
+
+  return value != null && type === 'object' && !isArray(value)
+}
+
+export function isEmptyObject(value: any) {
+  return isObject(value) && Object.keys(value).length === 0
+}
+
+export function isEmpty(value: any): boolean {
+  if (isArray(value)) return isEmptyArray(value)
+  if (isObject(value)) return isEmptyObject(value)
+  if (value == null || value === '') return true
+
+  return false
+}
+
+export type Booleanish = boolean | 'true' | 'false'
+
+export const dataAttr = (condition: boolean | undefined) =>
+  (condition ? 'true' : undefined) as Booleanish
+
+export const isNumeric = (value?: string | number) =>
+  value != null && !isNaN(Number(value)) && Number(value) >= 0

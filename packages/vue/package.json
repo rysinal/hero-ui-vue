@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@heroui-vue/styles": "workspace:*",
+    "@internationalized/date": "^3.12.1",
     "@vueuse/core": "^11.3.0",
     "radix-vue": "^1.9.11",
     "tailwind-merge": "^3.4.0",
@@ -44,7 +45,7 @@
     "vue-tsc": "^2.1.10"
   },
   "peerDependencies": {
-    "vue": ">=3.4.0",
-    "tailwindcss": ">=4.0.0"
+    "tailwindcss": ">=4.0.0",
+    "vue": ">=3.4.0"
   }
 }
