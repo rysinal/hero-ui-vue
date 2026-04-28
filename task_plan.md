@@ -111,38 +111,51 @@ Create a complete 1:1 port of HeroUI React component library to Vue 3, maintaini
 
 ---
 
-### Phase 4: Foundation Components (Tier 1) [not_started]
+### Phase 4: Foundation Components (Tier 1) [in_progress]
 **Goal**: Implement basic building block components
 
 **Components** (10 total):
-1. Button
-2. Link
-3. Text
-4. Label
-5. Description
-6. FieldError
-7. Spinner
-8. Separator
-9. Kbd
-10. CloseButton
+1. ✅ Button
+2. ✅ ButtonGroup
+3. ✅ Link
+4. ✅ Text
+5. ✅ Label
+6. ✅ Spinner
+7. ✅ Separator
+8. [ ] Description
+9. [ ] FieldError
+10. [ ] Kbd
+11. [ ] CloseButton
 
 **Tasks**:
-- [ ] Research Radix Vue primitives for each component
-- [ ] Implement each component with Composition API
-- [ ] Port all variants and props
-- [ ] Add TypeScript types
-- [ ] Create Storybook stories
+- [x] Research Radix Vue primitives for each component
+- [x] Implement Button with all variants
+- [x] Implement ButtonGroup with context
+- [x] Implement Link with external link icon
+- [x] Implement Text with size/variant props
+- [x] Implement Label with required indicator
+- [x] Implement Spinner with loading states
+- [x] Implement Separator component
+- [x] Fix TypeScript type mismatches (button variants)
+- [x] Verify build passes with strict type checking
+- [ ] Implement Description component
+- [ ] Implement FieldError component
+- [ ] Implement Kbd component
+- [ ] Implement CloseButton component
+- [ ] Create Storybook stories (deferred)
 - [ ] Write component tests
 - [ ] Add accessibility features
 - [ ] Document usage patterns
 
 **Success Criteria**:
-- All components render correctly
-- Props API matches React version
-- Accessibility features work
-- Tests pass
-- Storybook stories complete
+- ✅ 7/10 components implemented
+- ✅ Props API matches React version
+- ✅ TypeScript types correct
+- ✅ Build passes
+- [ ] Tests written
+- [ ] Accessibility verified
 
+**Started**: 2026-04-28
 **Estimated Time**: 5-7 days
 
 ---

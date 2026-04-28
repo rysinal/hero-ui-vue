@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@heroui-vue/styles": "workspace:*",
+    "@heroui/styles": "^3.0.3",
     "@internationalized/date": "^3.12.1",
     "@vueuse/core": "^11.3.0",
     "radix-vue": "^1.9.11",
