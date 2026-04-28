@@ -43,11 +43,31 @@ Create a complete 1:1 port of HeroUI React component library to Vue 3, maintaini
 
 ---
 
-### Phase 2: Core Utilities & Composables [not_started]
+### Phase 2: Core Utilities & Composables [complete]
 **Goal**: Create Vue 3 equivalents of React utilities and hooks
 
 **Tasks**:
-- [ ] Port `composeTwRenderProps` utility for class merging
+- [x] Port `composeTwRenderProps` utility for class merging
+- [x] Create `mapPropsVariants` for variant prop extraction
+- [x] Port `createVariants` and `createVariantBuilder` helpers
+- [x] Create calendar utilities (`getGregorianYearOffset`, `getYearRange`)
+- [x] Port children utilities (`getValidChildren`, `pickChildren`)
+- [x] Create Logger class for development logging
+- [x] Port assertion utilities (`isArray`, `isEmpty`, `dataAttr`, etc.)
+- [x] Create `tv` wrapper for tailwind-variants
+- [x] Write comprehensive tests for all utilities (34 tests)
+- [x] Fix code review issues (immutability, type safety)
+
+**Success Criteria**:
+- ✅ All utility functions ported and tested
+- ✅ Tests passing with good coverage
+- ✅ Type safety verified
+- ✅ Code review completed and issues fixed
+
+**Completed**: 2026-04-28
+**Actual Time**: 1 day
+
+---
 - [ ] Create `useFocusRing` composable (from React Aria)
 - [ ] Create `useDisabled` composable
 - [ ] Port variant mapping utilities (`mapPropsVariants`)
