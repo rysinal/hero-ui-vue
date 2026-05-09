@@ -134,9 +134,8 @@ const parseInput = (nextText: string) => {
     .replace(/(?!^)-/g, '')
     .replace(/(\..*)\./g, '$1')
 
-  inputDraft.value = numericText
-
   if (numericText.trim() === '' || numericText === '-' || numericText === '.') {
+    inputDraft.value = numericText
     setValue(undefined)
     return
   }
@@ -144,7 +143,10 @@ const parseInput = (nextText: string) => {
   const parsedValue = Number(numericText)
 
   if (!Number.isNaN(parsedValue)) {
-    setValue(isPercentFormat.value ? parsedValue / 100 : parsedValue)
+    const nextValue = isPercentFormat.value ? parsedValue / 100 : parsedValue
+
+    setValue(nextValue)
+    inputDraft.value = props.formatOptions ? formatValue(nextValue) : numericText
   }
 }
 
