@@ -5,3 +5,4 @@
 - Before considering a component done, mirror the React docs preview directory for that component unless a feature is explicitly impossible in Vue; if anything is skipped, document the reason in the final response.
 - Interactive label/title areas inside selectable controls must share the same pointer/hover behavior as the control. Do not leave only the small checkbox/radio/switch control or description area clickable-looking when the upstream component makes the whole option/title area interactive.
 - Prefer fixing component CSS/API behavior in `packages/vue` and `packages/styles`. Use docs-only styles only for multi-component demo layout, and include those styles in the visible demo source.
+- When component coverage changes, update `README.md` in the same commit so the public component list and project status stay current.
