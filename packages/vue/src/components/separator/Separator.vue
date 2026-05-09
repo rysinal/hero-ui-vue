@@ -6,6 +6,7 @@ import { composeTwClasses } from '../../utils'
 interface SeparatorProps {
   class?: string
   orientation?: 'horizontal' | 'vertical'
+  variant?: 'default' | 'secondary' | 'tertiary'
 }
 
 const props = withDefaults(defineProps<SeparatorProps>(), {
@@ -15,6 +16,7 @@ const props = withDefaults(defineProps<SeparatorProps>(), {
 const separatorClass = computed(() => {
   const styles = separatorVariants({
     orientation: props.orientation,
+    variant: props.variant,
   })
 
   return composeTwClasses(props.class, styles)
@@ -25,6 +27,7 @@ const separatorClass = computed(() => {
   <div
     :aria-orientation="props.orientation"
     :class="separatorClass"
+    :data-orientation="props.orientation"
     data-slot="separator"
     role="separator"
   >

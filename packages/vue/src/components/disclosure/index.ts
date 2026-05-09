@@ -1,0 +1,6 @@
+export { default as Disclosure } from './Disclosure.vue'
+export { default as DisclosureBody } from './DisclosureBody.vue'
+export { default as DisclosureContent } from './DisclosureContent.vue'
+export { default as DisclosureHeading } from './DisclosureHeading.vue'
+export { default as DisclosureIndicator } from './DisclosureIndicator.vue'
+export { default as DisclosureTrigger } from './DisclosureTrigger.vue'

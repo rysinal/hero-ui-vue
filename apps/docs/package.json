@@ -1,0 +1,26 @@
+{
+  "name": "@heroui-vue/docs",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "dependencies": {
+    "@heroui-vue/styles": "workspace:*",
+    "@heroui-vue/vue": "workspace:*",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.4",
+    "@vitepress-demo-preview/component": "^2.6.2",
+    "@vitepress-demo-preview/core": "^0.3.0",
+    "@vitepress-demo-preview/plugin": "^1.4.1",
+    "playwright": "^1.59.1",
+    "tailwindcss": "^4.1.18",
+    "tw-animate-css": "^1.4.0",
+    "vitepress": "^1.6.4"
+  }
+}

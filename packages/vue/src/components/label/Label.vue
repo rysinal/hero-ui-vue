@@ -7,13 +7,23 @@ interface LabelProps {
   for?: string
   class?: string
   isRequired?: boolean
+  required?: boolean
+  isDisabled?: boolean
+  isInvalid?: boolean
 }
 
-const props = defineProps<LabelProps>()
+const props = withDefaults(defineProps<LabelProps>(), {
+  isDisabled: undefined,
+  isInvalid: undefined,
+  isRequired: undefined,
+  required: undefined,
+})
 
 const labelClass = computed(() => {
   const styles = labelVariants({
-    isRequired: props.isRequired,
+    isDisabled: props.isDisabled,
+    isInvalid: props.isInvalid,
+    isRequired: props.isRequired ?? props.required,
   })
 
   return composeTwClasses(props.class, styles)

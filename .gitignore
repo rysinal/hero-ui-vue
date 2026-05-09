@@ -1,10 +1,51 @@
-node_modules
-dist
-.turbo
-.next
-storybook-static
-coverage
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+storybook-static/
+.turbo/
+.next/
+coverage/
+
+# Local source reference copy
+react-source/
+
+# Logs
 *.log
-.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files
 .env
-.env.local
+.env.*
+!.env.example
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# TypeScript / framework caches
+*.tsbuildinfo
+.eslintcache
+.stylelintcache
+
+# VitePress
+.vitepress/cache/
+.vitepress/dist/
+apps/docs/.vitepress/cache/
+apps/docs/.vitepress/dist/
+
+# Planning documents (internal use only)
+.planning/

@@ -16,7 +16,7 @@ const fieldErrorClass = computed(() => {
 </script>
 
 <template>
-  <div :class="fieldErrorClass" data-slot="field-error">
+  <div :class="fieldErrorClass" data-slot="field-error" data-visible="true">
     <slot />
   </div>
 </template>

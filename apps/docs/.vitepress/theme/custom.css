@@ -1,0 +1,573 @@
+:root {
+  --vp-c-brand-1: oklch(58% 0.22 260);
+  --vp-c-brand-2: oklch(65% 0.19 255);
+  --vp-c-brand-3: oklch(72% 0.14 250);
+  --vp-c-bg: oklch(99% 0.004 260);
+  --vp-c-bg-alt: oklch(97% 0.006 260);
+  --vp-c-bg-soft: oklch(96% 0.008 260);
+  --vp-c-border: oklch(90% 0.012 260);
+  --vp-c-divider: oklch(90% 0.012 260);
+  --vp-c-text-1: oklch(22% 0.018 265);
+  --vp-c-text-2: oklch(42% 0.018 265);
+  --vp-c-text-3: oklch(56% 0.016 265);
+  --vp-font-family-base:
+    ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --vp-font-family-mono:
+    "SFMono-Regular", ui-monospace, "Cascadia Code", "Roboto Mono", monospace;
+  --vp-layout-max-width: 1500px;
+  --doc-surface: oklch(100% 0 0 / 92%);
+  --doc-surface-raised: oklch(100% 0 0);
+  --doc-sidebar: oklch(98% 0.006 260 / 86%);
+  --doc-shadow: 0 18px 50px oklch(36% 0.05 260 / 10%);
+}
+
+.dark {
+  --vp-c-bg: oklch(18% 0.02 265);
+  --vp-c-bg-alt: oklch(15% 0.018 265);
+  --vp-c-bg-soft: oklch(22% 0.022 265);
+  --vp-c-border: oklch(32% 0.02 265);
+  --vp-c-divider: oklch(30% 0.018 265);
+  --vp-c-text-1: oklch(96% 0.004 260);
+  --vp-c-text-2: oklch(78% 0.012 260);
+  --vp-c-text-3: oklch(66% 0.014 260);
+  --doc-surface: oklch(22% 0.022 265 / 88%);
+  --doc-surface-raised: oklch(24% 0.024 265);
+  --doc-sidebar: oklch(18% 0.02 265 / 88%);
+  --doc-shadow: 0 20px 60px oklch(0% 0 0 / 28%);
+}
+
+body {
+  background:
+    linear-gradient(180deg, color-mix(in oklch, var(--vp-c-brand-3), transparent 88%), transparent 360px),
+    var(--vp-c-bg);
+}
+
+.VPNav {
+  border-bottom: 1px solid color-mix(in oklch, var(--vp-c-divider), transparent 35%);
+  backdrop-filter: blur(18px);
+}
+
+.VPNavBar.has-sidebar .content,
+.VPNavBar .content {
+  background: transparent !important;
+}
+
+.VPNavBarTitle .title {
+  font-weight: 740;
+  letter-spacing: 0;
+}
+
+.VPNavBarMenuLink,
+.VPNavBarMenuGroup .button {
+  font-size: 13px;
+  font-weight: 560;
+}
+
+.VPSidebar {
+  background: var(--doc-sidebar) !important;
+  border-right: 1px solid color-mix(in oklch, var(--vp-c-divider), transparent 35%);
+  backdrop-filter: blur(18px);
+}
+
+.VPSidebarItem .text {
+  letter-spacing: 0;
+}
+
+.VPSidebarItem.is-active > .item .link > .text,
+.VPSidebarItem.is-active > .item > .indicator + .link > .text {
+  color: var(--vp-c-brand-1);
+  font-weight: 700;
+}
+
+.VPDoc.has-aside .content-container {
+  max-width: 960px !important;
+}
+
+.vp-doc h1 {
+  margin-bottom: 10px;
+  letter-spacing: 0;
+  font-size: clamp(2.25rem, 4vw, 4.4rem);
+  line-height: 0.96;
+}
+
+.vp-doc h2 {
+  margin-top: 56px;
+  padding-top: 18px;
+  border-top: 1px solid color-mix(in oklch, var(--vp-c-divider), transparent 35%);
+  letter-spacing: 0;
+}
+
+.vp-doc h3 {
+  letter-spacing: 0;
+}
+
+.vp-doc p {
+  line-height: 1.75;
+}
+
+.vp-doc table {
+  display: table;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 14px;
+  background: var(--doc-surface);
+  box-shadow: 0 1px 0 oklch(100% 0 0 / 50%) inset;
+}
+
+.vp-doc tr:nth-child(2n) {
+  background: color-mix(in oklch, var(--vp-c-bg-soft), transparent 40%);
+}
+
+.vp-doc th,
+.vp-doc td {
+  border-color: color-mix(in oklch, var(--vp-c-divider), transparent 32%);
+}
+
+.vp-doc div[class*="language-"] {
+  border: 1px solid color-mix(in oklch, var(--vp-c-divider), transparent 24%);
+  border-radius: 16px;
+  background: var(--doc-surface-raised);
+  box-shadow: 0 12px 32px oklch(36% 0.05 260 / 8%);
+}
+
+.vp-doc :not(pre) > code {
+  border: 1px solid color-mix(in oklch, var(--vp-c-brand-3), transparent 55%);
+  border-radius: 8px;
+  background: color-mix(in oklch, var(--vp-c-brand-3), transparent 88%);
+  color: var(--vp-c-brand-1);
+}
+
+/* VitePress applies higher-specificity link color in docs content; keep component Link color visible in previews. */
+.vp-doc a.link,
+.vp-doc [data-slot="link"] {
+  color: var(--color-link);
+}
+
+.vp-doc a.link:hover,
+.vp-doc [data-slot="link"]:hover,
+.vp-doc [data-slot="link"][data-hovered="true"] {
+  color: var(--color-link);
+}
+
+.Layout .VPHome {
+  margin-bottom: 64px;
+}
+
+.VPHero .name,
+.VPHero .text {
+  letter-spacing: 0;
+}
+
+.VPHero .tagline {
+  max-width: 680px;
+  line-height: 1.7;
+}
+
+.VPHero .main {
+  padding-top: 32px;
+}
+
+.VPFeature {
+  border: 1px solid color-mix(in oklch, var(--vp-c-divider), transparent 25%) !important;
+  border-radius: 18px !important;
+  background: var(--doc-surface) !important;
+  box-shadow: 0 16px 40px oklch(36% 0.05 260 / 8%);
+}
+
+.VPFeature .icon {
+  background: color-mix(in oklch, var(--vp-c-brand-3), transparent 78%) !important;
+}
+
+/* Preview shell only. Component/demo-specific styles belong in packages/* or each demo's <style lang="less">. */
+.vitepress-demo-preview__ant-design__container,
+.vitepress-demo-preview-preview,
+.vitepress-demo-preview__element,
+.demo-preview {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  padding: 40px;
+  border: 1px solid color-mix(in oklch, var(--vp-c-divider), transparent 30%);
+  border-radius: 22px;
+  background: #f5f5f5;
+  box-shadow: var(--doc-shadow);
+  text-align: left;
+}
+
+.vitepress-demo-preview__ant-design__container {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  overflow: hidden;
+  padding: 0 !important;
+}
+
+.vitepress-demo-preview__ant-design__container > .vitepress-demo-preview-preview {
+  width: 100% !important;
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 180px !important;
+  padding: 40px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #f5f5f5 !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+
+/* Guard against VitePress text alignment leaking into form controls. */
+.vitepress-demo-preview__ant-design__container [data-slot="label"],
+.vitepress-demo-preview__ant-design__container [data-slot="description"],
+.vitepress-demo-preview__ant-design__container [data-slot="field-error"],
+.vitepress-demo-preview__ant-design__container [data-slot="radio"],
+.vitepress-demo-preview__ant-design__container [data-slot="radio-group"],
+.vitepress-demo-preview-preview [data-slot="label"],
+.vitepress-demo-preview-preview [data-slot="description"],
+.vitepress-demo-preview-preview [data-slot="field-error"],
+.vitepress-demo-preview-preview [data-slot="radio"],
+.vitepress-demo-preview-preview [data-slot="radio-group"] {
+  text-align: left;
+}
+
+.vitepress-demo-preview__ant-design__container [data-slot="radio-group"],
+.vitepress-demo-preview-preview [data-slot="radio-group"] {
+  align-items: flex-start;
+}
+
+.vitepress-demo-preview__ant-design__container > section,
+.vitepress-demo-preview-preview > div,
+.vitepress-demo-preview__element > div,
+.demo-preview > div {
+  max-width: 100%;
+}
+
+.vitepress-demo-preview__ant-design__container .flex,
+.vitepress-demo-preview-preview .flex,
+.vitepress-demo-preview__element .flex,
+.demo-preview .flex {
+  display: flex;
+}
+
+.vitepress-demo-preview__ant-design__container .grid,
+.vitepress-demo-preview-preview .grid,
+.vitepress-demo-preview__element .grid,
+.demo-preview .grid {
+  display: grid;
+}
+
+.vitepress-demo-preview__ant-design__container .items-center,
+.vitepress-demo-preview-preview .items-center,
+.vitepress-demo-preview__element .items-center,
+.demo-preview .items-center {
+  align-items: center;
+}
+
+.vitepress-demo-preview__element .justify-center,
+.vitepress-demo-preview-preview .justify-center,
+.vitepress-demo-preview__ant-design__container .justify-center,
+.demo-preview .justify-center {
+  justify-content: center;
+}
+
+.vitepress-demo-preview__element .text-left,
+.vitepress-demo-preview-preview .text-left,
+.vitepress-demo-preview__ant-design__container .text-left,
+.demo-preview .text-left,
+.vitepress-demo-preview__element .text-start,
+.vitepress-demo-preview-preview .text-start,
+.vitepress-demo-preview__ant-design__container .text-start,
+.demo-preview .text-start {
+  text-align: left;
+}
+
+.vitepress-demo-preview__element .flex-wrap,
+.vitepress-demo-preview-preview .flex-wrap,
+.vitepress-demo-preview__ant-design__container .flex-wrap,
+.demo-preview .flex-wrap {
+  flex-wrap: wrap;
+}
+
+.vitepress-demo-preview__element .gap-1,
+.vitepress-demo-preview-preview .gap-1,
+.vitepress-demo-preview__ant-design__container .gap-1,
+.demo-preview .gap-1 {
+  gap: 0.25rem;
+}
+
+.vitepress-demo-preview__element .gap-2,
+.vitepress-demo-preview-preview .gap-2,
+.vitepress-demo-preview__ant-design__container .gap-2,
+.demo-preview .gap-2 {
+  gap: 0.5rem;
+}
+
+.vitepress-demo-preview__element .gap-3,
+.vitepress-demo-preview-preview .gap-3,
+.vitepress-demo-preview__ant-design__container .gap-3,
+.demo-preview .gap-3 {
+  gap: 0.75rem;
+}
+
+.vitepress-demo-preview__element .gap-4,
+.vitepress-demo-preview-preview .gap-4,
+.vitepress-demo-preview__ant-design__container .gap-4,
+.demo-preview .gap-4 {
+  gap: 1rem;
+}
+
+.vitepress-demo-preview__element .gap-5,
+.vitepress-demo-preview-preview .gap-5,
+.vitepress-demo-preview__ant-design__container .gap-5,
+.demo-preview .gap-5 {
+  gap: 1.25rem;
+}
+
+.vitepress-demo-preview__element .gap-6,
+.vitepress-demo-preview-preview .gap-6,
+.vitepress-demo-preview__ant-design__container .gap-6,
+.demo-preview .gap-6 {
+  gap: 1.5rem;
+}
+
+.vitepress-demo-preview__element .gap-8,
+.vitepress-demo-preview-preview .gap-8,
+.vitepress-demo-preview__ant-design__container .gap-8,
+.demo-preview .gap-8 {
+  gap: 2rem;
+}
+
+.vitepress-demo-preview__element .w-full,
+.vitepress-demo-preview-preview .w-full,
+.vitepress-demo-preview__ant-design__container .w-full,
+.demo-preview .w-full {
+  width: 100%;
+}
+
+.vitepress-demo-preview__element .w-fit,
+.vitepress-demo-preview-preview .w-fit,
+.vitepress-demo-preview__ant-design__container .w-fit,
+.demo-preview .w-fit {
+  width: fit-content;
+}
+
+.vitepress-demo-preview__element .max-w-xs,
+.vitepress-demo-preview-preview .max-w-xs,
+.vitepress-demo-preview__ant-design__container .max-w-xs,
+.demo-preview .max-w-xs {
+  max-width: 20rem;
+}
+
+.vitepress-demo-preview__element .max-w-sm,
+.vitepress-demo-preview-preview .max-w-sm,
+.vitepress-demo-preview__ant-design__container .max-w-sm,
+.demo-preview .max-w-sm {
+  max-width: 24rem;
+}
+
+.vitepress-demo-preview__element .max-w-md,
+.vitepress-demo-preview-preview .max-w-md,
+.vitepress-demo-preview__ant-design__container .max-w-md,
+.demo-preview .max-w-md {
+  max-width: 28rem;
+}
+
+.vitepress-demo-preview__element .max-w-lg,
+.vitepress-demo-preview-preview .max-w-lg,
+.vitepress-demo-preview__ant-design__container .max-w-lg,
+.demo-preview .max-w-lg {
+  max-width: 32rem;
+}
+
+.vitepress-demo-preview__element .max-w-xl,
+.vitepress-demo-preview-preview .max-w-xl,
+.vitepress-demo-preview__ant-design__container .max-w-xl,
+.demo-preview .max-w-xl {
+  max-width: 36rem;
+}
+
+.vitepress-demo-preview__element .h-4,
+.vitepress-demo-preview-preview .h-4,
+.vitepress-demo-preview__ant-design__container .h-4,
+.demo-preview .h-4 {
+  height: 1rem;
+}
+
+.vitepress-demo-preview__element .h-5,
+.vitepress-demo-preview-preview .h-5,
+.vitepress-demo-preview__ant-design__container .h-5,
+.demo-preview .h-5 {
+  height: 1.25rem;
+}
+
+.vitepress-demo-preview__element .h-24,
+.vitepress-demo-preview-preview .h-24,
+.vitepress-demo-preview__ant-design__container .h-24,
+.demo-preview .h-24 {
+  height: 6rem;
+}
+
+.vitepress-demo-preview__element :is([class~="w-2/3"]),
+.vitepress-demo-preview-preview :is([class~="w-2/3"]),
+.vitepress-demo-preview__ant-design__container :is([class~="w-2/3"]),
+.demo-preview :is([class~="w-2/3"]) {
+  width: 66.666667%;
+}
+
+.vitepress-demo-preview__element :is([class~="w-3/5"]),
+.vitepress-demo-preview-preview :is([class~="w-3/5"]),
+.vitepress-demo-preview__ant-design__container :is([class~="w-3/5"]),
+.demo-preview :is([class~="w-3/5"]) {
+  width: 60%;
+}
+
+.vitepress-demo-preview__element .size-10,
+.vitepress-demo-preview-preview .size-10,
+.vitepress-demo-preview__ant-design__container .size-10,
+.demo-preview .size-10 {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.vitepress-demo-preview__element .size-3,
+.vitepress-demo-preview-preview .size-3,
+.vitepress-demo-preview__ant-design__container .size-3,
+.demo-preview .size-3 {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.vitepress-demo-preview__element .size-4,
+.vitepress-demo-preview-preview .size-4,
+.vitepress-demo-preview__ant-design__container .size-4,
+.demo-preview .size-4 {
+  width: 1rem;
+  height: 1rem;
+}
+
+.vitepress-demo-preview__element .size-5,
+.vitepress-demo-preview-preview .size-5,
+.vitepress-demo-preview__ant-design__container .size-5,
+.demo-preview .size-5 {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.vitepress-demo-preview__element .size-6,
+.vitepress-demo-preview-preview .size-6,
+.vitepress-demo-preview__ant-design__container .size-6,
+.demo-preview .size-6 {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.vitepress-demo-preview__element .rounded-2xl,
+.vitepress-demo-preview-preview .rounded-2xl,
+.vitepress-demo-preview__ant-design__container .rounded-2xl,
+.demo-preview .rounded-2xl {
+  border-radius: 1rem;
+}
+
+.vitepress-demo-preview__element .rounded-3xl,
+.vitepress-demo-preview-preview .rounded-3xl,
+.vitepress-demo-preview__ant-design__container .rounded-3xl,
+.demo-preview .rounded-3xl {
+  border-radius: 1.5rem;
+}
+
+.vitepress-demo-preview__element .rounded-full,
+.vitepress-demo-preview-preview .rounded-full,
+.vitepress-demo-preview__ant-design__container .rounded-full,
+.demo-preview .rounded-full {
+  border-radius: 999px;
+}
+
+.vitepress-demo-preview__element .p-5,
+.vitepress-demo-preview-preview .p-5,
+.vitepress-demo-preview__ant-design__container .p-5,
+.demo-preview .p-5 {
+  padding: 1.25rem;
+}
+
+.vitepress-demo-preview__element .flex-1,
+.vitepress-demo-preview-preview .flex-1,
+.vitepress-demo-preview__ant-design__container .flex-1,
+.demo-preview .flex-1 {
+  flex: 1 1 0%;
+}
+
+.vitepress-demo-preview__element .flex-col,
+.vitepress-demo-preview-preview .flex-col,
+.vitepress-demo-preview__ant-design__container .flex-col,
+.demo-preview .flex-col {
+  flex-direction: column;
+}
+
+.vitepress-demo-preview__element .flex-row-reverse,
+.vitepress-demo-preview-preview .flex-row-reverse,
+.vitepress-demo-preview__ant-design__container .flex-row-reverse,
+.demo-preview .flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+.vitepress-demo-preview__element :is([class~="mt-0.5"]),
+.vitepress-demo-preview-preview :is([class~="mt-0.5"]),
+.vitepress-demo-preview__ant-design__container :is([class~="mt-0.5"]),
+.demo-preview :is([class~="mt-0.5"]) {
+  margin-top: 0.125rem;
+}
+
+.vitepress-demo-preview__element .text-sm,
+.vitepress-demo-preview-preview .text-sm,
+.vitepress-demo-preview__ant-design__container .text-sm,
+.demo-preview .text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.vitepress-demo-preview__element .font-medium,
+.vitepress-demo-preview-preview .font-medium,
+.vitepress-demo-preview__ant-design__container .font-medium,
+.demo-preview .font-medium {
+  font-weight: 500;
+}
+
+.vitepress-demo-preview__element .font-semibold,
+.vitepress-demo-preview-preview .font-semibold,
+.vitepress-demo-preview__ant-design__container .font-semibold,
+.demo-preview .font-semibold {
+  font-weight: 600;
+}
+
+.vitepress-demo-preview__element .text-muted,
+.vitepress-demo-preview-preview .text-muted,
+.vitepress-demo-preview__ant-design__container .text-muted,
+.demo-preview .text-muted {
+  color: var(--color-muted-foreground);
+}
+
+.vitepress-demo-preview__element .text-inherit,
+.vitepress-demo-preview-preview .text-inherit,
+.vitepress-demo-preview__ant-design__container .text-inherit,
+.demo-preview .text-inherit {
+  color: inherit;
+}
+
+.vitepress-demo-preview__element .opacity-70,
+.vitepress-demo-preview-preview .opacity-70,
+.vitepress-demo-preview__ant-design__container .opacity-70,
+.demo-preview .opacity-70 {
+  opacity: 0.7;
+}
+
+.vitepress-demo-preview__element .opacity-100,
+.vitepress-demo-preview-preview .opacity-100,
+.vitepress-demo-preview__ant-design__container .opacity-100,
+.demo-preview .opacity-100 {
+  opacity: 1;
+}
