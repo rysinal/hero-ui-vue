@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, provide } from 'vue'
 import { linkVariants } from '@heroui/styles'
-import { composeTwClasses } from '../../utils'
+import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
 import { LINK_CONTEXT_KEY, type LinkContext } from './context'
 
 interface LinkProps {
@@ -10,13 +10,16 @@ interface LinkProps {
   target?: string
   rel?: string
   class?: string
+  isDisabled?: boolean
 }
 
 const props = withDefaults(defineProps<LinkProps>(), {
   as: 'a',
+  isDisabled: undefined,
 })
 
 const slots = computed(() => linkVariants())
+const { interactionAttrs, interactionHandlers } = useInteractionStates(() => props.isDisabled)
 
 provide<LinkContext>(LINK_CONTEXT_KEY, {
   slots: slots.value,
@@ -32,8 +35,13 @@ const linkClass = computed(() => {
     :is="props.as"
     :class="linkClass"
     :href="props.href"
+    :aria-disabled="dataAttr(props.isDisabled)"
+    :data-disabled="dataAttr(props.isDisabled)"
+    data-slot="link"
     :rel="props.rel"
     :target="props.target"
+    v-bind="interactionAttrs"
+    v-on="interactionHandlers"
   >
     <slot />
   </component>

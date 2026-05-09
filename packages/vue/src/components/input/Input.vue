@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { inputVariants } from '@heroui/styles'
-import { composeTwClasses } from '../../utils'
+import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
 
 interface InputProps {
   class?: string
@@ -11,15 +11,23 @@ interface InputProps {
   placeholder?: string
   modelValue?: string | number
   disabled?: boolean
+  isDisabled?: boolean
+  isInvalid?: boolean
   required?: boolean
+  isRequired?: boolean
   name?: string
   id?: string
 }
 
 const props = withDefaults(defineProps<InputProps>(), {
-  variant: 'primary',
-  type: 'text',
+  disabled: undefined,
   fullWidth: false,
+  isDisabled: undefined,
+  isInvalid: undefined,
+  isRequired: undefined,
+  required: undefined,
+  type: 'text',
+  variant: 'primary',
 })
 
 const emit = defineEmits<{
@@ -28,6 +36,9 @@ const emit = defineEmits<{
   focus: [event: FocusEvent]
   input: [event: Event]
 }>()
+
+const finalIsDisabled = computed(() => props.disabled ?? props.isDisabled)
+const { interactionAttrs, interactionHandlers } = useInteractionStates(() => finalIsDisabled.value)
 
 const inputClass = computed(() => {
   const styles = inputVariants({
@@ -60,10 +71,17 @@ const handleFocus = (event: FocusEvent) => {
     :type="props.type"
     :placeholder="props.placeholder"
     :value="props.modelValue"
-    :disabled="props.disabled"
-    :required="props.required"
+    :aria-disabled="dataAttr(finalIsDisabled)"
+    :aria-invalid="dataAttr(props.isInvalid)"
+    :data-disabled="dataAttr(finalIsDisabled)"
+    :data-invalid="dataAttr(props.isInvalid)"
+    :data-required="dataAttr(props.required ?? props.isRequired)"
+    :disabled="finalIsDisabled"
+    :required="props.required ?? props.isRequired"
     :name="props.name"
     data-slot="input"
+    v-bind="interactionAttrs"
+    v-on="interactionHandlers"
     @input="handleInput"
     @blur="handleBlur"
     @focus="handleFocus"

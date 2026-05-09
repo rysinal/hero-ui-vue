@@ -1,0 +1,14 @@
+.checkbox-group {
+  @apply relative flex flex-col;
+
+  [data-slot="checkbox"] {
+    @apply mt-4;
+  }
+}
+
+.checkbox-group__validation-proxy {
+  @apply pointer-events-none absolute size-px opacity-0;
+
+  top: 1.75rem;
+  left: 50%;
+}

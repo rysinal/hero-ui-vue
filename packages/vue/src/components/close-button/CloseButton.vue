@@ -1,18 +1,28 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { closeButtonVariants } from '@heroui/styles'
-import { composeTwClasses } from '../../utils'
+import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
 
 interface CloseButtonProps {
   class?: string
   variant?: 'default'
   disabled?: boolean
+  isDisabled?: boolean
   ariaLabel?: string
 }
 
 const props = withDefaults(defineProps<CloseButtonProps>(), {
   ariaLabel: 'Close',
+  disabled: undefined,
+  isDisabled: undefined,
 })
+
+const slots = defineSlots<{
+  default?: () => any
+}>()
+
+const finalIsDisabled = computed(() => props.disabled ?? props.isDisabled)
+const { interactionAttrs, interactionHandlers } = useInteractionStates(() => finalIsDisabled.value)
 
 const closeButtonClass = computed(() => {
   const styles = closeButtonVariants({
@@ -25,16 +35,23 @@ const closeButtonClass = computed(() => {
 <template>
   <button
     :aria-label="props.ariaLabel"
+    :aria-disabled="dataAttr(finalIsDisabled)"
     :class="closeButtonClass"
-    :disabled="props.disabled"
+    :data-disabled="dataAttr(finalIsDisabled)"
+    :disabled="finalIsDisabled"
     data-slot="close-button"
     type="button"
+    v-bind="interactionAttrs"
+    v-on="interactionHandlers"
   >
+    <slot v-if="slots.default" />
     <svg
+      v-else
       aria-hidden="true"
       fill="none"
       focusable="false"
       height="1em"
+      data-slot="close-button-icon"
       role="presentation"
       stroke="currentColor"
       stroke-linecap="round"

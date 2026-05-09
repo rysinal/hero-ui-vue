@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
 import { textFieldVariants } from '@heroui/styles'
-import { composeTwClasses } from '../../utils'
+import { composeTwClasses, dataAttr } from '../../utils'
 import Label from '../label/Label.vue'
 import Description from '../description/Description.vue'
 import FieldError from '../field-error/FieldError.vue'
@@ -14,7 +14,11 @@ interface TextFieldProps {
   description?: string
   error?: string
   required?: boolean
+  isRequired?: boolean
   disabled?: boolean
+  isDisabled?: boolean
+  isInvalid?: boolean
+  variant?: 'primary' | 'secondary'
   // Input props
   type?: 'text' | 'email' | 'password' | 'search' | 'tel' | 'url' | 'number'
   placeholder?: string
@@ -24,8 +28,13 @@ interface TextFieldProps {
 }
 
 const props = withDefaults(defineProps<TextFieldProps>(), {
-  type: 'text',
+  disabled: undefined,
   fullWidth: false,
+  isDisabled: undefined,
+  isInvalid: undefined,
+  isRequired: undefined,
+  required: undefined,
+  type: 'text',
 })
 
 const emit = defineEmits<{
@@ -41,6 +50,9 @@ const textFieldClass = computed(() => {
   return composeTwClasses(props.class, styles)
 })
 
+const finalIsRequired = computed(() => props.required ?? props.isRequired)
+const finalIsDisabled = computed(() => props.disabled ?? props.isDisabled)
+const finalIsInvalid = computed(() => props.isInvalid ?? Boolean(props.error || slots.error))
 const inputId = computed(() => props.id || `textfield-${Math.random().toString(36).substr(2, 9)}`)
 
 const handleInput = (value: string | number) => {
@@ -57,8 +69,22 @@ const handleFocus = (event: FocusEvent) => {
 </script>
 
 <template>
-  <div :class="textFieldClass" data-slot="textfield">
-    <Label v-if="props.label || slots.label" :for="inputId" :required="props.required">
+  <div
+    :aria-disabled="dataAttr(finalIsDisabled)"
+    :aria-invalid="dataAttr(finalIsInvalid)"
+    :class="textFieldClass"
+    :data-disabled="dataAttr(finalIsDisabled)"
+    :data-invalid="dataAttr(finalIsInvalid)"
+    :data-required="dataAttr(finalIsRequired)"
+    data-slot="textfield"
+  >
+    <Label
+      v-if="props.label || slots.label"
+      :for="inputId"
+      :is-disabled="finalIsDisabled"
+      :is-invalid="finalIsInvalid"
+      :is-required="finalIsRequired"
+    >
       <slot name="label">{{ props.label }}</slot>
     </Label>
 
@@ -68,9 +94,11 @@ const handleFocus = (event: FocusEvent) => {
       :placeholder="props.placeholder"
       :model-value="props.modelValue"
       :name="props.name"
-      :disabled="props.disabled"
-      :required="props.required"
+      :is-disabled="finalIsDisabled"
+      :is-invalid="finalIsInvalid"
+      :required="finalIsRequired"
       :full-width="props.fullWidth"
+      :variant="props.variant"
       @update:model-value="handleInput"
       @blur="handleBlur"
       @focus="handleFocus"

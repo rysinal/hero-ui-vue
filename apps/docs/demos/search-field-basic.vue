@@ -1,0 +1,20 @@
+<template>
+  <SearchField name="search">
+    <Label>Search</Label>
+    <SearchFieldGroup>
+      <SearchFieldSearchIcon />
+      <SearchFieldInput class="demo-search-field-input" placeholder="Search..." />
+      <SearchFieldClearButton />
+    </SearchFieldGroup>
+  </SearchField>
+</template>
+
+<script setup lang="ts">
+import { Label, SearchField, SearchFieldClearButton, SearchFieldGroup, SearchFieldInput, SearchFieldSearchIcon } from '@heroui-vue/vue'
+</script>
+
+<style lang="less">
+.demo-search-field-input {
+  width: 17.5rem;
+}
+</style>

@@ -1,0 +1,42 @@
+/* Base breadcrumbs container */
+.breadcrumbs {
+  @apply m-0 flex list-none items-center p-0;
+
+  /* Breadcrumb link */
+  .breadcrumbs__link {
+    @apply relative inline-flex h-5 items-center px-0.5 text-sm leading-5 font-medium text-muted no-underline opacity-100;
+
+    cursor: var(--cursor-interactive);
+
+    &:hover:not([data-disabled="true"]),
+    &[data-hovered="true"]:not([data-disabled="true"]) {
+      @apply underline;
+    }
+
+    &[data-current="true"] {
+      @apply text-link opacity-100;
+    }
+
+    &[data-disabled="true"],
+    &[aria-disabled="true"] {
+      @apply status-disabled no-underline;
+      pointer-events: auto;
+      cursor: var(--cursor-disabled);
+    }
+  }
+
+  /* Breadcrumb item wrapper */
+  .breadcrumbs__item {
+    @apply m-0 inline-flex shrink-0 list-none items-center justify-center gap-0.5 px-0.5 p-0;
+  }
+
+  /* Separator icon */
+  .breadcrumbs__separator {
+    @apply inline-flex size-3 shrink-0 items-center justify-center text-muted leading-none rtl:rotate-180;
+
+    & > svg,
+    & > span {
+      @apply block size-3 shrink-0;
+    }
+  }
+}

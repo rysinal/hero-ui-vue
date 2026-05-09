@@ -1,1 +1,5 @@
+export { default as DangerIcon } from './DangerIcon.vue'
 export { default as ExternalLinkIcon } from './ExternalLinkIcon.vue'
+export { default as InfoIcon } from './InfoIcon.vue'
+export { default as SuccessIcon } from './SuccessIcon.vue'
+export { default as WarningIcon } from './WarningIcon.vue'
