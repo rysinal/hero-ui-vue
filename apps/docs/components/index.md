@@ -13,6 +13,8 @@ Form components for user input and interaction.
 - [Fieldset](/components/fieldset) - Form section layout with legend and actions
 - [Input](/components/input) - Single-line text input field
 - [Input Group](/components/input-group) - Input shell with prefix, suffix, and textarea slots
+- [Input OTP](/components/input-otp) - One-time passcode input with visual slots
+- [Number Field](/components/number-field) - Numeric input with increment/decrement controls
 - [Radio](/components/radio) - Radio button for single selection from a group
 - [Radio Group](/components/radio-group) - Group radio buttons with shared state
 - [Switch](/components/switch) - Toggle switch for on/off states

@@ -7,6 +7,10 @@
   }
 }
 
+.input-otp__native {
+  @apply pointer-events-none absolute h-px w-px opacity-0;
+}
+
 /* Group - slots separated with gap */
 .input-otp__group {
   @apply flex items-center gap-2;

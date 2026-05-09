@@ -61,8 +61,8 @@ Visit [documentation site](https://heroui-vue.com) (coming soon) for full docume
 ### Foundation (10)
 Button, Link, Text, Label, Description, FieldError, Spinner, Separator, Kbd, CloseButton
 
-### Forms (15)
-TextField, TextArea, Input, InputGroup, Checkbox, CheckboxGroup, Radio, RadioGroup, Switch, SwitchGroup, Select, ComboBox, Autocomplete, SearchField, NumberField
+### Forms (16)
+TextField, TextArea, Input, InputGroup, InputOTP, Checkbox, CheckboxGroup, Radio, RadioGroup, Switch, SwitchGroup, Select, ComboBox, Autocomplete, SearchField, NumberField
 
 ### Layout & Navigation (12)
 Accordion, Tabs, Disclosure, DisclosureGroup, Breadcrumbs, Pagination, Toolbar, Card, Surface, Fieldset, Form, ScrollShadow
@@ -79,8 +79,8 @@ Calendar, RangeCalendar, DateField, DatePicker, DateRangePicker, TimeField, Date
 ### Color (6)
 ColorPicker, ColorArea, ColorSlider, ColorField, ColorSwatch, ColorSwatchPicker
 
-### Advanced (9)
-Slider, ToggleButton, ToggleButtonGroup, ButtonGroup, InputOTP, Toast, Alert, MenuSection, ListBoxSection
+### Advanced (8)
+Slider, ToggleButton, ToggleButtonGroup, ButtonGroup, Toast, Alert, MenuSection, ListBoxSection
 
 ## Development
 
