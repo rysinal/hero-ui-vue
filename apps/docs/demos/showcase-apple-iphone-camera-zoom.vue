@@ -12,22 +12,32 @@
         >
       </div>
 
-      <Tabs
-        v-model:value="selectedZoom"
+      <div
         class="apple-camera-showcase__tabs"
-        default-value="200"
+        role="tablist"
+        aria-label="Camera zoom options"
       >
-        <TabList class="apple-camera-showcase__tab-list" aria-label="Camera zoom options">
-          <Tab
+        <div class="apple-camera-showcase__tab-list">
+          <span
+            aria-hidden="true"
+            class="apple-camera-showcase__indicator"
+            :style="indicatorStyle"
+          />
+          <button
             v-for="item in zoomItems"
             :key="item.value"
+            :ref="(el) => setTabRef(el, item.value)"
+            type="button"
             class="apple-camera-showcase__tab"
-            :value="item.value"
+            :data-selected="selectedZoom === item.value ? 'true' : undefined"
+            role="tab"
+            :aria-selected="selectedZoom === item.value"
+            @click="selectZoom(item.value)"
           >
             {{ item.label }}
-          </Tab>
-        </TabList>
-      </Tabs>
+          </button>
+        </div>
+      </div>
 
       <div class="apple-camera-showcase__zoom-label">
         <p
@@ -49,8 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Tab, TabList, Tabs } from '@heroui-vue/vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 const zoomItems = [
   {
@@ -103,7 +112,49 @@ const zoomItems = [
   },
 ] as const
 
-const selectedZoom = ref('200')
+type ZoomValue = (typeof zoomItems)[number]['value']
+
+const selectedZoom = ref<ZoomValue>('200')
+const tabRefs = new Map<ZoomValue, HTMLElement>()
+const indicatorLeft = ref(0)
+const indicatorWidth = ref(0)
+let resizeObserver: ResizeObserver | undefined
+
+const indicatorStyle = computed(() => ({
+  transform: `translateX(${indicatorLeft.value}px)`,
+  width: `${indicatorWidth.value}px`,
+}))
+
+const updateIndicator = async () => {
+  await nextTick()
+  const activeTab = tabRefs.get(selectedZoom.value)
+
+  if (!activeTab) return
+  indicatorLeft.value = activeTab.offsetLeft
+  indicatorWidth.value = activeTab.offsetWidth
+}
+
+const setTabRef = (el: Element | null, value: ZoomValue) => {
+  if (el instanceof HTMLElement) tabRefs.set(value, el)
+}
+
+const selectZoom = (value: ZoomValue) => {
+  selectedZoom.value = value
+}
+
+watch(selectedZoom, updateIndicator)
+
+onMounted(() => {
+  updateIndicator()
+
+  if (typeof ResizeObserver === 'undefined') return
+  resizeObserver = new ResizeObserver(updateIndicator)
+  tabRefs.forEach((element) => resizeObserver?.observe(element))
+})
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+})
 </script>
 
 <style lang="less">
@@ -121,12 +172,13 @@ const selectedZoom = ref('200')
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 2rem 1.5rem;
 }
 
 .apple-camera-showcase__image-frame {
   position: relative;
-  width: min(840px, 100%);
+  width: min(840px, calc(100vw - 12rem));
+  min-height: min(540px, calc(100vh - 20rem));
   aspect-ratio: 7 / 5;
 }
 
@@ -153,18 +205,26 @@ const selectedZoom = ref('200')
   width: 100%;
   display: flex;
   justify-content: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: 1.5rem 0 0;
+}
+
+.apple-camera-showcase__tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .apple-camera-showcase__tab-list {
+  position: relative;
   scrollbar-width: none;
   display: flex;
   width: fit-content;
-  max-width: 100%;
+  min-width: min-content;
+  max-width: calc(100vw - 12rem);
   overflow-x: auto;
   border-radius: 999px;
   background: rgb(42 42 45 / 88%);
   padding: 0.25rem;
-  margin: 1.5rem 0 0;
   gap: 0;
 }
 
@@ -173,14 +233,24 @@ const selectedZoom = ref('200')
 }
 
 .apple-camera-showcase__tab {
+  position: relative;
+  z-index: 1;
   height: 2.25rem;
   width: fit-content;
+  flex: 0 0 auto;
+  border: 0;
   border-radius: 999px;
+  background: transparent;
   color: rgb(245 245 247 / 65%);
   padding: 0 1rem;
+  font: inherit;
   font-size: 0.875rem;
   font-weight: 400;
   opacity: 0.8;
+  cursor: var(--cursor-interactive);
+  transition:
+    color 150ms var(--ease-smooth),
+    opacity 150ms var(--ease-smooth);
 }
 
 .apple-camera-showcase__tab:hover,
@@ -189,9 +259,22 @@ const selectedZoom = ref('200')
 }
 
 .apple-camera-showcase__tab[data-selected="true"] {
-  background: #fff;
   color: #000;
   opacity: 1;
+}
+
+.apple-camera-showcase__indicator {
+  position: absolute;
+  z-index: 0;
+  top: 0.25rem;
+  left: 0;
+  height: calc(100% - 0.5rem);
+  border-radius: 999px;
+  background: #fff;
+  transition:
+    transform 320ms cubic-bezier(0.33, 1, 0.68, 1),
+    width 320ms cubic-bezier(0.33, 1, 0.68, 1);
+  will-change: transform, width;
 }
 
 .apple-camera-showcase__zoom-label {
@@ -246,6 +329,15 @@ const selectedZoom = ref('200')
 
   .apple-camera-showcase__stage {
     padding: 1rem;
+  }
+
+  .apple-camera-showcase__image-frame {
+    width: 100%;
+    min-height: 0;
+  }
+
+  .apple-camera-showcase__tab-list {
+    max-width: 100%;
   }
 
   .apple-camera-showcase__tab {

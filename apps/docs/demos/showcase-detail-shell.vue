@@ -7,11 +7,26 @@
         </svg>
       </a>
       <span class="showcase-detail-page__brand">HeroUI Vue</span>
-      <a class="showcase-detail-page__icon-button" :href="returnHref" aria-label="Close showcase">
-        <svg aria-hidden="true" viewBox="0 0 20 20">
-          <path d="m5.5 5.5 9 9M14.5 5.5l-9 9" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" />
-        </svg>
-      </a>
+      <div class="showcase-detail-page__actions">
+        <button
+          v-if="sourceCode"
+          type="button"
+          class="showcase-detail-page__icon-button"
+          :aria-expanded="isCodeOpen"
+          aria-controls="showcase-source-panel"
+          aria-label="View source code"
+          @click="isCodeOpen = true"
+        >
+          <svg aria-hidden="true" viewBox="0 0 20 20">
+            <path d="m7.5 5-5 5 5 5M12.5 5l5 5-5 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+          </svg>
+        </button>
+        <a class="showcase-detail-page__icon-button" :href="returnHref" aria-label="Close showcase">
+          <svg aria-hidden="true" viewBox="0 0 20 20">
+            <path d="m5.5 5.5 9 9M14.5 5.5l-9 9" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" />
+          </svg>
+        </a>
+      </div>
     </header>
 
     <main class="showcase-detail-page__main">
@@ -48,10 +63,43 @@
       </div>
       <p>{{ title }}</p>
     </footer>
+
+    <div
+      v-if="sourceCode"
+      class="showcase-detail-page__source-backdrop"
+      :data-open="isCodeOpen ? 'true' : undefined"
+      @click.self="isCodeOpen = false"
+    >
+      <aside
+        id="showcase-source-panel"
+        class="showcase-detail-page__source"
+        :aria-hidden="!isCodeOpen"
+      >
+        <div class="showcase-detail-page__source-header">
+          <div>
+            <p>Source</p>
+            <span>{{ sourceLabel }}</span>
+          </div>
+          <div class="showcase-detail-page__source-actions">
+            <button type="button" @click="copySource">
+              {{ copyLabel }}
+            </button>
+            <button type="button" aria-label="Close source code" @click="isCodeOpen = false">
+              <svg aria-hidden="true" viewBox="0 0 20 20">
+                <path d="m5.5 5.5 9 9M14.5 5.5l-9 9" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <pre><code>{{ sourceCode }}</code></pre>
+      </aside>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed, onBeforeUnmount, ref } from 'vue'
+
 interface ComponentLink {
   href: string
   label: string
@@ -62,12 +110,38 @@ interface ShowcaseDetailShellProps {
   components: ComponentLink[]
   returnHref?: string
   selected: 'disclosure' | 'camera'
+  sourceCode?: string
+  sourceLabel?: string
   title: string
 }
 
-withDefaults(defineProps<ShowcaseDetailShellProps>(), {
+const props = withDefaults(defineProps<ShowcaseDetailShellProps>(), {
   backLabel: 'Back to Disclosure',
   returnHref: '/components/disclosure.html',
+  sourceCode: '',
+  sourceLabel: 'Showcase.vue',
+})
+
+const isCodeOpen = ref(false)
+const isCopied = ref(false)
+const copyLabel = computed(() => (isCopied.value ? 'Copied' : 'Copy'))
+
+let copyResetTimer: number | undefined
+
+const copySource = async () => {
+  if (!props.sourceCode) return
+
+  await navigator.clipboard.writeText(props.sourceCode)
+  isCopied.value = true
+
+  window.clearTimeout(copyResetTimer)
+  copyResetTimer = window.setTimeout(() => {
+    isCopied.value = false
+  }, 1600)
+}
+
+onBeforeUnmount(() => {
+  window.clearTimeout(copyResetTimer)
 })
 
 const showcaseItems = [
@@ -145,8 +219,11 @@ body:has(.showcase-detail-page) .main {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
+  border: 0;
   background: rgb(255 255 255 / 12%);
   color: rgb(245 245 247 / 70%);
+  cursor: pointer;
+  font: inherit;
   text-decoration: none;
   transition:
     background-color 180ms var(--ease-out),
@@ -161,6 +238,11 @@ body:has(.showcase-detail-page) .main {
 .showcase-detail-page__icon-button svg {
   width: 1.25rem;
   height: 1.25rem;
+}
+
+.showcase-detail-page__actions {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .showcase-detail-page__main {
@@ -259,6 +341,121 @@ body:has(.showcase-detail-page) .main {
   text-decoration: none;
 }
 
+.showcase-detail-page__source-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-end;
+  background: rgb(0 0 0 / 0%);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    background-color 220ms var(--ease-out),
+    opacity 220ms var(--ease-out);
+}
+
+.showcase-detail-page__source-backdrop[data-open="true"] {
+  background: rgb(0 0 0 / 58%);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.showcase-detail-page__source {
+  display: flex;
+  width: min(720px, 100%);
+  height: 100%;
+  min-width: 0;
+  flex-direction: column;
+  border-left: 1px solid rgb(255 255 255 / 12%);
+  background: #0b0b0d;
+  box-shadow: -24px 0 64px rgb(0 0 0 / 45%);
+  color: #f5f5f7;
+  transform: translateX(100%);
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.showcase-detail-page__source-backdrop[data-open="true"] .showcase-detail-page__source {
+  transform: translateX(0);
+}
+
+.showcase-detail-page__source-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+  padding: 1rem;
+}
+
+.showcase-detail-page__source-header p,
+.showcase-detail-page__source-header span {
+  margin: 0;
+}
+
+.showcase-detail-page__source-header p {
+  font-weight: 700;
+}
+
+.showcase-detail-page__source-header span {
+  color: rgb(245 245 247 / 48%);
+  font-size: 0.8125rem;
+}
+
+.showcase-detail-page__source-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.showcase-detail-page__source-actions button {
+  display: inline-flex;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 10%);
+  color: rgb(245 245 247 / 84%);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8125rem;
+  padding: 0 0.75rem;
+}
+
+.showcase-detail-page__source-actions button:hover {
+  background: rgb(255 255 255 / 16%);
+  color: #f5f5f7;
+}
+
+.showcase-detail-page__source-actions button:last-child {
+  width: 2rem;
+  padding: 0;
+}
+
+.showcase-detail-page__source-actions svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.showcase-detail-page__source pre {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  margin: 0;
+  padding: 1rem;
+  background: transparent;
+  color: #e6edf3;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  tab-size: 2;
+  white-space: pre;
+}
+
+.showcase-detail-page__source code {
+  color: inherit;
+}
+
 @media (max-width: 860px) {
   .showcase-detail-page__main {
     flex-direction: column;
@@ -286,6 +483,10 @@ body:has(.showcase-detail-page) .main {
 
   .showcase-detail-page__footer p:last-child {
     text-align: center;
+  }
+
+  .showcase-detail-page__source {
+    width: 100%;
   }
 }
 </style>

@@ -66,8 +66,8 @@ const expanded = ref(true)
 .demo-disclosure-trigger {
   display: inline-flex;
   box-sizing: border-box;
-  height: 36px;
-  min-height: 36px;
+  height: calc(var(--spacing) * 9);
+  min-height: calc(var(--spacing) * 9);
   width: fit-content;
   align-items: center;
   gap: 0.5rem;
@@ -108,7 +108,7 @@ const expanded = ref(true)
   border-radius: 1.5rem;
   background: var(--color-surface);
   background-clip: padding-box;
-  box-shadow: 0 16px 32px color-mix(in oklab, var(--color-foreground) 12%, transparent);
+  box-shadow: none;
   margin-top: 0.375rem;
   overflow: hidden;
   padding: 1rem;
