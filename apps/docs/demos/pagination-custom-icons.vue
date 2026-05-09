@@ -4,7 +4,9 @@
       <PaginationItem>
         <PaginationPrevious :is-disabled="page === 1" @press="page -= 1">
           <PaginationPreviousIcon>
-            <ArrowLeftIcon />
+            <svg fill="none" viewBox="0 0 20 20">
+              <path d="M12.5 5 7.5 10l5 5M8 10h8" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+            </svg>
           </PaginationPreviousIcon>
           <span>Back</span>
         </PaginationPrevious>
@@ -18,7 +20,9 @@
         <PaginationNext :is-disabled="page === totalPages" @press="page += 1">
           <span>Forward</span>
           <PaginationNextIcon>
-            <ArrowRightIcon />
+            <svg fill="none" viewBox="0 0 20 20">
+              <path d="m7.5 5 5 5-5 5M12 10H4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" />
+            </svg>
           </PaginationNextIcon>
         </PaginationNext>
       </PaginationItem>
@@ -41,11 +45,4 @@ import {
 
 const page = ref(1)
 const totalPages = 3
-
-const ArrowLeftIcon = {
-  template: '<svg fill="none" viewBox="0 0 20 20"><path d="M12.5 5 7.5 10l5 5M8 10h8" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>',
-}
-const ArrowRightIcon = {
-  template: '<svg fill="none" viewBox="0 0 20 20"><path d="m7.5 5 5 5-5 5M12 10H4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/></svg>',
-}
 </script>

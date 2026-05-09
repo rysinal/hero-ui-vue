@@ -28,7 +28,7 @@ export default defineConfig({
     nav: [
       { text: 'Guide', link: '/guide/introduction' },
       { text: 'Components', link: '/components/' },
-      { text: 'GitHub', link: 'https://github.com/yourusername/heroui-vue' }
+      { text: 'GitHub', link: 'https://github.com/rysinal/hero-ui-vue' }
     ],
 
     sidebar: {
@@ -118,7 +118,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/yourusername/heroui-vue' }
+      { icon: 'github', link: 'https://github.com/rysinal/hero-ui-vue' }
     ],
 
     search: {
@@ -126,12 +126,12 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/yourusername/heroui-vue/edit/main/apps/docs/:path',
+      pattern: 'https://github.com/rysinal/hero-ui-vue/edit/develop/apps/docs/:path',
       text: 'Edit this page on GitHub'
     },
 
     footer: {
-      message: 'Released under the MIT License.',
+      message: 'Released under the Apache-2.0 License.',
       copyright: 'Copyright © 2024-present HeroUI Vue'
     }
   },

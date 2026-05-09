@@ -24,7 +24,7 @@
 
 /* Link - page number button (ghost button style) */
 .pagination__link {
-  @apply relative isolate inline-flex size-9 origin-center items-center justify-center rounded-3xl text-sm font-medium whitespace-nowrap outline-none select-none no-highlight md:size-8;
+  @apply relative isolate inline-flex size-9 origin-center items-center justify-center rounded-3xl text-sm font-medium leading-none whitespace-nowrap outline-none select-none no-highlight md:size-8;
 
   cursor: var(--cursor-interactive);
 
@@ -88,10 +88,10 @@
 }
 
 .pagination__icon {
-  @apply inline-flex size-4 shrink-0 items-center justify-center;
+  @apply inline-flex size-4 shrink-0 items-center justify-center leading-none;
 
   svg {
-    @apply size-4;
+    @apply block size-4;
   }
 }
 
