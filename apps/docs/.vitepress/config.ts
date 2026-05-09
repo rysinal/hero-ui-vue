@@ -75,6 +75,8 @@ export default defineConfig({
             { text: 'Fieldset', link: '/components/fieldset' },
             { text: 'Input', link: '/components/input' },
             { text: 'Input Group', link: '/components/input-group' },
+            { text: 'Input OTP', link: '/components/input-otp' },
+            { text: 'Number Field', link: '/components/number-field' },
             { text: 'Radio', link: '/components/radio' },
             { text: 'Radio Group', link: '/components/radio-group' },
             { text: 'Search Field', link: '/components/search-field' },

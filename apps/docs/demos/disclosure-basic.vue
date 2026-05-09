@@ -58,12 +58,16 @@ const expanded = ref(true)
 }
 
 .demo-disclosure-heading {
+  display: flex;
+  justify-content: center;
   margin: 0;
 }
 
 .demo-disclosure-trigger {
   display: inline-flex;
-  min-height: 2.5rem;
+  box-sizing: border-box;
+  height: calc(var(--spacing) * 9);
+  min-height: calc(var(--spacing) * 9);
   width: fit-content;
   align-items: center;
   gap: 0.5rem;
@@ -71,10 +75,11 @@ const expanded = ref(true)
   border-radius: 999px;
   background: var(--color-default);
   color: var(--color-accent-soft-foreground);
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
   font: inherit;
   font-size: 0.875rem;
   font-weight: 500;
+  line-height: 1;
   transition:
     background-color 180ms ease,
     transform 180ms ease;
@@ -102,8 +107,10 @@ const expanded = ref(true)
   align-items: center;
   border-radius: 1.5rem;
   background: var(--color-surface);
-  box-shadow: 0 16px 32px color-mix(in oklab, var(--color-foreground) 12%, transparent);
-  margin-top: 0.5rem;
+  background-clip: padding-box;
+  box-shadow: none;
+  margin-top: 0.375rem;
+  overflow: hidden;
   padding: 1rem;
   text-align: center;
   gap: 0;
@@ -118,11 +125,11 @@ const expanded = ref(true)
 
 .demo-disclosure-qr {
   aspect-ratio: 1;
-  width: min(13.5rem, 100%);
+  width: min(12.5rem, 100%);
   object-fit: cover;
 }
 
 .demo-disclosure-app-button {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
 }
 </style>
