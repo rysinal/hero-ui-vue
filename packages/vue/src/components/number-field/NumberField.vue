@@ -88,11 +88,19 @@ const numberFormatter = computed(() => {
 
   return new Intl.NumberFormat(props.locale, props.formatOptions)
 })
+const editableNumberFormatter = computed(() => {
+  if (!props.formatOptions) return undefined
+
+  return new Intl.NumberFormat(props.locale, {
+    ...props.formatOptions,
+    useGrouping: false,
+  })
+})
 const isPercentFormat = computed(() => props.formatOptions?.style === 'percent')
 
 const getEditableValue = (nextValue: number | undefined) => {
   if (nextValue === undefined) return ''
-  if (props.formatOptions) return formatValue(nextValue)
+  if (props.formatOptions) return formatEditableValue(nextValue)
 
   return String(nextValue)
 }
@@ -146,7 +154,7 @@ const parseInput = (nextText: string) => {
     const nextValue = isPercentFormat.value ? parsedValue / 100 : parsedValue
 
     setValue(nextValue)
-    inputDraft.value = props.formatOptions ? formatValue(nextValue) : numericText
+    inputDraft.value = props.formatOptions ? formatEditableValue(nextValue) : numericText
   }
 }
 
@@ -154,6 +162,12 @@ const formatValue = (nextValue: number | undefined) => {
   if (nextValue === undefined) return ''
 
   return numberFormatter.value?.format(nextValue) ?? String(nextValue)
+}
+
+const formatEditableValue = (nextValue: number | undefined) => {
+  if (nextValue === undefined) return ''
+
+  return editableNumberFormatter.value?.format(nextValue) ?? String(nextValue)
 }
 
 const inputText = computed(() => {
