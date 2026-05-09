@@ -27,6 +27,14 @@ const handleInput = (event: Event) => {
   emit('input', event)
 }
 
+const handleBeforeInput = (event: InputEvent) => {
+  if (!event.data) return
+
+  if (!/^[\d.,+-]+$/.test(event.data)) {
+    event.preventDefault()
+  }
+}
+
 const handleFocus = (event: FocusEvent) => {
   numberFieldContext?.setFocused(true)
   emit('focus', event)
@@ -77,6 +85,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     role="spinbutton"
     type="text"
     @blur="handleBlur"
+    @beforeinput="handleBeforeInput"
     @focus="handleFocus"
     @input="handleInput"
     @keydown="handleKeydown"

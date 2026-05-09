@@ -101,10 +101,12 @@ const setValue = (nextValue: string) => {
 const focusAt = async (index: number) => {
   if (finalIsDisabled.value) return
 
-  activeIndex.value = Math.min(Math.max(index, 0), maxLength.value - 1)
+  const insertionIndex = Math.min(Math.max(index, 0), maxLength.value)
+
+  activeIndex.value = Math.min(insertionIndex, maxLength.value - 1)
   await nextTick()
   inputRef.value?.focus()
-  inputRef.value?.setSelectionRange(activeIndex.value, activeIndex.value)
+  inputRef.value?.setSelectionRange(insertionIndex, insertionIndex)
 }
 
 const handleInput = (event: Event) => {
@@ -122,7 +124,11 @@ const handleBlur = () => {
 
 const handleKeydown = (event: KeyboardEvent) => {
   if (event.key === 'Backspace' && value.value.length > 0) {
-    activeIndex.value = Math.max(value.value.length - 1, 0)
+    event.preventDefault()
+    const nextValue = value.value.slice(0, -1)
+
+    setValue(nextValue)
+    void focusAt(nextValue.length)
   }
 
   if (event.key === 'ArrowLeft') {

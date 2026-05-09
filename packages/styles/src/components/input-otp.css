@@ -2,6 +2,8 @@
 .input-otp {
   @apply relative flex items-center gap-2;
 
+  cursor: text;
+
   &[data-disabled="true"] {
     @apply cursor-not-allowed opacity-50;
   }
@@ -21,6 +23,7 @@
   @apply relative flex h-10 w-9.5 flex-1 items-center justify-center;
   @apply border bg-field text-field-foreground shadow-field;
   @apply rounded-field text-sm font-semibold outline-none;
+  cursor: text;
 
   border-width: var(--border-width-field);
   border-color: var(--color-field-border);
@@ -57,6 +60,7 @@
   /* Disabled */
   &[data-disabled="true"] {
     @apply status-disabled;
+    cursor: not-allowed;
   }
 
   /* Invalid */

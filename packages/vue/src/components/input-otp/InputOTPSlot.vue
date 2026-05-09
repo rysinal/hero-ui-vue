@@ -23,21 +23,18 @@ const caretClass = computed(() => inputOTPContext?.slots.value.caret())
 </script>
 
 <template>
-  <button
+  <span
     :class="slotClass"
     :data-active="dataAttr(isActive)"
     :data-disabled="dataAttr(inputOTPContext?.isDisabled.value)"
     :data-filled="dataAttr(isFilled)"
     :data-invalid="dataAttr(inputOTPContext?.isInvalid.value)"
-    :disabled="inputOTPContext?.isDisabled.value"
-    :aria-label="`Digit ${props.index + 1}`"
+    :aria-hidden="true"
     data-slot="input-otp-slot"
-    type="button"
-    @click.stop="inputOTPContext?.focusAt(props.index)"
   >
     <span v-if="isFilled" :class="valueClass" data-slot="input-otp-slot-value">
       {{ character }}
     </span>
     <span v-else-if="isActive" :class="caretClass" data-slot="input-otp-caret" />
-  </button>
+  </span>
 </template>

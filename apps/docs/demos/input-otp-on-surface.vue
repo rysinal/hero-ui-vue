@@ -33,9 +33,10 @@ const value = ref('')
 
 <style lang="less">
 .demo-input-otp-surface {
+  box-sizing: border-box;
   display: flex;
   width: 100%;
-  max-width: 280px;
+  max-width: 328px;
   flex-direction: column;
   gap: 0.5rem;
   border-radius: 1.5rem;

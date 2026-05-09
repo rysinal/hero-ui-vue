@@ -88,10 +88,22 @@ const numberFormatter = computed(() => {
 
   return new Intl.NumberFormat(props.locale, props.formatOptions)
 })
+const isPercentFormat = computed(() => props.formatOptions?.style === 'percent')
+
+const getEditableValue = (nextValue: number | undefined) => {
+  if (nextValue === undefined) return ''
+  if (props.formatOptions) return formatValue(nextValue)
+
+  return String(nextValue)
+}
 
 const normalizeNumber = (nextValue: number | undefined) => {
   if (nextValue === undefined || Number.isNaN(nextValue)) return undefined
 
+  return nextValue
+}
+
+const normalizeStepValue = (nextValue: number) => {
   const precision = String(step.value).split('.')[1]?.length ?? 0
 
   return Number(nextValue.toFixed(Math.min(Math.max(precision, 0), 12)))
@@ -116,18 +128,23 @@ const clampValue = (nextValue: number) => {
 }
 
 const parseInput = (nextText: string) => {
-  inputDraft.value = nextText
+  const numericText = nextText
+    .replace(/,/g, '.')
+    .replace(/[^\d.-]/g, '')
+    .replace(/(?!^)-/g, '')
+    .replace(/(\..*)\./g, '$1')
 
-  if (nextText.trim() === '') {
+  inputDraft.value = numericText
+
+  if (numericText.trim() === '' || numericText === '-' || numericText === '.') {
     setValue(undefined)
     return
   }
 
-  const numericText = nextText.replace(/[^\d.-]/g, '')
   const parsedValue = Number(numericText)
 
   if (!Number.isNaN(parsedValue)) {
-    setValue(parsedValue)
+    setValue(isPercentFormat.value ? parsedValue / 100 : parsedValue)
   }
 }
 
@@ -152,17 +169,17 @@ const isDecrementDisabled = computed(() =>
 
 const increment = () => {
   if (isIncrementDisabled.value) return
-  setValue(clampValue((value.value ?? 0) + step.value))
+  setValue(clampValue(normalizeStepValue((value.value ?? 0) + step.value)))
 }
 
 const decrement = () => {
   if (isDecrementDisabled.value) return
-  setValue(clampValue((value.value ?? 0) - step.value))
+  setValue(clampValue(normalizeStepValue((value.value ?? 0) - step.value)))
 }
 
 const setFocused = (focused: boolean) => {
   isFocused.value = focused
-  inputDraft.value = focused ? (value.value === undefined ? '' : String(value.value)) : ''
+  inputDraft.value = focused ? getEditableValue(value.value) : ''
 }
 
 watch(
