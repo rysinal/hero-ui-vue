@@ -100,7 +100,7 @@ const isPercentFormat = computed(() => props.formatOptions?.style === 'percent')
 
 const getEditableValue = (nextValue: number | undefined) => {
   if (nextValue === undefined) return ''
-  if (props.formatOptions) return formatEditableValue(nextValue)
+  if (props.formatOptions) return formatValue(nextValue)
 
   return String(nextValue)
 }
@@ -137,7 +137,7 @@ const clampValue = (nextValue: number) => {
 
 const parseInput = (nextText: string) => {
   const numericText = nextText
-    .replace(/,/g, '.')
+    .replace(/,/g, '')
     .replace(/[^\d.-]/g, '')
     .replace(/(?!^)-/g, '')
     .replace(/(\..*)\./g, '$1')
