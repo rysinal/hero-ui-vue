@@ -125,7 +125,7 @@ This project is a Vue 3 port of [HeroUI](https://github.com/heroui-inc/heroui) b
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+Apache-2.0 — see [LICENSE](LICENSE)
 
 ## Acknowledgments
 

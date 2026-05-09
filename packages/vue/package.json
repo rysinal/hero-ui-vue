@@ -2,7 +2,7 @@
   "name": "@heroui-vue/vue",
   "version": "0.0.1",
   "description": "Beautiful and modern Vue 3 UI library built with Tailwind CSS 4.0",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",

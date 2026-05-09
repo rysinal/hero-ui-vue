@@ -2,7 +2,7 @@
   "name": "@heroui-vue/standard",
   "version": "0.0.1",
   "description": "Shared configurations for HeroUI Vue",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "type": "module",
   "exports": {
     "./eslint": "./eslint.config.js",
