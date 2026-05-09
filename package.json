@@ -2,7 +2,8 @@
   "name": "@heroui-vue/monorepo",
   "version": "0.0.1",
   "private": true,
-  "description": "HeroUI Vue 3 - Beautiful and modern Vue UI library",
+  "description": "HeroUI Vue 3 - Beautiful and modern Vue UI library. Docs: https://hero-ui-vue.pages.dev",
+  "homepage": "https://hero-ui-vue.pages.dev",
   "type": "module",
   "scripts": {
     "dev": "pnpm --filter @heroui-vue/storybook dev",

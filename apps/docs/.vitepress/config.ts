@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   title: 'HeroUI Vue',
-  description: 'A modern Vue 3 UI component library built with Tailwind CSS',
+  description: 'A modern Vue 3 UI component library built with Tailwind CSS. Docs: https://hero-ui-vue.pages.dev',
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#3b82f6' }],

@@ -15,6 +15,8 @@
 
 **HeroUI Vue** is a beautiful and modern Vue 3 UI library - a complete port of HeroUI React to Vue 3 with Composition API.
 
+Documentation: [https://hero-ui-vue.pages.dev](https://hero-ui-vue.pages.dev)
+
 > ⚠️ **Work in Progress**: This library is currently under active development. Not ready for production use.
 
 ## Features
@@ -54,7 +56,7 @@ import { Button } from '@heroui-vue/vue';
 
 ## Documentation
 
-Visit [documentation site](https://heroui-vue.com) (coming soon) for full documentation.
+Visit the [documentation site](https://hero-ui-vue.pages.dev) for full documentation.
 
 ## Components
 
