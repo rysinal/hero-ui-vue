@@ -14,17 +14,18 @@
 
 /* Content - container for pagination items */
 .pagination__content {
-  @apply flex items-center gap-1 self-start sm:self-center;
+  @apply m-0 flex list-none items-center gap-1 self-start p-0 sm:self-center;
 }
 
 /* Item - list item wrapper */
 .pagination__item {
-  @apply inline-flex;
+  @apply m-0 inline-flex items-center p-0;
 }
 
 /* Link - page number button (ghost button style) */
 .pagination__link {
   @apply relative isolate inline-flex size-9 origin-center items-center justify-center rounded-3xl text-sm font-medium leading-none whitespace-nowrap outline-none select-none no-highlight md:size-8;
+  vertical-align: middle;
 
   cursor: var(--cursor-interactive);
 
@@ -98,6 +99,7 @@
 /* Navigation buttons (Previous / Next) */
 .pagination__link--nav {
   @apply w-auto gap-1.5 px-2.5;
+  line-height: 1;
 }
 
 /* ==========================================================================

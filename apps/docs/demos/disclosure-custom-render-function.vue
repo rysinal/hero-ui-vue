@@ -58,6 +58,8 @@ const expanded = ref(true)
 }
 
 .demo-disclosure-heading {
+  display: flex;
+  justify-content: center;
   margin: 0;
 }
 
@@ -103,8 +105,8 @@ const expanded = ref(true)
   border-radius: 1.5rem;
   background: var(--color-surface);
   box-shadow: 0 16px 32px color-mix(in oklab, var(--color-foreground) 12%, transparent);
-  margin-top: 0.5rem;
-  padding: 1rem;
+  margin-top: 0.375rem;
+  padding: 0.875rem;
   text-align: center;
   gap: 0;
 }
@@ -118,11 +120,11 @@ const expanded = ref(true)
 
 .demo-disclosure-qr {
   aspect-ratio: 1;
-  width: min(13.5rem, 100%);
+  width: min(12.5rem, 100%);
   object-fit: cover;
 }
 
 .demo-disclosure-app-button {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
 }
 </style>
