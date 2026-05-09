@@ -203,11 +203,14 @@ const selectByOffset = (offset: number) => {
 }
 
 .apple-disclosure-showcase__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   width: min(28rem, 100%);
 }
 
 .apple-disclosure-showcase__heading {
-  margin: 0 0 0.75rem;
+  margin: 0;
 }
 
 .apple-disclosure-showcase__trigger {
@@ -269,7 +272,7 @@ const selectByOffset = (offset: number) => {
   border-radius: 1rem;
   background: rgb(42 42 45 / 72%);
   padding: 1.75rem;
-  margin: 0.75rem 0;
+  margin: 0.75rem 0 0;
   text-align: left;
   backdrop-filter: blur(20px);
 

@@ -89,12 +89,37 @@ const showcaseItems = [
 </script>
 
 <style lang="less">
+body:has(.showcase-detail-page) {
+  background: #030303;
+}
+
+body:has(.showcase-detail-page) .VPNav,
+body:has(.showcase-detail-page) .VPFooter {
+  display: none;
+}
+
+body:has(.showcase-detail-page) .VPContent,
+body:has(.showcase-detail-page) .VPPage,
+body:has(.showcase-detail-page) .VPDoc,
+body:has(.showcase-detail-page) .vp-doc,
+body:has(.showcase-detail-page) .container,
+body:has(.showcase-detail-page) .content,
+body:has(.showcase-detail-page) .content-container,
+body:has(.showcase-detail-page) .main {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #030303 !important;
+}
+
 .showcase-detail-page {
-  min-height: calc(100vh - var(--vp-nav-height, 64px));
+  min-height: 100vh;
   width: 100%;
   overflow: hidden;
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background:
+    radial-gradient(rgb(255 255 255 / 8%) 1px, transparent 1px) 0 0 / 16px 16px,
+    #030303;
+  color: #f5f5f7;
 }
 
 .showcase-detail-page__header {
@@ -104,12 +129,12 @@ const showcaseItems = [
   align-items: center;
   justify-content: space-between;
   padding: 1rem;
-  background: color-mix(in oklab, var(--color-background) 70%, transparent);
+  background: rgb(0 0 0 / 70%);
   backdrop-filter: blur(16px);
 }
 
 .showcase-detail-page__brand {
-  color: color-mix(in oklab, var(--color-foreground) 20%, transparent);
+  color: rgb(245 245 247 / 20%);
   font-weight: 700;
 }
 
@@ -120,8 +145,8 @@ const showcaseItems = [
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: var(--color-default);
-  color: color-mix(in oklab, var(--color-foreground) 70%, transparent);
+  background: rgb(255 255 255 / 12%);
+  color: rgb(245 245 247 / 70%);
   text-decoration: none;
   transition:
     background-color 180ms var(--ease-out),
@@ -129,8 +154,8 @@ const showcaseItems = [
 }
 
 .showcase-detail-page__icon-button:hover {
-  background: var(--color-default-hover);
-  color: var(--color-foreground);
+  background: rgb(255 255 255 / 20%);
+  color: #f5f5f7;
 }
 
 .showcase-detail-page__icon-button svg {
@@ -167,6 +192,7 @@ const showcaseItems = [
   justify-content: center;
   gap: 0.75rem;
   padding: 1rem;
+  background: rgb(0 0 0 / 18%);
 }
 
 .showcase-detail-page__rail-item {
@@ -206,8 +232,8 @@ const showcaseItems = [
   gap: 1rem;
   align-items: center;
   padding: 1rem 1.5rem;
-  background: color-mix(in oklab, var(--color-background) 70%, transparent);
-  color: color-mix(in oklab, var(--color-muted-foreground) 80%, transparent);
+  background: rgb(0 0 0 / 70%);
+  color: rgb(245 245 247 / 46%);
   font-size: 0.875rem;
   backdrop-filter: blur(16px);
 }
@@ -227,8 +253,8 @@ const showcaseItems = [
 
 .showcase-detail-page__footer a {
   border-radius: 999px;
-  background: var(--color-default);
-  color: var(--color-muted-foreground);
+  background: rgb(255 255 255 / 10%);
+  color: rgb(245 245 247 / 84%);
   padding: 0.375rem 0.625rem;
   text-decoration: none;
 }
