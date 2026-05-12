@@ -1,0 +1,45 @@
+/* Text component styles */
+
+.text {
+  @apply transition-colors duration-200;
+}
+
+.text--xs {
+  @apply text-xs;
+}
+
+.text--sm {
+  @apply text-sm;
+}
+
+.text--base {
+  @apply text-base;
+}
+
+.text--lg {
+  @apply text-lg;
+}
+
+.text--xl {
+  @apply text-xl;
+}
+
+.text--default {
+  color: var(--foreground);
+}
+
+.text--muted {
+  color: var(--muted);
+}
+
+.text--danger {
+  color: var(--danger);
+}
+
+.text--success {
+  color: var(--success);
+}
+
+.text--warning {
+  color: var(--warning);
+}

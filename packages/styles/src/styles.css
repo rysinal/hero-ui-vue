@@ -8,8 +8,11 @@
 /* External animation utilities used by overlay components. */
 @import "tw-animate-css";
 
-/* Keep package utility class names discoverable when consumed from node_modules. */
-@source "./components";
+/*
+ * Do not @source component TypeScript here. Tailwind scans object keys as class
+ * candidates too, which can emit global utilities such as `.container` and
+ * collide with host themes like VitePress.
+ */
 
 /* Base styles */
 @import "./base/base.css" layer(base);
