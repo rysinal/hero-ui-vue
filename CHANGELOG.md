@@ -2,6 +2,12 @@
 
 All notable changes to HeroUI Vue are documented here.
 
+## Unreleased
+
+### Changed
+
+- Simplified installation docs with file-level setup steps for app entry styles, Tailwind CSS source scanning, and first component usage.
+
 ## 0.0.3
 
 ### Added
