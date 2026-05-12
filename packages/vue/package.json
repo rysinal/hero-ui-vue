@@ -1,6 +1,6 @@
 {
   "name": "@rysinal/heroui-vue",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Beautiful and modern Vue 3 UI library built with Tailwind CSS 4.0",
   "keywords": [
     "heroui",

@@ -33,13 +33,26 @@ Documentation: [https://hero-ui-vue.pages.dev](https://hero-ui-vue.pages.dev)
 
 ```bash
 # pnpm
-pnpm add @rysinal/heroui-vue
+pnpm add @rysinal/heroui-vue @rysinal/heroui-vue-styles
 
 # npm
-npm install @rysinal/heroui-vue
+npm install @rysinal/heroui-vue @rysinal/heroui-vue-styles
 
 # yarn
-yarn add @rysinal/heroui-vue
+yarn add @rysinal/heroui-vue @rysinal/heroui-vue-styles
+```
+
+Import the component styles once in your app entry:
+
+```ts
+import '@rysinal/heroui-vue-styles/styles.css'
+```
+
+For Tailwind CSS 4, include the package in your CSS source scan:
+
+```css
+@import "tailwindcss";
+@source "../node_modules/@rysinal/heroui-vue";
 ```
 
 ## Quick Start

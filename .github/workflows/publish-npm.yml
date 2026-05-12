@@ -12,7 +12,7 @@ on:
         default: latest
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
@@ -78,8 +78,49 @@ jobs:
           pnpm -C packages/vue pack --pack-destination ../../.release
           ls -la .release
 
+      - name: Verify package contents
+        run: |
+          STYLES_TARBALL="$(ls .release/rysinal-heroui-vue-styles-*.tgz)"
+          VUE_TARBALL="$(ls .release/rysinal-heroui-vue-*.tgz | grep -v styles)"
+          tar -tzf "$STYLES_TARBALL" | grep -qx 'package/README.md'
+          tar -tzf "$VUE_TARBALL" | grep -qx 'package/README.md'
+
       - name: Publish styles
         run: npm publish "$(ls .release/rysinal-heroui-vue-styles-*.tgz)" --access public --tag "$DIST_TAG"
 
       - name: Publish Vue package
         run: npm publish "$(ls .release/rysinal-heroui-vue-*.tgz | grep -v styles)" --access public --tag "$DIST_TAG"
+
+      - name: Create GitHub Release
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          node - <<'NODE' "$VERSION" > .release-notes.md
+          const fs = require('node:fs')
+          const version = process.argv[2]
+          const changelog = fs.readFileSync('CHANGELOG.md', 'utf8')
+          const heading = `## ${version}`
+          const lines = changelog.split(/\r?\n/)
+          const start = lines.findIndex((line) => line.trim() === heading)
+          if (start === -1) {
+            console.error(`Missing changelog section: ${heading}`)
+            process.exit(1)
+          }
+          const body = []
+          for (let i = start + 1; i < lines.length; i += 1) {
+            if (/^##\s+/.test(lines[i])) break
+            body.push(lines[i])
+          }
+          const notes = body.join('\n').trim()
+          if (!notes) {
+            console.error(`Empty changelog section: ${heading}`)
+            process.exit(1)
+          }
+          process.stdout.write(notes)
+          NODE
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file .release-notes.md \
+            --latest
