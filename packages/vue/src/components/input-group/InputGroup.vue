@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, provide, ref } from 'vue'
-import { inputGroupVariants } from '@heroui/styles'
+import { inputGroupVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
 import { INPUT_GROUP_CONTEXT_KEY } from './context'
 

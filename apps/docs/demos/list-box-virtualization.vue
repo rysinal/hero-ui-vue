@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { Description, Label, ListBox, ListBoxItem, ListBoxItemIndicator } from '@heroui-vue/vue'
+import { Description, Label, ListBox, ListBoxItem, ListBoxItemIndicator } from '@rysinal/heroui-vue'
 
 const firstNames = [
   'Emma',

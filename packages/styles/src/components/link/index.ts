@@ -1,1 +1,1 @@
-export * from './link.styles'
+export * from './link.styles.js'

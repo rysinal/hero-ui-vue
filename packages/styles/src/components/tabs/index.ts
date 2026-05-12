@@ -1,1 +1,1 @@
-export * from './tabs.styles'
+export * from './tabs.styles.js'

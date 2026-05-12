@@ -63,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { Avatar, AvatarFallback, AvatarImage, Description, Tag, TagGroup } from '@heroui-vue/vue'
+import { Avatar, AvatarFallback, AvatarImage, Description, Tag, TagGroup } from '@rysinal/heroui-vue'
 </script>
 
 <style lang="less">

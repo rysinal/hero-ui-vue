@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, provide } from 'vue'
-import { paginationVariants } from '@heroui/styles'
+import { paginationVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
 import { PAGINATION_CONTEXT_KEY } from './context'
 

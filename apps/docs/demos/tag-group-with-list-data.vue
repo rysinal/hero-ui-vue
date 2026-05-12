@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Avatar, AvatarFallback, AvatarImage, Description, Tag, TagGroup } from '@heroui-vue/vue'
+import { Avatar, AvatarFallback, AvatarImage, Description, Tag, TagGroup } from '@rysinal/heroui-vue'
 
 const members = [
   { id: 'fred', name: 'Fred', avatar: 'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/blue.jpg', fallback: 'F' },

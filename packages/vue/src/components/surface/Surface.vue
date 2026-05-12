@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { surfaceVariants } from '@heroui/styles'
+import { surfaceVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
 
 interface SurfaceProps {

@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Checkbox, CheckboxGroup, Description, Label } from '@heroui-vue/vue'
+import { Checkbox, CheckboxGroup, Description, Label } from '@rysinal/heroui-vue'
 
 const selectedFeatures = ref<string[]>(['newsletter'])
 </script>

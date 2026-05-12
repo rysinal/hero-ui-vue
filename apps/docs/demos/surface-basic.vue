@@ -10,5 +10,5 @@
 </template>
 
 <script setup>
-import { Surface, Text } from '@heroui-vue/vue'
+import { Surface, Text } from '@rysinal/heroui-vue'
 </script>

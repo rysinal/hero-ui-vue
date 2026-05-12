@@ -1,5 +1,5 @@
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
-import type { accordionVariants } from '@heroui/styles'
+import type { accordionVariants } from '@rysinal/heroui-vue-styles'
 
 export interface AccordionContext {
   disabled: ComputedRef<boolean | undefined>

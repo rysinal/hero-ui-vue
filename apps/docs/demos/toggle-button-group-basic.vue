@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-import { ToggleButton, ToggleButtonGroup } from '@heroui-vue/vue'
+import { ToggleButton, ToggleButtonGroup } from '@rysinal/heroui-vue'
 </script>

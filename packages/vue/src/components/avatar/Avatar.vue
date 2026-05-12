@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, provide } from 'vue'
-import { avatarVariants } from '@heroui/styles'
+import { avatarVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
 import { AVATAR_CONTEXT_KEY } from './context'
 

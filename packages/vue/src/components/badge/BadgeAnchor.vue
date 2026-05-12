@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { badgeVariants } from '@heroui/styles'
+import { badgeVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
 
 interface BadgeAnchorProps {

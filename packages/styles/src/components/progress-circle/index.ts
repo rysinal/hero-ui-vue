@@ -1,1 +1,1 @@
-export * from './progress-circle.styles'
+export * from './progress-circle.styles.js'

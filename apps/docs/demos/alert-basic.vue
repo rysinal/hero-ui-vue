@@ -82,5 +82,5 @@ import {
   Button,
   CloseButton,
   Spinner,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 </script>

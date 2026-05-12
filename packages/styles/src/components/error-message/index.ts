@@ -1,1 +1,1 @@
-export * from './error-message.styles'
+export * from './error-message.styles.js'

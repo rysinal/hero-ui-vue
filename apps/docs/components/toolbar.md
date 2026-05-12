@@ -5,7 +5,7 @@ Toolbar container for related actions.
 ## Import
 
 ```ts
-import { Toolbar } from '@heroui-vue/vue'
+import { Toolbar } from '@rysinal/heroui-vue'
 ```
 
 ## Usage

@@ -1,1 +1,1 @@
-export * from './color-swatch.styles'
+export * from './color-swatch.styles.js'

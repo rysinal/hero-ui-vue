@@ -45,7 +45,7 @@ import {
   DisclosureHeading,
   DisclosureIndicator,
   DisclosureTrigger,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 
 const expanded = ref(true)
 </script>

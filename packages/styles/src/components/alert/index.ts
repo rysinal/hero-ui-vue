@@ -1,1 +1,1 @@
-export * from './alert.styles'
+export * from './alert.styles.js'

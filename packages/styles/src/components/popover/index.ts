@@ -1,1 +1,1 @@
-export * from './popover.styles'
+export * from './popover.styles.js'

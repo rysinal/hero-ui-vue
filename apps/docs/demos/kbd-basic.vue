@@ -9,5 +9,5 @@
 </template>
 
 <script setup>
-import { Kbd } from '@heroui-vue/vue'
+import { Kbd } from '@rysinal/heroui-vue'
 </script>

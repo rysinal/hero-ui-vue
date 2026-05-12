@@ -1,1 +1,1 @@
-export * from './tag.styles'
+export * from './tag.styles.js'

@@ -6,5 +6,5 @@
 </template>
 
 <script setup>
-import { Button, Spinner } from '@heroui-vue/vue'
+import { Button, Spinner } from '@rysinal/heroui-vue'
 </script>

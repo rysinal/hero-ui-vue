@@ -1,1 +1,1 @@
-export * from './color-field.styles'
+export * from './color-field.styles.js'

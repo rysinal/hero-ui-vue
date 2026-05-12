@@ -1,1 +1,1 @@
-export * from './menu-item.styles'
+export * from './menu-item.styles.js'

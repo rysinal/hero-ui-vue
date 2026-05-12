@@ -1,1 +1,1 @@
-export * from './button-group.styles'
+export * from './button-group.styles.js'

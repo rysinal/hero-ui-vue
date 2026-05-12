@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { Description, Label, Radio, RadioGroup } from '@heroui-vue/vue'
+import { Description, Label, Radio, RadioGroup } from '@rysinal/heroui-vue'
 
 const plans = [
   { value: 'basic', label: 'Basic Plan', description: 'Includes 100 messages per month' },

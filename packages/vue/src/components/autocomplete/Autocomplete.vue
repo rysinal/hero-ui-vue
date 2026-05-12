@@ -8,7 +8,7 @@ import {
   useId,
   watch,
 } from 'vue'
-import { autocompleteVariants } from '@heroui/styles'
+import { autocompleteVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
 import { Description } from '../description'
 import { EmptyState } from '../empty-state'

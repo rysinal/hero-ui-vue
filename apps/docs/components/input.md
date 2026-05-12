@@ -5,7 +5,7 @@ Single-line text input field for user text entry.
 ## Import
 
 ```ts
-import { Input } from '@heroui-vue/vue'
+import { Input } from '@rysinal/heroui-vue'
 ```
 
 ## Usage

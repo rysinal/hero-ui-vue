@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { Avatar, AvatarFallback, AvatarImage, Description, Label, ListBox, ListBoxItem, ListBoxItemIndicator } from '@heroui-vue/vue'
+import { Avatar, AvatarFallback, AvatarImage, Description, Label, ListBox, ListBoxItem, ListBoxItemIndicator } from '@rysinal/heroui-vue'
 
 const users = [
   { id: '1', name: 'Bob', email: 'bob@heroui.com', avatar: 'https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/blue.jpg', fallback: 'B' },

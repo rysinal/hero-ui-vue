@@ -11,5 +11,5 @@
 </template>
 
 <script setup>
-import { Description, Label, Switch } from '@heroui-vue/vue'
+import { Description, Label, Switch } from '@rysinal/heroui-vue'
 </script>

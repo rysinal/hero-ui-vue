@@ -1,5 +1,5 @@
 import type { InjectionKey } from 'vue'
-import type { inputGroupVariants } from '@heroui/styles'
+import type { inputGroupVariants } from '@rysinal/heroui-vue-styles'
 
 export interface InputGroupContextValue {
   slots: ReturnType<typeof inputGroupVariants>

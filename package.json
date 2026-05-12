@@ -1,18 +1,18 @@
 {
-  "name": "@heroui-vue/monorepo",
+  "name": "@rysinal/heroui-vue-monorepo",
   "version": "0.0.1",
   "private": true,
   "description": "HeroUI Vue 3 - Beautiful and modern Vue UI library. Docs: https://hero-ui-vue.pages.dev",
   "homepage": "https://hero-ui-vue.pages.dev",
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter @heroui-vue/storybook dev",
+    "dev": "pnpm --filter @rysinal/heroui-vue-docs dev",
     "docs:dev": "vitepress dev apps/docs",
     "docs:build": "vitepress build apps/docs",
     "docs:preview": "vitepress preview apps/docs",
     "build": "turbo run build",
-    "build:vue": "pnpm --filter @heroui-vue/vue build",
-    "build:styles": "pnpm --filter @heroui-vue/styles build",
+    "build:vue": "pnpm --filter @rysinal/heroui-vue build",
+    "build:styles": "pnpm --filter @rysinal/heroui-vue-styles build",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "lint": "eslint .",
@@ -22,6 +22,7 @@
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
+    "@rysinal/heroui-vue-standard": "workspace:*",
     "@tailwindcss/vite": "^4.2.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@types/node": "^22.10.2",

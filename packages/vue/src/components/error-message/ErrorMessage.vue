@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { errorMessageVariants } from '@heroui/styles'
+import { errorMessageVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
 
 interface ErrorMessageProps {

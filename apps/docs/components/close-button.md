@@ -6,7 +6,7 @@ Button for closing dialogs, modals, banners, or dismissible content.
 
 ```vue
 <script setup lang="ts">
-import { CloseButton } from '@heroui-vue/vue'
+import { CloseButton } from '@rysinal/heroui-vue'
 </script>
 ```
 

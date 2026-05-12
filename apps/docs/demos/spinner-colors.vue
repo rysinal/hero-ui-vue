@@ -8,5 +8,5 @@
 </template>
 
 <script setup>
-import { Spinner } from '@heroui-vue/vue'
+import { Spinner } from '@rysinal/heroui-vue'
 </script>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, provide } from 'vue'
-import { fieldsetVariants } from '@heroui/styles'
+import { fieldsetVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
 import { FIELDSET_CONTEXT_KEY } from './context'
 

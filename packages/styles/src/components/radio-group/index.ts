@@ -1,1 +1,1 @@
-export * from './radio-group.styles'
+export * from './radio-group.styles.js'

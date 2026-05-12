@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Description, InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, Label, REGEXP_ONLY_CHARS } from '@heroui-vue/vue'
+import { Description, InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, Label, REGEXP_ONLY_CHARS } from '@rysinal/heroui-vue'
 
 const value = ref('')
 </script>

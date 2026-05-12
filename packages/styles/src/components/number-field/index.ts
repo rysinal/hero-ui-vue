@@ -1,1 +1,1 @@
-export * from './number-field.styles'
+export * from './number-field.styles.js'

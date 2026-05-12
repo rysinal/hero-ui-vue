@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import { defineComponent, h } from 'vue'
-import { Button, ButtonGroup, ButtonGroupSeparator } from '@heroui-vue/vue'
+import { Button, ButtonGroup, ButtonGroupSeparator } from '@rysinal/heroui-vue'
 
 const iconPaths: Record<string, string[]> = {
   globe: ['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z', 'M3.6 9h16.8', 'M3.6 15h16.8', 'M12 3a14 14 0 0 1 0 18', 'M12 3a14 14 0 0 0 0 18'],

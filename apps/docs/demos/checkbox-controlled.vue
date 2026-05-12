@@ -11,7 +11,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Checkbox, Label } from '@heroui-vue/vue'
+import { Checkbox, Label } from '@rysinal/heroui-vue'
 
 const isSelected = ref(true)
 </script>

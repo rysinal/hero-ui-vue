@@ -1,1 +1,1 @@
-export * from './description.styles'
+export * from './description.styles.js'

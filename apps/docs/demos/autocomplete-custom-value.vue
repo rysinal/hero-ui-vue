@@ -56,7 +56,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Autocomplete, Description, Label } from '@heroui-vue/vue'
+import { Autocomplete, Description, Label } from '@rysinal/heroui-vue'
 
 const selectedUser = ref<string | number | null>(null)
 

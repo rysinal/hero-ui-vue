@@ -1,1 +1,1 @@
-export * from './table.styles'
+export * from './table.styles.js'

@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Button, Description, InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, Label, Link, Spinner } from '@heroui-vue/vue'
+import { Button, Description, InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, Label, Link, Spinner } from '@rysinal/heroui-vue'
 
 const value = ref('')
 const error = ref('')

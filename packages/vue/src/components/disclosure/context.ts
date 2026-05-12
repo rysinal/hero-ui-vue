@@ -1,5 +1,5 @@
 import type { ComputedRef, InjectionKey } from 'vue'
-import type { disclosureVariants } from '@heroui/styles'
+import type { disclosureVariants } from '@rysinal/heroui-vue-styles'
 
 type DisclosureSlots = ReturnType<typeof disclosureVariants>
 

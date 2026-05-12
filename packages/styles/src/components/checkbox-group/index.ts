@@ -1,1 +1,1 @@
-export * from './checkbox-group.styles'
+export * from './checkbox-group.styles.js'

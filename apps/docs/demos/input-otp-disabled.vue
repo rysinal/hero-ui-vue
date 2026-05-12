@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { Description, InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, Label } from '@heroui-vue/vue'
+import { Description, InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot, Label } from '@rysinal/heroui-vue'
 </script>
 
 <style lang="less">

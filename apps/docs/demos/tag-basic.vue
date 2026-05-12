@@ -10,5 +10,5 @@
 </template>
 
 <script setup>
-import { Tag, TagGroup, TagRemoveButton } from '@heroui-vue/vue'
+import { Tag, TagGroup, TagRemoveButton } from '@rysinal/heroui-vue'
 </script>

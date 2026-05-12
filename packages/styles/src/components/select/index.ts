@@ -1,1 +1,1 @@
-export * from './select.styles'
+export * from './select.styles.js'

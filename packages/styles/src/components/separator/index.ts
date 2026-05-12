@@ -1,1 +1,1 @@
-export * from './separator.styles'
+export * from './separator.styles.js'

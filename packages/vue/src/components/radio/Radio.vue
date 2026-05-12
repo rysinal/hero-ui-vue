@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
 import { RadioGroupItem, RadioGroupIndicator } from 'radix-vue'
-import { radioVariants } from '@heroui/styles'
+import { radioVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
 import { RADIO_GROUP_CONTEXT_KEY } from '../radio-group/context'
 

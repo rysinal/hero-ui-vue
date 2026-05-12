@@ -1,5 +1,5 @@
 import type { InjectionKey } from 'vue'
-import type { fieldsetVariants } from '@heroui/styles'
+import type { fieldsetVariants } from '@rysinal/heroui-vue-styles'
 
 export interface FieldsetContextValue {
   slots: ReturnType<typeof fieldsetVariants>

@@ -6,5 +6,5 @@
 </template>
 
 <script setup>
-import { Switch, SwitchGroup } from '@heroui-vue/vue'
+import { Switch, SwitchGroup } from '@rysinal/heroui-vue'
 </script>

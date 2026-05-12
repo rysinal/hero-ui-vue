@@ -18,5 +18,5 @@
 </template>
 
 <script setup>
-import { Checkbox, Description, Label } from '@heroui-vue/vue'
+import { Checkbox, Description, Label } from '@rysinal/heroui-vue'
 </script>

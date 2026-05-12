@@ -6,5 +6,5 @@
 </template>
 
 <script setup>
-import { ProgressBar } from '@heroui-vue/vue'
+import { ProgressBar } from '@rysinal/heroui-vue'
 </script>

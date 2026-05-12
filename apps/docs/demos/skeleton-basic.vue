@@ -13,5 +13,5 @@
 </template>
 
 <script setup>
-import { Skeleton } from '@heroui-vue/vue'
+import { Skeleton } from '@rysinal/heroui-vue'
 </script>

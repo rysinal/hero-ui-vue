@@ -8,7 +8,7 @@ Import and use components in your Vue files:
 
 ```vue
 <script setup lang="ts">
-import { Button } from '@heroui-vue/vue'
+import { Button } from '@rysinal/heroui-vue'
 </script>
 
 <template>
@@ -24,7 +24,7 @@ Most components support multiple variants for different use cases:
 
 ```vue
 <script setup lang="ts">
-import { Button } from '@heroui-vue/vue'
+import { Button } from '@rysinal/heroui-vue'
 </script>
 
 <template>
@@ -67,8 +67,8 @@ All components include full TypeScript definitions:
 
 ```vue
 <script setup lang="ts">
-import { Button } from '@heroui-vue/vue'
-import type { ButtonVariants } from '@heroui-vue/vue'
+import { Button } from '@rysinal/heroui-vue'
+import type { ButtonVariants } from '@rysinal/heroui-vue'
 
 const variant: ButtonVariants['variant'] = 'primary'
 </script>

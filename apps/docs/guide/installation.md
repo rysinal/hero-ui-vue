@@ -13,15 +13,15 @@ Install HeroUI Vue using your preferred package manager:
 ::: code-group
 
 ```bash [pnpm]
-pnpm add @heroui-vue/vue @heroui-vue/styles
+pnpm add @rysinal/heroui-vue @rysinal/heroui-vue-styles
 ```
 
 ```bash [npm]
-npm install @heroui-vue/vue @heroui-vue/styles
+npm install @rysinal/heroui-vue @rysinal/heroui-vue-styles
 ```
 
 ```bash [yarn]
-yarn add @heroui-vue/vue @heroui-vue/styles
+yarn add @rysinal/heroui-vue @rysinal/heroui-vue-styles
 ```
 
 :::
@@ -35,7 +35,7 @@ Import the HeroUI styles in your main entry file:
 ```ts
 // main.ts
 import { createApp } from 'vue'
-import '@heroui-vue/styles/src/styles.css'
+import '@rysinal/heroui-vue-styles/styles.css'
 import App from './App.vue'
 
 createApp(App).mount('#app')
@@ -47,7 +47,7 @@ Add HeroUI to your CSS entry file:
 
 ```css
 @import "tailwindcss";
-@source "../node_modules/@heroui-vue";
+@source "../node_modules/@rysinal/heroui-vue";
 ```
 
 ## Next Steps

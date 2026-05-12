@@ -11,7 +11,7 @@ import {
   SearchFieldGroup,
   SearchFieldInput,
   SearchFieldSearchIcon,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 ```
 
 ## Usage

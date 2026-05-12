@@ -1,1 +1,1 @@
-export * from './color-slider.styles'
+export * from './color-slider.styles.js'

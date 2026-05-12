@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { Description, Header, Kbd, Label, ListBox, ListBoxItem, ListBoxSection, Separator, Surface } from '@heroui-vue/vue'
+import { Description, Header, Kbd, Label, ListBox, ListBoxItem, ListBoxSection, Separator, Surface } from '@rysinal/heroui-vue'
 
 const handleAction = (key: string | number) => {
   window.alert(`Selected item: ${key}`)

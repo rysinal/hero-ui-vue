@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { Button, ButtonGroup, ButtonGroupSeparator } from '@heroui-vue/vue'
+import { Button, ButtonGroup, ButtonGroupSeparator } from '@rysinal/heroui-vue'
 </script>
 
 <style lang="less">

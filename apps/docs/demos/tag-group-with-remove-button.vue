@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Tag, TagGroup, TagRemoveButton } from '@heroui-vue/vue'
+import { Tag, TagGroup, TagRemoveButton } from '@rysinal/heroui-vue'
 
 const tags = ref([
   { id: 'news', label: 'News' },

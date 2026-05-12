@@ -5,7 +5,7 @@ Fallback content for empty lists and search results.
 ## Import
 
 ```ts
-import { EmptyState } from '@heroui-vue/vue'
+import { EmptyState } from '@rysinal/heroui-vue'
 ```
 
 ## Usage

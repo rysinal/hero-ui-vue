@@ -10,7 +10,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Button, Spinner } from '@heroui-vue/vue'
+import { Button, Spinner } from '@rysinal/heroui-vue'
 
 const isLoading = ref(false)
 

@@ -1,1 +1,1 @@
-export * from './card.styles'
+export * from './card.styles.js'

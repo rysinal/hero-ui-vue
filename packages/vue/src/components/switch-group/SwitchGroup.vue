@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { switchGroupVariants } from '@heroui/styles'
+import { switchGroupVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
 
 interface SwitchGroupProps {

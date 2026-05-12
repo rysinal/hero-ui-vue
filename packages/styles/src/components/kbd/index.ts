@@ -1,1 +1,1 @@
-export * from './kbd.styles'
+export * from './kbd.styles.js'

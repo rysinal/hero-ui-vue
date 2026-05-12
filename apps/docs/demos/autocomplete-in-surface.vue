@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Autocomplete, Surface } from '@heroui-vue/vue'
+import { Autocomplete, Surface } from '@rysinal/heroui-vue'
 
 const selectedFramework = ref<string | number | null>(null)
 

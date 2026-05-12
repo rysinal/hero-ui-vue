@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { skeletonVariants } from '@heroui/styles'
+import { skeletonVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
 
 interface SkeletonProps {

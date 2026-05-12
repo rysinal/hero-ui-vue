@@ -7,5 +7,5 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumbs, BreadcrumbsItem } from '@heroui-vue/vue'
+import { Breadcrumbs, BreadcrumbsItem } from '@rysinal/heroui-vue'
 </script>

@@ -5,8 +5,8 @@ Radio button for single selection from a group.
 ## Import
 
 ```ts
-import { Radio, RadioGroup } from '@heroui-vue/vue'
-import { Label } from '@heroui-vue/vue'
+import { Radio, RadioGroup } from '@rysinal/heroui-vue'
+import { Label } from '@rysinal/heroui-vue'
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ demo-preview=../demos/radio-basic.vue
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Radio, RadioGroup, Label } from '@heroui-vue/vue'
+import { Radio, RadioGroup, Label } from '@rysinal/heroui-vue'
 
 const selected = ref('medium')
 </script>

@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { Checkbox, Label } from '@heroui-vue/vue'
+import { Checkbox, Label } from '@rysinal/heroui-vue'
 </script>
 
 <style lang="less">

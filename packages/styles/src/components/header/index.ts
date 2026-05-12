@@ -1,1 +1,1 @@
-export * from './header.styles'
+export * from './header.styles.js'

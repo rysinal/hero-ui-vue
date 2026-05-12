@@ -1,1 +1,1 @@
-export * from './accordion.styles'
+export * from './accordion.styles.js'

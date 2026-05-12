@@ -14,7 +14,7 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionTrigger,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 </script>
 ```
 

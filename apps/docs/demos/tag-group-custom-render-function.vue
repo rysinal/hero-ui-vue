@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Tag, TagGroup } from '@heroui-vue/vue'
+import { Tag, TagGroup } from '@rysinal/heroui-vue'
 
 const selectedKeys = ref<Array<string | number>>(['online'])
 const statuses = [

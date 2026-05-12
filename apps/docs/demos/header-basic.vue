@@ -8,5 +8,5 @@
 </template>
 
 <script setup>
-import { Card, CardContent, Header } from '@heroui-vue/vue'
+import { Card, CardContent, Header } from '@rysinal/heroui-vue'
 </script>

@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { CloseButton } from '@heroui-vue/vue'
+import { CloseButton } from '@rysinal/heroui-vue'
 
 const count = ref(0)
 </script>

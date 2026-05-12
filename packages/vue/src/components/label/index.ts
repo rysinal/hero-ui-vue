@@ -1,2 +1,2 @@
 export { default as Label } from './Label.vue'
-export type { LabelVariants } from '@heroui/styles'
+export type { LabelVariants } from '@rysinal/heroui-vue-styles'

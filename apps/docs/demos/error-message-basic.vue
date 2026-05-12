@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Description, ErrorMessage, Tag, TagGroup } from '@heroui-vue/vue'
+import { Description, ErrorMessage, Tag, TagGroup } from '@rysinal/heroui-vue'
 
 const selectedKeys = ref<Array<string | number>>([])
 const isInvalid = computed(() => selectedKeys.value.length === 0)

@@ -1,1 +1,1 @@
-export * from './empty-state.styles'
+export * from './empty-state.styles.js'

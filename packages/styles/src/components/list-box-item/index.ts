@@ -1,1 +1,1 @@
-export * from './list-box-item.styles'
+export * from './list-box-item.styles.js'

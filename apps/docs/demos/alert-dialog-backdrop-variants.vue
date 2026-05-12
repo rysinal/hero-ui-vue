@@ -42,7 +42,7 @@ import {
   AlertDialogTrigger,
   Button,
   type AlertDialogBackdropVariant,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 
 const variants: AlertDialogBackdropVariant[] = ['transparent', 'opaque', 'blur']
 const labels: Record<AlertDialogBackdropVariant, string> = {

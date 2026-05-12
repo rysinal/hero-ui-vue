@@ -1,1 +1,1 @@
-export * from './tooltip.styles'
+export * from './tooltip.styles.js'

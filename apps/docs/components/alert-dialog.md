@@ -18,7 +18,7 @@ import {
   AlertDialogHeading,
   AlertDialogIcon,
   AlertDialogTrigger,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 </script>
 ```
 

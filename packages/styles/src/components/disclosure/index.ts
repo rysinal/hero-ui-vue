@@ -1,1 +1,1 @@
-export * from './disclosure.styles'
+export * from './disclosure.styles.js'

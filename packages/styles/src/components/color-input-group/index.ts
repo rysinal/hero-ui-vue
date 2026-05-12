@@ -1,1 +1,1 @@
-export * from './color-input-group.styles'
+export * from './color-input-group.styles.js'

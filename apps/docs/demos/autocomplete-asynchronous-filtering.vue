@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Autocomplete } from '@heroui-vue/vue'
+import { Autocomplete } from '@rysinal/heroui-vue'
 
 const selectedCharacter = ref<string | number | null>(null)
 

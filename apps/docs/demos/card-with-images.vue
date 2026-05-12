@@ -159,7 +159,7 @@ import {
   CloseButton,
   Link,
   LinkIcon,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 
 const communities = [
   {

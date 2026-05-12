@@ -1,1 +1,1 @@
-export * from './badge.styles'
+export * from './badge.styles.js'

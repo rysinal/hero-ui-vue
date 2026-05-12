@@ -1,6 +1,6 @@
 import type { InjectionKey } from 'vue'
 import type { ComputedRef } from 'vue'
-import type { tabsVariants } from '@heroui/styles'
+import type { tabsVariants } from '@rysinal/heroui-vue-styles'
 
 export interface TabsContext {
   selectedValue: ComputedRef<string | undefined>

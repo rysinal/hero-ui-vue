@@ -1,5 +1,5 @@
 import type { InjectionKey } from 'vue'
-import type { toggleButtonGroupVariants } from '@heroui/styles'
+import type { toggleButtonGroupVariants } from '@rysinal/heroui-vue-styles'
 
 export interface ToggleButtonGroupContextValue {
   isDisabled?: boolean

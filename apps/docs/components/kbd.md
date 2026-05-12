@@ -6,7 +6,7 @@ A component for displaying keyboard shortcuts and key combinations.
 
 ```vue
 <script setup lang="ts">
-import { Kbd } from '@heroui-vue/vue'
+import { Kbd } from '@rysinal/heroui-vue'
 </script>
 ```
 

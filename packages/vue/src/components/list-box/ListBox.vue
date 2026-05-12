@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
-import { listboxVariants } from '@heroui/styles'
+import { listboxVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
 import { LIST_BOX_CONTEXT_KEY } from './context'
 import type { ListBoxKey, ListBoxSelectionMode } from './context'

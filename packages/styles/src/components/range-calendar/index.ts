@@ -1,1 +1,1 @@
-export * from './range-calendar.styles'
+export * from './range-calendar.styles.js'

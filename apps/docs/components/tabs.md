@@ -5,7 +5,7 @@ Tabbed content navigation.
 ## Import
 
 ```ts
-import { Tab, TabList, TabPanel, Tabs } from '@heroui-vue/vue'
+import { Tab, TabList, TabPanel, Tabs } from '@rysinal/heroui-vue'
 ```
 
 ## Usage

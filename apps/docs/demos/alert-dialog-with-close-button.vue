@@ -40,7 +40,7 @@ import {
   AlertDialogIcon,
   AlertDialogTrigger,
   Button,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 </script>
 
 <style lang="less">

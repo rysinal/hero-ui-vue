@@ -74,5 +74,5 @@
 </template>
 
 <script setup>
-import { Switch } from '@heroui-vue/vue'
+import { Switch } from '@rysinal/heroui-vue'
 </script>

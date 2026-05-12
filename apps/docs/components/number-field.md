@@ -11,7 +11,7 @@ import {
   NumberFieldInput,
   NumberFieldIncrementButton,
   NumberFieldDecrementButton,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 ```
 
 ## Usage

@@ -1,1 +1,1 @@
-export * from './surface.styles'
+export * from './surface.styles.js'

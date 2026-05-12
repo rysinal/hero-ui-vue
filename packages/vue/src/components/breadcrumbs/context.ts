@@ -1,5 +1,5 @@
 import type { ComputedRef, InjectionKey, Slot } from 'vue'
-import type { breadcrumbsVariants } from '@heroui/styles'
+import type { breadcrumbsVariants } from '@rysinal/heroui-vue-styles'
 
 export interface BreadcrumbsContext {
   isDisabled: ComputedRef<boolean | undefined>

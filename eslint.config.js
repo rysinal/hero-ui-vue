@@ -1,4 +1,4 @@
-import standardConfig from '@heroui-vue/standard/eslint';
+import standardConfig from '@rysinal/heroui-vue-standard/eslint';
 
 export default [
   ...standardConfig,

@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-import { Textarea } from '@heroui-vue/vue'
+import { Textarea } from '@rysinal/heroui-vue'
 </script>

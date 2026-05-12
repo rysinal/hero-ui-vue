@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { h } from 'vue'
-import { Checkbox, CheckboxGroup, Description, Label } from '@heroui-vue/vue'
+import { Checkbox, CheckboxGroup, Description, Label } from '@rysinal/heroui-vue'
 
 const iconAttrs = {
   fill: 'none',

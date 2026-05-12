@@ -5,7 +5,7 @@ Form section layout with legend, grouped fields, and actions.
 ## Import
 
 ```ts
-import { FieldGroup, Fieldset, FieldsetActions, FieldsetLegend } from '@heroui-vue/vue'
+import { FieldGroup, Fieldset, FieldsetActions, FieldsetLegend } from '@rysinal/heroui-vue'
 ```
 
 ## Usage

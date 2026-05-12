@@ -1,5 +1,5 @@
 import type { ComputedRef, InjectionKey } from 'vue'
-import type { paginationVariants } from '@heroui/styles'
+import type { paginationVariants } from '@rysinal/heroui-vue-styles'
 
 type PaginationSlots = ReturnType<typeof paginationVariants>
 

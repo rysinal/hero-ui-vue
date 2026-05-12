@@ -5,7 +5,7 @@ A toggle switch component for boolean states.
 ## Import
 
 ```ts
-import { Description, Label, Switch, SwitchGroup } from '@heroui-vue/vue'
+import { Description, Label, Switch, SwitchGroup } from '@rysinal/heroui-vue'
 ```
 
 ## Usage

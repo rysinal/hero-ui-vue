@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Autocomplete } from '@heroui-vue/vue'
+import { Autocomplete } from '@rysinal/heroui-vue'
 
 const selectedStates = ref<(string | number)[]>([])
 

@@ -5,7 +5,7 @@ Loading placeholder.
 ## Import
 
 ```ts
-import { Skeleton } from '@heroui-vue/vue'
+import { Skeleton } from '@rysinal/heroui-vue'
 ```
 
 ## Usage

@@ -13,7 +13,7 @@ import {
   Radio,
   RadioGroup,
   Surface,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 ```
 
 ## Usage

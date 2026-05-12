@@ -1,1 +1,1 @@
-export * from './avatar.styles'
+export * from './avatar.styles.js'

@@ -1,5 +1,5 @@
 import type { InjectionKey } from 'vue'
-import type { linkVariants } from '@heroui/styles'
+import type { linkVariants } from '@rysinal/heroui-vue-styles'
 
 export interface LinkContext {
   slots?: ReturnType<typeof linkVariants>

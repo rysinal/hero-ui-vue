@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-import { Input } from '@heroui-vue/vue'
+import { Input } from '@rysinal/heroui-vue'
 </script>

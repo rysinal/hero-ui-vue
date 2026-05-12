@@ -5,7 +5,7 @@ Base surface wrapper.
 ## Import
 
 ```ts
-import { Surface } from '@heroui-vue/vue'
+import { Surface } from '@rysinal/heroui-vue'
 ```
 
 ## Usage

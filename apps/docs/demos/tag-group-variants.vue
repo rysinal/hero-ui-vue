@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { Tag, TagGroup } from '@heroui-vue/vue'
+import { Tag, TagGroup } from '@rysinal/heroui-vue'
 </script>
 
 <style lang="less">

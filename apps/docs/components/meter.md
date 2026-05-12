@@ -5,7 +5,7 @@ Known-range scalar measurement.
 ## Import
 
 ```ts
-import { Meter } from '@heroui-vue/vue'
+import { Meter } from '@rysinal/heroui-vue'
 ```
 
 ## Usage

@@ -55,7 +55,7 @@ import {
   AccordionPanel,
   AccordionTrigger,
   Button,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 
 const items = [
   {

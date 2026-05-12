@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import { defineComponent, h } from 'vue'
-import { Chip, ChipLabel, Separator } from '@heroui-vue/vue'
+import { Chip, ChipLabel, Separator } from '@rysinal/heroui-vue'
 
 const sizes = ['lg', 'md', 'sm'] as const
 const variants = ['primary', 'secondary', 'tertiary', 'soft'] as const

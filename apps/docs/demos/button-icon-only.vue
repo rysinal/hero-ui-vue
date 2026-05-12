@@ -24,5 +24,5 @@
 </template>
 
 <script setup>
-import { Button } from '@heroui-vue/vue'
+import { Button } from '@rysinal/heroui-vue'
 </script>

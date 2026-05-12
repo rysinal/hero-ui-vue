@@ -1,1 +1,1 @@
-export * from './date-picker.styles'
+export * from './date-picker.styles.js'

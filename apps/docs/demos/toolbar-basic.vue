@@ -9,5 +9,5 @@
 </template>
 
 <script setup>
-import { Button, Separator, ToggleButton, Toolbar } from '@heroui-vue/vue'
+import { Button, Separator, ToggleButton, Toolbar } from '@rysinal/heroui-vue'
 </script>

@@ -1,1 +1,1 @@
-export * from './textarea.styles'
+export * from './textarea.styles.js'

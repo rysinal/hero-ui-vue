@@ -1,1 +1,1 @@
-export * from './pagination.styles'
+export * from './pagination.styles.js'

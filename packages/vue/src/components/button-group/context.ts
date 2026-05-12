@@ -1,5 +1,5 @@
 import type { InjectionKey } from 'vue'
-import type { buttonGroupVariants } from '@heroui/styles'
+import type { buttonGroupVariants } from '@rysinal/heroui-vue-styles'
 
 export interface ButtonGroupContext {
   size?: 'sm' | 'md' | 'lg'

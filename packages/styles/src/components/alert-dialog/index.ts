@@ -1,1 +1,1 @@
-export * from './alert-dialog.styles'
+export * from './alert-dialog.styles.js'

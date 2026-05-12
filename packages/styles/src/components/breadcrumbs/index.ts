@@ -1,1 +1,1 @@
-export * from './breadcrumbs.styles'
+export * from './breadcrumbs.styles.js'

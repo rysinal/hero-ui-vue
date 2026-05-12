@@ -28,5 +28,5 @@ import {
   InputGroup,
   InputGroupInput,
   InputGroupPrefix,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 </script>

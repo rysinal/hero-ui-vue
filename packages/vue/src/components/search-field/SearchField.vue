@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
-import { searchFieldVariants } from '@heroui/styles'
+import { searchFieldVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
 import { SEARCH_FIELD_CONTEXT_KEY } from './context'
 

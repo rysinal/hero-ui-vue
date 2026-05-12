@@ -1,0 +1,85 @@
+name: Publish npm
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      dist_tag:
+        description: npm dist-tag to publish
+        required: true
+        default: latest
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    env:
+      DIST_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.dist_tag || 'latest' }}
+      NPM_CONFIG_PROVENANCE: 'true'
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.9.0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Use latest npm
+        run: npm install --global npm@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify tag matches package versions
+        if: github.event_name == 'push'
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          node - <<'NODE' "$VERSION"
+          const fs = require('node:fs')
+          const version = process.argv[2]
+          const packages = [
+            'packages/styles/package.json',
+            'packages/vue/package.json',
+          ]
+          for (const path of packages) {
+            const pkg = JSON.parse(fs.readFileSync(path, 'utf8'))
+            if (pkg.version !== version) {
+              console.error(`${path} has version ${pkg.version}, expected ${version}`)
+              process.exit(1)
+            }
+          }
+          NODE
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm exec vitest run
+
+      - name: Build
+        run: pnpm build
+
+      - name: Pack packages
+        run: |
+          mkdir -p .release
+          pnpm -C packages/styles pack --pack-destination ../../.release
+          pnpm -C packages/vue pack --pack-destination ../../.release
+          ls -la .release
+
+      - name: Publish styles
+        run: npm publish "$(ls .release/rysinal-heroui-vue-styles-*.tgz)" --access public --tag "$DIST_TAG"
+
+      - name: Publish Vue package
+        run: npm publish "$(ls .release/rysinal-heroui-vue-*.tgz | grep -v styles)" --access public --tag "$DIST_TAG"

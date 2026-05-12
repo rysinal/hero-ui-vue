@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-import { Text } from '@heroui-vue/vue'
+import { Text } from '@rysinal/heroui-vue'
 </script>

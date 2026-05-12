@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { Description, Label, Radio, RadioGroup } from '@heroui-vue/vue'
+import { Description, Label, Radio, RadioGroup } from '@rysinal/heroui-vue'
 </script>
 
 <style lang="less">

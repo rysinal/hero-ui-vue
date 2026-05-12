@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@rysinal/heroui-vue-standard':
+        specifier: workspace:*
+        version: link:packages/standard
       '@tailwindcss/vite':
         specifier: ^4.2.4
         version: 4.2.4(vite@6.4.2(@types/node@22.19.17)(jiti@2.6.1)(less@4.6.4)(lightningcss@1.32.0))
@@ -62,19 +65,19 @@ importers:
 
   apps/docs:
     dependencies:
-      '@heroui-vue/styles':
-        specifier: workspace:*
-        version: link:../../packages/styles
-      '@heroui-vue/vue':
+      '@rysinal/heroui-vue':
         specifier: workspace:*
         version: link:../../packages/vue
+      '@rysinal/heroui-vue-styles':
+        specifier: workspace:*
+        version: link:../../packages/styles
       vue:
         specifier: ^3.5.13
         version: 3.5.33(typescript@5.9.3)
     devDependencies:
       '@tailwindcss/vite':
         specifier: ^4.2.4
-        version: 4.2.4(vite@5.4.21(@types/node@22.19.17)(less@4.6.4)(lightningcss@1.32.0))
+        version: 4.2.4(vite@6.4.2(@types/node@22.19.17)(jiti@2.6.1)(less@4.6.4)(lightningcss@1.32.0))
       '@vitepress-demo-preview/component':
         specifier: ^2.6.2
         version: 2.6.2(vitepress@1.6.4(@algolia/client-search@5.51.0)(@types/node@22.19.17)(less@4.6.4)(lightningcss@1.32.0)(postcss@8.5.12)(search-insights@2.17.3)(typescript@5.9.3))(vue@3.5.33(typescript@5.9.3))
@@ -99,6 +102,9 @@ importers:
 
   packages/standard:
     devDependencies:
+      '@eslint/js':
+        specifier: ^9.39.4
+        version: 9.39.4
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.18.2
         version: 8.59.1(@typescript-eslint/parser@8.59.1(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
@@ -114,6 +120,9 @@ importers:
       typescript:
         specifier: ^5.8.3
         version: 5.9.3
+      vue-eslint-parser:
+        specifier: ^10.4.0
+        version: 10.4.0(eslint@9.39.4(jiti@2.6.1))
 
   packages/styles:
     dependencies:
@@ -121,7 +130,7 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.2.4)
     devDependencies:
-      '@heroui-vue/standard':
+      '@rysinal/heroui-vue-standard':
         specifier: workspace:*
         version: link:../standard
       '@tailwindcss/vite':
@@ -139,15 +148,12 @@ importers:
 
   packages/vue:
     dependencies:
-      '@heroui-vue/styles':
-        specifier: workspace:*
-        version: link:../styles
-      '@heroui/styles':
-        specifier: ^3.0.3
-        version: 3.0.3(tailwind-merge@3.5.0)(tailwindcss@4.2.4)
       '@internationalized/date':
         specifier: ^3.12.1
         version: 3.12.1
+      '@rysinal/heroui-vue-styles':
+        specifier: workspace:*
+        version: link:../styles
       '@vueuse/core':
         specifier: ^11.3.0
         version: 11.3.0(vue@3.5.33(typescript@5.9.3))
@@ -161,7 +167,7 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.2.4)
     devDependencies:
-      '@heroui-vue/standard':
+      '@rysinal/heroui-vue-standard':
         specifier: workspace:*
         version: link:../standard
       '@vitejs/plugin-vue':
@@ -723,11 +729,6 @@ packages:
 
   '@flypeng/tool@5.7.5':
     resolution: {integrity: sha512-3/TMouPSQiKcvV4sL/Jog20codkmEObYr0Pn4xJl6J+XEyb1rN/HqaQve2Kv5GhsbBC4s7YSlGcmOCC9CgH9aA==}
-
-  '@heroui/styles@3.0.3':
-    resolution: {integrity: sha512-DtN5QWfLVxy6DSDNgtUuHVU/h4G+dfoDHHxGVZRW6plCEh1Rc5Yc7YW7b8JBiYCknSRx/fqLXpas3Fe5Q5XJSw==}
-    peerDependencies:
-      tailwindcss: '>=4.0.0'
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -2618,6 +2619,12 @@ packages:
       '@vue/composition-api':
         optional: true
 
+  vue-eslint-parser@10.4.0:
+    resolution: {integrity: sha512-Vxi9pJdbN3ZnVGLODVtZ7y4Y2kzAAE2Cm0CZ3ZDRvydVYxZ6VrnBhLikBsRS+dpwj4Jv4UCv21PTEwF5rQ9WXg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
+
   vue-eslint-parser@9.4.3:
     resolution: {integrity: sha512-2rYRLWlIpaiN8xbPiDyXZXRgLGOtWxERV7ND5fFAv5qo1D2N9Fu9MNajBNc6o13lZ+24DAWCkQCvj4klgmcITg==}
     engines: {node: ^14.17.0 || >=16.0.0}
@@ -3139,14 +3146,6 @@ snapshots:
       html-to-image: 1.11.13
       lodash: 4.18.1
 
-  '@heroui/styles@3.0.3(tailwind-merge@3.5.0)(tailwindcss@4.2.4)':
-    dependencies:
-      tailwind-variants: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.2.4)
-      tailwindcss: 4.2.4
-      tw-animate-css: 1.4.0
-    transitivePeerDependencies:
-      - tailwind-merge
-
   '@humanfs/core@0.19.2':
     dependencies:
       '@humanfs/types': 0.15.0
@@ -3389,13 +3388,6 @@ snapshots:
       '@tailwindcss/oxide-wasm32-wasi': 4.2.4
       '@tailwindcss/oxide-win32-arm64-msvc': 4.2.4
       '@tailwindcss/oxide-win32-x64-msvc': 4.2.4
-
-  '@tailwindcss/vite@4.2.4(vite@5.4.21(@types/node@22.19.17)(less@4.6.4)(lightningcss@1.32.0))':
-    dependencies:
-      '@tailwindcss/node': 4.2.4
-      '@tailwindcss/oxide': 4.2.4
-      tailwindcss: 4.2.4
-      vite: 5.4.21(@types/node@22.19.17)(less@4.6.4)(lightningcss@1.32.0)
 
   '@tailwindcss/vite@4.2.4(vite@6.4.2(@types/node@22.19.17)(jiti@2.6.1)(less@4.6.4)(lightningcss@1.32.0))':
     dependencies:
@@ -5078,6 +5070,18 @@ snapshots:
   vue-demi@0.14.10(vue@3.5.33(typescript@5.9.3)):
     dependencies:
       vue: 3.5.33(typescript@5.9.3)
+
+  vue-eslint-parser@10.4.0(eslint@9.39.4(jiti@2.6.1)):
+    dependencies:
+      debug: 4.4.3
+      eslint: 9.39.4(jiti@2.6.1)
+      eslint-scope: 8.4.0
+      eslint-visitor-keys: 5.0.1
+      espree: 10.4.0
+      esquery: 1.7.0
+      semver: 7.7.4
+    transitivePeerDependencies:
+      - supports-color
 
   vue-eslint-parser@9.4.3(eslint@9.39.4(jiti@2.6.1)):
     dependencies:

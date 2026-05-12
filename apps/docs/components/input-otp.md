@@ -11,7 +11,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
   REGEXP_ONLY_CHARS,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 ```
 
 ## Usage

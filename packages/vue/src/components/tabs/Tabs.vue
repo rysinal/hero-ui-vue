@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, provide, ref, watch } from 'vue'
 import { TabsRoot } from 'radix-vue'
-import { tabsVariants } from '@heroui/styles'
+import { tabsVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
 import { TABS_CONTEXT_KEY } from './context'
 

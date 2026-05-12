@@ -16,5 +16,5 @@
 </template>
 
 <script setup>
-import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Text } from '@heroui-vue/vue'
+import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Text } from '@rysinal/heroui-vue'
 </script>

@@ -23,7 +23,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Description, Label, Radio, RadioGroup } from '@heroui-vue/vue'
+import { Description, Label, Radio, RadioGroup } from '@rysinal/heroui-vue'
 
 const value = ref('pro')
 </script>

@@ -6,7 +6,7 @@ A loading indicator component for showing progress or activity.
 
 ```vue
 <script setup lang="ts">
-import { Spinner } from '@heroui-vue/vue'
+import { Spinner } from '@rysinal/heroui-vue'
 </script>
 ```
 

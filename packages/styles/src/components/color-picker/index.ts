@@ -1,1 +1,1 @@
-export * from './color-picker.styles'
+export * from './color-picker.styles.js'

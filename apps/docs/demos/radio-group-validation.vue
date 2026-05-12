@@ -23,7 +23,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Button, Description, FieldError, Label, Radio, RadioGroup } from '@heroui-vue/vue'
+import { Button, Description, FieldError, Label, Radio, RadioGroup } from '@rysinal/heroui-vue'
 
 const plan = ref('')
 const submitted = ref(false)

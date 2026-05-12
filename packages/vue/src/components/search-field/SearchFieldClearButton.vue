@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
-import { closeButtonVariants } from '@heroui/styles'
+import { closeButtonVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
 import { SEARCH_FIELD_CONTEXT_KEY } from './context'
 

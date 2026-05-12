@@ -9,5 +9,5 @@
 </template>
 
 <script setup>
-import { ScrollShadow } from '@heroui-vue/vue'
+import { ScrollShadow } from '@rysinal/heroui-vue'
 </script>

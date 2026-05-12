@@ -33,7 +33,7 @@ import {
   PaginationNextIcon,
   PaginationPrevious,
   PaginationPreviousIcon,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 
 const page = ref(1)
 const totalPages = 3

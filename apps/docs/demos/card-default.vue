@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { defineComponent, h } from 'vue'
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle, Link, LinkIcon } from '@heroui-vue/vue'
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle, Link, LinkIcon } from '@rysinal/heroui-vue'
 
 const DollarIcon = defineComponent({
   setup() {

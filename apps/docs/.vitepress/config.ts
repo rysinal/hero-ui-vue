@@ -147,15 +147,15 @@ export default defineConfig({
     resolve: {
       alias: [
         {
-          find: '@heroui-vue/vue',
+          find: '@rysinal/heroui-vue',
           replacement: path.resolve(__dirname, '../../../packages/vue/src')
         },
         {
-          find: '@heroui-vue/styles',
+          find: '@rysinal/heroui-vue-styles',
           replacement: path.resolve(__dirname, '../../../packages/styles/src')
         },
         {
-          find: '@heroui/styles',
+          find: '@rysinal/heroui-vue-styles',
           replacement: path.resolve(__dirname, '../../../packages/styles/src')
         }
       ],

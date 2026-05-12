@@ -38,7 +38,7 @@ import {
   PaginationNextIcon,
   PaginationPrevious,
   PaginationPreviousIcon,
-} from '@heroui-vue/vue'
+} from '@rysinal/heroui-vue'
 
 const sizes = ['sm', 'md', 'lg'] as const
 const totalPages = 3

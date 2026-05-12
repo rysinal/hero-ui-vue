@@ -6,7 +6,7 @@ A component for creating accessible hyperlinks with various styles.
 
 ```vue
 <script setup lang="ts">
-import { Link } from '@heroui-vue/vue'
+import { Link } from '@rysinal/heroui-vue'
 </script>
 ```
 

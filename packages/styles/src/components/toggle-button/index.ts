@@ -1,1 +1,1 @@
-export * from './toggle-button.styles'
+export * from './toggle-button.styles.js'

@@ -1,1 +1,1 @@
-export * from './switch.styles'
+export * from './switch.styles.js'

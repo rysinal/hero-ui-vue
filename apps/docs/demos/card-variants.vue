@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@heroui-vue/vue'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@rysinal/heroui-vue'
 
 const variants = [
   {

@@ -6,10 +6,10 @@
 
 <p align="center">
   <a href="LICENSE">
-    <img src="https://img.shields.io/npm/l/@heroui-vue/vue?style=flat" alt="License">
+    <img src="https://img.shields.io/npm/l/@rysinal/heroui-vue?style=flat" alt="License">
   </a>
-  <a href="https://www.npmjs.com/package/@heroui-vue/vue">
-    <img src="https://img.shields.io/npm/dm/@heroui-vue/vue.svg?style=flat-round" alt="npm downloads">
+  <a href="https://www.npmjs.com/package/@rysinal/heroui-vue">
+    <img src="https://img.shields.io/npm/dm/@rysinal/heroui-vue.svg?style=flat-round" alt="npm downloads">
   </a>
 </p>
 
@@ -33,20 +33,20 @@ Documentation: [https://hero-ui-vue.pages.dev](https://hero-ui-vue.pages.dev)
 
 ```bash
 # pnpm
-pnpm add @heroui-vue/vue
+pnpm add @rysinal/heroui-vue
 
 # npm
-npm install @heroui-vue/vue
+npm install @rysinal/heroui-vue
 
 # yarn
-yarn add @heroui-vue/vue
+yarn add @rysinal/heroui-vue
 ```
 
 ## Quick Start
 
 ```vue
 <script setup lang="ts">
-import { Button } from '@heroui-vue/vue';
+import { Button } from '@rysinal/heroui-vue';
 </script>
 
 <template>

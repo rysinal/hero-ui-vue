@@ -1,1 +1,1 @@
-export * from './scroll-shadow.styles'
+export * from './scroll-shadow.styles.js'

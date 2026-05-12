@@ -1,1 +1,1 @@
-export * from './calendar-year-picker.styles'
+export * from './calendar-year-picker.styles.js'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, provide, ref, watch } from 'vue'
-import { alertDialogVariants } from '@heroui/styles'
+import { alertDialogVariants } from '@rysinal/heroui-vue-styles'
 import { ALERT_DIALOG_CONTEXT_KEY, type AlertDialogPlacement } from './context'
 
 interface AlertDialogProps {

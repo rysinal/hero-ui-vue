@@ -1,1 +1,1 @@
-export * from './search-field.styles'
+export * from './search-field.styles.js'

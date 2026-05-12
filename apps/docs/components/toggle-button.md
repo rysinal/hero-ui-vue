@@ -5,7 +5,7 @@ Pressable toggle control.
 ## Import
 
 ```ts
-import { ToggleButton } from '@heroui-vue/vue'
+import { ToggleButton } from '@rysinal/heroui-vue'
 ```
 
 ## Usage

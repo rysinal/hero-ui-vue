@@ -7,5 +7,5 @@
 </template>
 
 <script setup lang="ts">
-import { Button, ButtonGroup } from '@heroui-vue/vue'
+import { Button, ButtonGroup } from '@rysinal/heroui-vue'
 </script>

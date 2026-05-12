@@ -1,1 +1,1 @@
-export * from './toolbar.styles'
+export * from './toolbar.styles.js'

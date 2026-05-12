@@ -1,1 +1,1 @@
-export * from './time-field.styles'
+export * from './time-field.styles.js'

@@ -1,1 +1,1 @@
-export * from './close-button.styles'
+export * from './close-button.styles.js'

@@ -8,5 +8,5 @@
 </template>
 
 <script setup>
-import { EmptyState } from '@heroui-vue/vue'
+import { EmptyState } from '@rysinal/heroui-vue'
 </script>

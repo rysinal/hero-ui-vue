@@ -1,1 +1,1 @@
-export * from './spinner.styles'
+export * from './spinner.styles.js'

@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { Button, ButtonGroup, ButtonGroupSeparator } from '@heroui-vue/vue'
+import { Button, ButtonGroup, ButtonGroupSeparator } from '@rysinal/heroui-vue'
 
 type Variant = 'primary' | 'secondary' | 'tertiary' | 'outline' | 'ghost' | 'danger'
 

@@ -1,1 +1,1 @@
-export * from './fieldset.styles'
+export * from './fieldset.styles.js'

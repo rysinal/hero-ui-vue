@@ -1,1 +1,1 @@
-export * from './color-area.styles'
+export * from './color-area.styles.js'
