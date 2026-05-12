@@ -1,6 +1,6 @@
 {
   "name": "@rysinal/heroui-vue-standard",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "Shared configurations for HeroUI Vue",
   "license": "Apache-2.0",
