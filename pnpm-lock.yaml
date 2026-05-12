@@ -129,6 +129,9 @@ importers:
       tailwind-variants:
         specifier: ^3.2.2
         version: 3.2.2(tailwind-merge@3.5.0)(tailwindcss@4.2.4)
+      tw-animate-css:
+        specifier: ^1.4.0
+        version: 1.4.0
     devDependencies:
       '@rysinal/heroui-vue-standard':
         specifier: workspace:*
@@ -139,9 +142,6 @@ importers:
       tailwindcss:
         specifier: ^4.1.18
         version: 4.2.4
-      tw-animate-css:
-        specifier: ^1.4.0
-        version: 1.4.0
       typescript:
         specifier: ^5.8.3
         version: 5.9.3

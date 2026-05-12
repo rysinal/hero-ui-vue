@@ -2,9 +2,14 @@
 
 /* HeroUI v3 Styles - Layered Theme Architecture */
 
-/* Base layer - Tailwind CSS v4 */
-@import "tailwindcss";
+/* Make Tailwind utilities available to @apply without emitting Tailwind twice. */
+@reference "tailwindcss";
+
+/* External animation utilities used by overlay components. */
 @import "tw-animate-css";
+
+/* Keep package utility class names discoverable when consumed from node_modules. */
+@source "./components";
 
 /* Base styles */
 @import "./base/base.css" layer(base);

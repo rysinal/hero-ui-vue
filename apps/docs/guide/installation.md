@@ -1,25 +1,22 @@
 # Installation
 
-## Prerequisites
+## Requirements
 
-- Node.js 18+
-- Vue 3.3+
+- Vue 3.4+
 - Tailwind CSS 4+
 
-HeroUI Vue is currently designed for Vue 3 projects that already use Tailwind CSS 4.
+## Quick Install
 
-## 1. Install Packages
-
-Install both packages. The Vue package contains the components, and the styles package contains the CSS they need.
+Install HeroUI Vue and required styles:
 
 ::: code-group
 
-```bash [pnpm]
-pnpm add @rysinal/heroui-vue @rysinal/heroui-vue-styles
-```
-
 ```bash [npm]
 npm install @rysinal/heroui-vue @rysinal/heroui-vue-styles
+```
+
+```bash [pnpm]
+pnpm add @rysinal/heroui-vue @rysinal/heroui-vue-styles
 ```
 
 ```bash [yarn]
@@ -28,33 +25,24 @@ yarn add @rysinal/heroui-vue @rysinal/heroui-vue-styles
 
 :::
 
-## 2. Import Styles
+## Import Styles
 
-Import the HeroUI styles once in your app entry file:
-
-```ts
-// main.ts
-import { createApp } from 'vue'
-import '@rysinal/heroui-vue-styles/styles.css'
-import App from './App.vue'
-
-createApp(App).mount('#app')
-```
-
-## 3. Configure Tailwind CSS
-
-Tell Tailwind CSS 4 to scan the HeroUI Vue package. Put this in your main CSS file, usually `src/style.css` or `src/assets/main.css`:
+Add to your main CSS file, for example `src/style.css`:
 
 ```css
 @import "tailwindcss";
-@source "../node_modules/@rysinal/heroui-vue";
+@import "@rysinal/heroui-vue-styles/styles.css";
 ```
 
-The `@source` line is needed because Tailwind does not scan component code inside `node_modules` by default. If your CSS file is nested deeper than `src/style.css`, adjust the `../node_modules` path.
+Import order matters. Always import `tailwindcss` first.
 
-## 4. Use a Component
+If your app does not already load that CSS file, import it from `src/main.ts`:
 
-Use your first component in any Vue file:
+```ts
+import './style.css'
+```
+
+## Use Components
 
 ```vue
 <script setup lang="ts">

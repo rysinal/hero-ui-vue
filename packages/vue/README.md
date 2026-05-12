@@ -6,49 +6,49 @@ Documentation: https://hero-ui-vue.pages.dev
 
 > Work in progress: this package is still under active development and is not ready for production use.
 
-## Installation
+## Quick Start
 
-HeroUI Vue is currently designed for Vue 3 projects that use Tailwind CSS 4.
+Get started with HeroUI Vue in minutes.
 
-Install the Vue components and the required styles package:
+### Requirements
 
-```bash
-pnpm add @rysinal/heroui-vue @rysinal/heroui-vue-styles
-```
+- Vue 3.4+
+- Tailwind CSS v4
+
+### Quick Install
+
+Install HeroUI Vue and required styles:
 
 ```bash
 npm install @rysinal/heroui-vue @rysinal/heroui-vue-styles
 ```
 
 ```bash
+pnpm add @rysinal/heroui-vue @rysinal/heroui-vue-styles
+```
+
+```bash
 yarn add @rysinal/heroui-vue @rysinal/heroui-vue-styles
 ```
 
-## Setup
+### Import Styles
 
-Import the styles once in your application entry file:
-
-```ts
-// src/main.ts
-import { createApp } from 'vue'
-import '@rysinal/heroui-vue-styles/styles.css'
-import App from './App.vue'
-
-createApp(App).mount('#app')
-```
-
-Tell Tailwind CSS 4 to scan the HeroUI Vue package. Put this in your main CSS file, usually `src/style.css` or `src/assets/main.css`:
+Add to your main CSS file, for example `src/style.css`:
 
 ```css
 @import "tailwindcss";
-@source "../node_modules/@rysinal/heroui-vue";
+@import "@rysinal/heroui-vue-styles/styles.css";
 ```
 
-The `@source` line is needed because Tailwind does not scan component code inside `node_modules` by default. If your CSS file is nested deeper than `src/style.css`, adjust the `../node_modules` path.
+Import order matters. Always import `tailwindcss` first.
 
-## Quick Start
+If your app does not already load that CSS file, import it from `src/main.ts`:
 
-Use your first component in any Vue file:
+```ts
+import './style.css'
+```
+
+### Use Components
 
 ```vue
 <script setup lang="ts">
@@ -59,6 +59,11 @@ import { Button } from '@rysinal/heroui-vue'
   <Button variant="primary">Click me</Button>
 </template>
 ```
+
+### What's Next?
+
+- Documentation: https://hero-ui-vue.pages.dev
+- Components: https://hero-ui-vue.pages.dev/components/
 
 ## Packages
 

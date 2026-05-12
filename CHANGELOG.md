@@ -6,7 +6,8 @@ All notable changes to HeroUI Vue are documented here.
 
 ### Changed
 
-- Simplified installation docs with file-level setup steps for app entry styles, Tailwind CSS source scanning, and first component usage.
+- Aligned README installation docs with the upstream HeroUI Quick Start structure.
+- Moved package Tailwind source scanning into the styles entrypoint so consumers do not need to configure `@source` manually.
 
 ## 0.0.3
 
