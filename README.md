@@ -45,12 +45,28 @@ Install HeroUI Vue and required styles:
 ```bash
 # npm
 npm install @rysinal/heroui-vue @rysinal/heroui-vue-styles
+npm install -D tailwindcss @tailwindcss/vite
 
 # pnpm
 pnpm add @rysinal/heroui-vue @rysinal/heroui-vue-styles
+pnpm add -D tailwindcss @tailwindcss/vite
 
 # yarn
 yarn add @rysinal/heroui-vue @rysinal/heroui-vue-styles
+yarn add -D tailwindcss @tailwindcss/vite
+```
+
+If Tailwind CSS 4 is already configured in your app, keep your existing setup.
+For a Vite app, add the Tailwind plugin:
+
+```ts
+import tailwindcss from '@tailwindcss/vite'
+import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  plugins: [tailwindcss(), vue()],
+})
 ```
 
 ### Import Styles

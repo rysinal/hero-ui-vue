@@ -10,8 +10,8 @@
 
 /*
  * Do not @source component TypeScript here. Tailwind scans object keys as class
- * candidates too, which can emit global utilities such as `.container` and
- * collide with host themes like VitePress.
+ * candidates too, which can emit global layout utilities and collide with host
+ * themes like VitePress.
  */
 
 /* Base styles */
