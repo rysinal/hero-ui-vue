@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+/* global Event, FocusEvent, HTMLInputElement */
+import { computed, ref, watch } from 'vue'
 import { inputVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
 
@@ -38,7 +39,17 @@ const emit = defineEmits<{
 }>()
 
 const finalIsDisabled = computed(() => props.disabled ?? props.isDisabled)
+const isControlled = computed(() => props.modelValue !== undefined)
+const internalValue = ref<string | number>(props.modelValue ?? '')
+const inputValue = computed(() => props.modelValue ?? internalValue.value)
 const { interactionAttrs, interactionHandlers } = useInteractionStates(() => finalIsDisabled.value)
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    if (isControlled.value) internalValue.value = value ?? ''
+  },
+)
 
 const inputClass = computed(() => {
   const styles = inputVariants({
@@ -51,6 +62,8 @@ const inputClass = computed(() => {
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement
   const value = props.type === 'number' ? Number(target.value) : target.value
+
+  if (!isControlled.value) internalValue.value = value
   emit('update:modelValue', value)
   emit('input', event)
 }
@@ -70,7 +83,7 @@ const handleFocus = (event: FocusEvent) => {
     :class="inputClass"
     :type="props.type"
     :placeholder="props.placeholder"
-    :value="props.modelValue"
+    :value="inputValue"
     :aria-disabled="dataAttr(finalIsDisabled)"
     :aria-invalid="dataAttr(props.isInvalid)"
     :data-disabled="dataAttr(finalIsDisabled)"

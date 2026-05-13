@@ -20,8 +20,8 @@
             <ModalHeader>
               <ModalHeading>Scroll: {{ scrollLabel }}</ModalHeading>
               <p class="demo-modal-scroll-copy">
-                Compare scroll behaviors. Inside keeps content scrollable within the modal, while
-                outside allows the modal container to scroll.
+                Compare scroll behaviors - inside keeps content scrollable within the modal,
+                outside allows page scrolling
               </p>
             </ModalHeader>
             <ModalBody>
@@ -35,6 +35,7 @@
               <Button variant="secondary" @click="close">Cancel</Button>
               <Button @click="close">Confirm</Button>
             </ModalFooter>
+            <ModalCloseTrigger />
           </ModalDialog>
         </ModalContainer>
       </ModalBackdrop>

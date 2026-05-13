@@ -41,7 +41,8 @@ if (context) {
 <template>
   <div
     :class="containerClass"
-    :data-entering="dataAttr(true)"
+    :data-entering="dataAttr(context?.isEntering.value ?? true)"
+    :data-exiting="dataAttr(context?.isExiting.value)"
     :data-placement="placement"
     data-slot="modal-container"
   >

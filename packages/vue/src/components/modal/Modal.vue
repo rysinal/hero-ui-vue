@@ -25,6 +25,8 @@ const emit = defineEmits<{
 const internalOpen = ref(props.defaultOpen)
 const placement = ref<ModalPlacement>('auto')
 const isOpen = computed(() => props.modelValue ?? props.isOpen ?? internalOpen.value)
+const isEntering = computed(() => isOpen.value)
+const isExiting = computed(() => false)
 const slots = computed(() => modalVariants())
 
 watch(
@@ -48,6 +50,8 @@ const handleRootClick = (event: MouseEvent) => {
 
 provide(MODAL_CONTEXT_KEY, {
   close: () => setOpen(false),
+  isEntering,
+  isExiting,
   isOpen,
   open: () => setOpen(true),
   placement: computed(() => placement.value),

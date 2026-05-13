@@ -156,3 +156,7 @@
 .button--full-width {
   @apply w-full;
 }
+
+.button.w-full {
+  width: 100%;
+}

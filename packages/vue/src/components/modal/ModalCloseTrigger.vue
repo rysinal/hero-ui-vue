@@ -22,6 +22,6 @@ const closeClass = computed(() => composeTwClasses(props.class, context?.slots.v
     :aria-label="ariaLabel"
     :class="closeClass"
     data-slot="modal-close-trigger"
-    @click="context?.close"
+    @click.stop="context?.close"
   />
 </template>

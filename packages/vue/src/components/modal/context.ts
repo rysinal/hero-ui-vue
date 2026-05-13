@@ -10,6 +10,8 @@ export interface ModalContext {
   close: () => void
   open: () => void
   isOpen: ComputedRef<boolean>
+  isEntering: ComputedRef<boolean>
+  isExiting: ComputedRef<boolean>
   placement: ComputedRef<ModalPlacement>
   setOpen: (value: boolean) => void
   setPlacement: (placement: ModalPlacement) => void

@@ -63,6 +63,7 @@
   &[data-exiting="true"],
   &[data-entering="true"] {
     @apply will-change-[opacity];
+    --tw-animation-fill-mode: both;
     @apply motion-reduce:animate-none;
   }
 }
@@ -93,10 +94,11 @@
  */
 .modal__container {
   @apply flex flex-col items-center;
-  @apply h-(--visual-viewport-height) w-full min-w-0 flex-1;
+  @apply w-full min-w-0 flex-1;
   @apply p-4;
   @apply sm:w-fit sm:p-10;
   @apply pointer-events-none;
+  height: var(--visual-viewport-height, 100dvh);
 
   /* Entering animation */
   &[data-entering="true"] {
@@ -132,6 +134,7 @@
   &[data-exiting="true"],
   &[data-entering="true"] {
     @apply will-change-[opacity,transform];
+    --tw-animation-fill-mode: both;
     @apply motion-reduce:animate-none;
   }
 }
@@ -140,7 +143,7 @@
  * Modifier: container--scroll-outside
  */
 .modal__container--scroll-outside {
-  @apply overflow-y-auto;
+  @apply overflow-y-auto overscroll-contain;
   @apply pointer-events-auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -195,7 +198,7 @@
  * Modifier: dialog--scroll-inside
  */
 .modal__dialog--scroll-inside {
-  @apply overflow-hidden;
+  @apply max-h-full overflow-hidden;
 }
 
 /**
@@ -283,6 +286,30 @@
   @apply rounded-full select-none;
 }
 
+.modal__icon.bg-default {
+  background-color: var(--color-default);
+}
+
+.modal__icon.bg-accent-soft {
+  background-color: var(--color-accent-soft);
+}
+
+.modal__icon.bg-success-soft {
+  background-color: var(--color-success-soft);
+}
+
+.modal__icon.text-foreground {
+  color: var(--color-foreground);
+}
+
+.modal__icon.text-accent-soft-foreground {
+  color: var(--color-accent-soft-foreground);
+}
+
+.modal__icon.text-success-soft-foreground {
+  color: var(--color-success-soft-foreground);
+}
+
 /**
  * Element: body - the main content area
  */
@@ -292,11 +319,16 @@
   @apply my-0;
 }
 
+.modal__header > :where(p),
+.modal__body > :where(p) {
+  margin: 0;
+}
+
 /**
  * Modifier: body--scroll-inside
  */
 .modal__body--scroll-inside {
-  @apply overflow-y-auto;
+  @apply overflow-y-auto overscroll-contain;
   -webkit-overflow-scrolling: touch;
 }
 

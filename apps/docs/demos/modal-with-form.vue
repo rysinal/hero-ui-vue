@@ -20,18 +20,18 @@
           </ModalHeader>
           <ModalBody class="demo-modal-form-body">
             <Surface>
-              <form class="demo-modal-form">
-                <TextField class="w-full" label="Name" name="name" placeholder="Enter your name" />
-                <TextField class="w-full" label="Email" name="email" placeholder="Enter your email" type="email" />
-                <TextField class="w-full" label="Phone" name="phone" placeholder="Enter your phone number" type="tel" />
-                <TextField class="w-full" label="Company" name="company" placeholder="Enter your company name" />
-                <TextField class="w-full" label="Message" name="message" placeholder="Enter your message" />
+              <form id="demo-modal-contact-form" class="demo-modal-form" @submit.prevent>
+                <TextField class="w-full" full-width is-required label="Name" name="name" placeholder="Enter your name" />
+                <TextField class="w-full" full-width is-required label="Email" name="email" placeholder="Enter your email" type="email" />
+                <TextField class="w-full" full-width label="Phone" name="phone" placeholder="Enter your phone number" type="tel" />
+                <TextField class="w-full" full-width label="Company" name="company" placeholder="Enter your company name" />
+                <TextField class="w-full" full-width is-required label="Message" name="message" placeholder="Enter your message" />
               </form>
             </Surface>
           </ModalBody>
           <ModalFooter v-slot="{ close }">
             <Button variant="secondary" @click="close">Cancel</Button>
-            <Button @click="close">Send Message</Button>
+            <Button @click="submitForm(close)">Send Message</Button>
           </ModalFooter>
         </ModalDialog>
       </ModalContainer>
@@ -40,6 +40,7 @@
 </template>
 
 <script setup>
+/* global document, HTMLFormElement */
 import {
   Button,
   Modal,
@@ -55,6 +56,13 @@ import {
   Surface,
   TextField,
 } from '@rysinal/heroui-vue'
+
+const submitForm = (close) => {
+  const form = document.getElementById('demo-modal-contact-form')
+
+  if (!(form instanceof HTMLFormElement)) return
+  if (form.reportValidity()) close()
+}
 </script>
 
 <style lang="less">

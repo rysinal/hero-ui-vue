@@ -1,6 +1,6 @@
-/* global document, HTMLButtonElement, KeyboardEvent, MouseEvent */
+/* global Animation, document, HTMLElement, HTMLButtonElement, KeyboardEvent, MouseEvent, WheelEvent, setTimeout, window */
 import { enableAutoUnmount, mount } from '@vue/test-utils'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick, ref } from 'vue'
 import {
   Modal,
@@ -18,9 +18,30 @@ const cleanupTeleport = () => {
   document.body.innerHTML = ''
 }
 
+const flushModalAnimation = async () => {
+  await nextTick()
+  await Promise.resolve()
+  await new Promise((resolve) => setTimeout(resolve, 50))
+  await nextTick()
+}
+
 enableAutoUnmount(afterEach)
 
+const originalScrollToDescriptor = Object.getOwnPropertyDescriptor(window, 'scrollTo')
+
+beforeEach(() => {
+  Object.defineProperty(window, 'scrollTo', {
+    configurable: true,
+    value: vi.fn(),
+    writable: true,
+  })
+})
+
 afterEach(() => {
+  vi.useRealTimers()
+  if (originalScrollToDescriptor) {
+    Object.defineProperty(window, 'scrollTo', originalScrollToDescriptor)
+  }
   cleanupTeleport()
 })
 
@@ -105,9 +126,71 @@ describe('Modal', () => {
     )
 
     document.querySelector<HTMLButtonElement>('[data-test="close"]')?.click()
-    await nextTick()
+    await flushModalAnimation()
 
     expect(document.querySelector('[data-slot="modal-backdrop"]')).toBeNull()
+  })
+
+  it('locks page scroll while open and waits for exit animations before unmounting', async () => {
+    const originalGetAnimations = HTMLElement.prototype.getAnimations
+    let getAnimationsCalls = 0
+    let finishExitAnimation!: () => void
+    const exitAnimationFinished = new Promise<Animation>((resolve) => {
+      finishExitAnimation = () => resolve({} as Animation)
+    })
+
+    HTMLElement.prototype.getAnimations = vi.fn(() => {
+      getAnimationsCalls += 1
+      if (getAnimationsCalls <= 2) return []
+
+      return [
+        {
+          finished: exitAnimationFinished,
+          playState: 'running',
+        } as Animation,
+      ]
+    }) as HTMLElement['getAnimations']
+
+    const wrapper = createModal()
+
+    try {
+      await wrapper.get('[data-test="trigger"]').trigger('click')
+      await flushModalAnimation()
+
+      expect(document.body.style.overflow).toBe('')
+      expect(document.body.style.paddingRight).toBe('')
+      expect(document.documentElement.style.overflow).toBe('hidden')
+      expect(document.documentElement.style.scrollbarGutter).toBe('stable')
+      expect(
+        document.querySelector('[data-slot="modal-backdrop"]')?.hasAttribute('data-entering'),
+      ).toBe(false)
+
+      document.querySelector<HTMLButtonElement>('[data-test="close"]')?.click()
+      await nextTick()
+
+      expect(document.querySelector('[data-slot="modal-backdrop"]')).not.toBeNull()
+      expect(
+        document.querySelector('[data-slot="modal-backdrop"]')?.hasAttribute('data-entering'),
+      ).toBe(false)
+      expect(
+        document.querySelector('[data-slot="modal-backdrop"]')?.getAttribute('data-exiting'),
+      ).toBe('true')
+
+      await flushModalAnimation()
+      expect(document.querySelector('[data-slot="modal-backdrop"]')).not.toBeNull()
+
+      finishExitAnimation()
+      await flushModalAnimation()
+
+      expect(document.querySelector('[data-slot="modal-backdrop"]')).toBeNull()
+      expect(document.body.style.overflow).toBe('')
+      expect(document.body.style.paddingRight).toBe('')
+      expect(document.documentElement.style.overflow).toBe('')
+      expect(document.documentElement.style.scrollbarGutter).toBe('')
+      expect(document.documentElement.style.paddingRight).toBe('')
+    } finally {
+      HTMLElement.prototype.getAnimations = originalGetAnimations
+    }
   })
 
   it('dismisses on backdrop click by default', async () => {
@@ -117,8 +200,100 @@ describe('Modal', () => {
     document
       .querySelector('[data-slot="modal-backdrop"]')
       ?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await flushModalAnimation()
+
+    expect(document.querySelector('[data-slot="modal-backdrop"]')).toBeNull()
+  })
+
+  it('does not propagate backdrop clicks to the root trigger', async () => {
+    const wrapper = createModal()
+    const bodyClick = vi.fn()
+    document.body.addEventListener('click', bodyClick)
+
+    await wrapper.get('[data-test="trigger"]').trigger('click')
+    bodyClick.mockClear()
+    document
+      .querySelector('[data-slot="modal-backdrop"]')
+      ?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await flushModalAnimation()
+
+    expect(document.querySelector('[data-slot="modal-backdrop"]')).toBeNull()
+    expect(bodyClick).not.toHaveBeenCalled()
+    document.body.removeEventListener('click', bodyClick)
+  })
+
+  it('prevents backdrop wheel events from scrolling the page behind the modal', async () => {
+    const wrapper = createModal()
+    const bodyWheel = vi.fn()
+    document.body.addEventListener('wheel', bodyWheel)
+
+    await wrapper.get('[data-test="trigger"]').trigger('click')
+
+    const backdrop = document.querySelector('[data-slot="modal-backdrop"]')
+    const wheel = new WheelEvent('wheel', { bubbles: true, cancelable: true, deltaY: 120 })
+    const propagated = backdrop?.dispatchEvent(wheel)
+
+    expect(propagated).toBe(false)
+    expect(wheel.defaultPrevented).toBe(true)
+    expect(bodyWheel).not.toHaveBeenCalled()
+    document.body.removeEventListener('wheel', bodyWheel)
+  })
+
+  it('allows wheel events inside scrollable modal content', async () => {
+    const wrapper = mount(
+      {
+        components: {
+          Modal,
+          ModalBackdrop,
+          ModalBody,
+          ModalContainer,
+          ModalDialog,
+          ModalTrigger,
+        },
+        template: `
+          <Modal>
+            <ModalTrigger data-test="trigger">Open modal</ModalTrigger>
+            <ModalBackdrop>
+              <ModalContainer>
+                <ModalDialog>
+                  <ModalBody data-test="scrollable" style="height: 4rem; overflow-y: auto;">
+                    <div style="height: 20rem;">Scrollable modal content</div>
+                  </ModalBody>
+                </ModalDialog>
+              </ModalContainer>
+            </ModalBackdrop>
+          </Modal>
+        `,
+      },
+      { attachTo: document.body },
+    )
+
+    await wrapper.get('[data-test="trigger"]').trigger('click')
+
+    const scrollable = document.querySelector<HTMLElement>('[data-test="scrollable"]')!
+    Object.defineProperty(scrollable, 'clientHeight', { configurable: true, value: 100 })
+    Object.defineProperty(scrollable, 'scrollHeight', { configurable: true, value: 300 })
+    scrollable.scrollTop = 20
+
+    const wheel = new WheelEvent('wheel', { bubbles: true, cancelable: true, deltaY: 120 })
+    const propagated = scrollable.dispatchEvent(wheel)
+
+    expect(propagated).toBe(true)
+    expect(wheel.defaultPrevented).toBe(false)
+  })
+
+  it('focuses the dialog on open and does not restore focus-visible to the trigger on Escape', async () => {
+    const wrapper = createModal()
+
+    await wrapper.get('[data-test="trigger"]').trigger('click')
     await nextTick()
 
+    expect(document.activeElement?.getAttribute('data-slot')).toBe('modal-dialog')
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    await flushModalAnimation()
+
+    expect(document.activeElement).not.toBe(wrapper.get('[data-test="trigger"]').element)
     expect(document.querySelector('[data-slot="modal-backdrop"]')).toBeNull()
   })
 
@@ -191,6 +366,8 @@ describe('Modal', () => {
     await nextTick()
 
     expect(wrapper.vm.isOpen).toBe(false)
+    await flushModalAnimation()
+
     expect(document.querySelector('[data-slot="modal-backdrop"]')).toBeNull()
   })
 

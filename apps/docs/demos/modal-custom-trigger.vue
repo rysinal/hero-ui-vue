@@ -9,7 +9,7 @@
       </div>
       <div class="demo-modal-card-copy">
         <p>Settings</p>
-        <span>Manage your preferences</span>
+        <p>Manage your preferences</p>
       </div>
     </ModalTrigger>
     <ModalBackdrop>
@@ -92,18 +92,17 @@ import {
   flex-direction: column;
   gap: 0.125rem;
 
-  p,
-  span {
+  p {
     margin: 0;
   }
 
-  p {
+  p:first-child {
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--foreground);
   }
 
-  span {
+  p:last-child {
     font-size: 0.75rem;
     color: var(--muted);
   }
