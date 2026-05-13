@@ -265,9 +265,13 @@
 /**
  * Element: heading - the main title text
  */
-.modal__heading {
+.modal__heading,
+.modal__dialog .modal__heading {
   @apply align-middle;
   @apply text-base font-medium text-foreground;
+  margin: 0;
+  border: 0;
+  padding: 0;
 }
 
 /**

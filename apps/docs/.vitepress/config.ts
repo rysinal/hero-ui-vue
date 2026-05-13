@@ -57,6 +57,7 @@ export default defineConfig({
             { text: 'Card', link: '/components/card' },
             { text: 'Chip', link: '/components/chip' },
             { text: 'Disclosure', link: '/components/disclosure' },
+            { text: 'Disclosure Group', link: '/components/disclosure-group' },
             { text: 'Empty State', link: '/components/empty-state' },
             { text: 'Skeleton', link: '/components/skeleton' },
             { text: 'Surface', link: '/components/surface' },

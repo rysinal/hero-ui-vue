@@ -55,7 +55,7 @@ demo-preview=../demos/disclosure-basic.vue
 ## Related Components
 
 - [Accordion](/components/accordion)
-- DisclosureGroup
+- [DisclosureGroup](/components/disclosure-group)
 
 ## Custom Render Function
 
@@ -75,20 +75,27 @@ Use `DisclosureTrigger`, `DisclosureIndicator`, and `DisclosureContent` for comp
 
 ### Disclosure Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `expanded` / `isExpanded` | `boolean` | `undefined` | Controlled expanded state |
-| `defaultExpanded` | `boolean` | `false` | Initial uncontrolled expanded state |
-| `disabled` / `isDisabled` | `boolean` | `false` | Disables trigger interaction |
-| `as` | `string` | `'div'` | Root element tag |
+| Prop                      | Type      | Default     | Description                         |
+| ------------------------- | --------- | ----------- | ----------------------------------- |
+| `expanded` / `isExpanded` | `boolean` | `undefined` | Controlled expanded state           |
+| `defaultExpanded`         | `boolean` | `false`     | Initial uncontrolled expanded state |
+| `disabled` / `isDisabled` | `boolean` | `false`     | Disables trigger interaction        |
+| `as`                      | `string`  | `'div'`     | Root element tag                    |
+
+### DisclosureHeading Props
+
+| Prop    | Type                         | Default     | Description                                  |
+| ------- | ---------------------------- | ----------- | -------------------------------------------- |
+| `level` | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `3`         | Heading level, matching React Aria `Heading` |
+| `as`    | `string`                     | `undefined` | Optional element override                    |
 
 ### Events
 
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `update:expanded` | `boolean` | Emitted when expanded state changes |
+| Event               | Payload   | Description                         |
+| ------------------- | --------- | ----------------------------------- |
+| `update:expanded`   | `boolean` | Emitted when expanded state changes |
 | `update:isExpanded` | `boolean` | Emitted when expanded state changes |
-| `expanded-change` | `boolean` | Emitted when expanded state changes |
+| `expanded-change`   | `boolean` | Emitted when expanded state changes |
 
 <style lang="less">
 .related-showcases {

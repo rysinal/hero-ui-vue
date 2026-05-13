@@ -73,7 +73,7 @@ const items = [
   gap: 1rem;
 }
 
-.demo-autocomplete-variant-section h3 {
+.demo-autocomplete-variants .demo-autocomplete-variant-section h3 {
   margin: 0;
   font-size: 1.125rem;
   font-weight: 600;

@@ -103,7 +103,7 @@ import {
   gap: 0.5rem;
 }
 
-.demo-accordion-heading {
+.demo-accordion-disabled .demo-accordion-heading {
   margin: 0;
   color: var(--color-muted-foreground);
   font-size: 0.875rem;

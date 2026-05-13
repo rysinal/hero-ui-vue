@@ -3,8 +3,10 @@
   @apply relative;
 }
 
-.disclosure__heading {
+.disclosure .disclosure__heading {
   @apply flex;
+  margin: 0;
+  font: inherit;
 }
 
 .disclosure__trigger {
@@ -13,19 +15,25 @@
 
   /* Focus state */
   &:focus-visible:not(:focus),
-  &[data-focus-visible="true"] {
+  &[data-focus-visible='true'] {
     @apply status-focused;
   }
 
   /* Disabled state */
   &:disabled,
-  &[aria-disabled="true"] {
+  &[aria-disabled='true'] {
     @apply status-disabled;
   }
 }
 
 .disclosure__indicator {
-  @apply ml-auto size-4 shrink-0 text-inherit;
+  @apply ml-auto inline-flex size-4 shrink-0 items-center justify-center text-inherit;
+  line-height: 1;
+  transform-origin: center;
+
+  & > svg {
+    @apply block size-full shrink-0;
+  }
 
   /**
    * Transitions
@@ -33,7 +41,7 @@
   @apply transition duration-250 motion-reduce:transition-none;
 
   /* Expanded state for indicator rotation */
-  &[data-expanded="true"] {
+  &[data-expanded='true'] {
     @apply -rotate-180;
   }
 }
@@ -52,7 +60,7 @@
     opacity 200ms var(--ease-out);
   @apply motion-reduce:transition-none;
 
-  &[data-expanded="true"] {
+  &[data-expanded='true'] {
     will-change: height, opacity;
     opacity: 1;
   }

@@ -46,6 +46,7 @@ General-purpose UI components.
 - [Card](/components/card) - Structured surface container
 - [Chip](/components/chip) - Compact label or status
 - [Disclosure](/components/disclosure) - Collapsible section with trigger and animated panel
+- [Disclosure Group](/components/disclosure-group) - Coordinate expanded state across disclosure items
 - [Close Button](/components/close-button) - Button for closing/dismissing elements
 - [Empty State](/components/empty-state) - Empty list or search result placeholder
 - [Header](/components/header) - Section heading primitive

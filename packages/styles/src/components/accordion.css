@@ -22,7 +22,13 @@
 }
 
 .accordion__indicator {
-  @apply ml-auto size-4 shrink-0 text-muted;
+  @apply ml-auto inline-flex size-4 shrink-0 items-center justify-center text-muted;
+  line-height: 1;
+  transform-origin: center;
+
+  & > svg {
+    @apply block size-full shrink-0;
+  }
 
   /**
    * Transitions

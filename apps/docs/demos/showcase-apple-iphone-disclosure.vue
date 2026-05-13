@@ -14,7 +14,9 @@
           @click="selectByOffset(-1)"
         >
           <svg aria-hidden="true" viewBox="0 0 36 36">
-            <path d="m11 20c0-.3838.1465-.7676.4395-1.0605l5.5-5.5c.5854-.5859 1.5356-.5859 2.1211 0l5.5 5.5c.5859.5859.5859 1.5352 0 2.1211-.5854.5859-1.5356.5859-2.1211 0l-4.4395-4.4395-4.4395 4.4395c-.5854.5859-1.5356.5859-2.1211 0-.293-.293-.4395-.6768-.4395-1.0605z" />
+            <path
+              d="m11 20c0-.3838.1465-.7676.4395-1.0605l5.5-5.5c.5854-.5859 1.5356-.5859 2.1211 0l5.5 5.5c.5859.5859.5859 1.5352 0 2.1211-.5854.5859-1.5356.5859-2.1211 0l-4.4395-4.4395-4.4395 4.4395c-.5854.5859-1.5356.5859-2.1211 0-.293-.293-.4395-.6768-.4395-1.0605z"
+            />
           </svg>
         </Button>
         <Button
@@ -26,7 +28,9 @@
           @click="selectByOffset(1)"
         >
           <svg aria-hidden="true" viewBox="0 0 36 36">
-            <path d="m19.0625 22.5597 5.5-5.5076c.5854-.5854.5825-1.5323-.0039-2.1157-.5869-.5835-1.5366-.5815-2.1211.0039l-4.4375 4.4438-4.4375-4.4438c-.5845-.5854-1.5342-.5874-2.1211-.0039-.2944.2922-.4414.676-.4414 1.0598 0 .3818.1455.7637.4375 1.0559l5.5 5.5076c.2813.2815.6636.4403 1.0625.4403s.7812-.1588 1.0625-.4403z" />
+            <path
+              d="m19.0625 22.5597 5.5-5.5076c.5854-.5854.5825-1.5323-.0039-2.1157-.5869-.5835-1.5366-.5815-2.1211.0039l-4.4375 4.4438-4.4375-4.4438c-.5845-.5854-1.5342-.5874-2.1211-.0039-.2944.2922-.4414.676-.4414 1.0598 0 .3818.1455.7637.4375 1.0559l5.5 5.5076c.2813.2815.6636.4403 1.0625.4403s.7812-.1588 1.0625-.4403z"
+            />
           </svg>
         </Button>
       </div>
@@ -36,9 +40,9 @@
           v-for="item in showcaseItems"
           :key="item.id"
           :expanded="selectedId === item.id"
-          @expanded-change="(isExpanded) => handleExpandedChange(item.id, isExpanded)"
+          @expanded-change="isExpanded => handleExpandedChange(item.id, isExpanded)"
         >
-          <DisclosureHeading as="h3" class="apple-disclosure-showcase__heading">
+          <DisclosureHeading class="apple-disclosure-showcase__heading">
             <DisclosureTrigger
               class="apple-disclosure-showcase__trigger"
               :data-selected="selectedId === item.id ? 'true' : undefined"
@@ -49,9 +53,17 @@
                   class="apple-disclosure-showcase__swatch"
                   aria-hidden="true"
                 />
-                <svg v-else aria-hidden="true" class="apple-disclosure-showcase__plus" viewBox="0 0 24 24">
+                <svg
+                  v-else
+                  aria-hidden="true"
+                  class="apple-disclosure-showcase__plus"
+                  viewBox="0 0 24 24"
+                >
                   <circle cx="12" cy="12" fill="none" r="11.3" stroke="currentColor" />
-                  <path d="m16 11h-3v-3a1 1 0 0 0-2 0v3h-3a1 1 0 0 0 0 2h3v3a1 1 0 0 0 2 0v-3h3a1 1 0 0 0 0-2Z" fill="currentColor" />
+                  <path
+                    d="m16 11h-3v-3a1 1 0 0 0-2 0v3h-3a1 1 0 0 0 0 2h3v3a1 1 0 0 0 2 0v-3h3a1 1 0 0 0 0-2Z"
+                    fill="currentColor"
+                  />
                 </svg>
                 {{ item.label }}
               </span>
@@ -63,7 +75,8 @@
               :data-expanded="selectedId === item.id ? 'true' : undefined"
             >
               <p :data-expanded="selectedId === item.id ? 'true' : undefined">
-                <strong>{{ item.label }}</strong>. {{ item.content }}
+                <strong>{{ item.label }}</strong
+                >. {{ item.content }}
               </p>
             </DisclosureBody>
           </DisclosureContent>
@@ -78,7 +91,7 @@
       class="apple-disclosure-showcase__image"
       :data-selected="selectedId === item.id ? 'true' : undefined"
       :src="item.imgSrc"
-    >
+    />
   </section>
 </template>
 
@@ -97,49 +110,62 @@ const showcaseItems = [
   {
     content: 'Choose from three bold finishes. iPhone 17 Pro shown in Cosmic Orange.',
     id: 'colors',
-    imgSrc: 'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/colors_orange__f2ug4x6ry8uq_large_2x.jpg',
+    imgSrc:
+      'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/colors_orange__f2ug4x6ry8uq_large_2x.jpg',
     label: 'Colors',
   },
   {
-    content: 'Optimized for performance and battery. Aluminum alloy is remarkably light and has exceptional thermal conductivity.',
+    content:
+      'Optimized for performance and battery. Aluminum alloy is remarkably light and has exceptional thermal conductivity.',
     id: 'aluminum',
-    imgSrc: 'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/viewer_aluminum_endframe__fypyvk9kkg2m_large_2x.jpg',
+    imgSrc:
+      'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/viewer_aluminum_endframe__fypyvk9kkg2m_large_2x.jpg',
     label: 'Aluminum unibody',
   },
   {
-    content: 'Deionized water sealed inside moves heat away from the A19 Pro chip, allowing for even higher sustained performance.',
+    content:
+      'Deionized water sealed inside moves heat away from the A19 Pro chip, allowing for even higher sustained performance.',
     id: 'vapor-chamber',
-    imgSrc: 'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/viewer_vapor_chamber_endframe__dst8qkmuys4m_large_2x.jpg',
+    imgSrc:
+      'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/viewer_vapor_chamber_endframe__dst8qkmuys4m_large_2x.jpg',
     label: 'Vapor chamber',
   },
   {
-    content: 'Protects the back of iPhone 17 Pro, making it 4x more resistant to cracks. New Ceramic Shield 2 on the front has 3x better scratch resistance.',
+    content:
+      'Protects the back of iPhone 17 Pro, making it 4x more resistant to cracks. New Ceramic Shield 2 on the front has 3x better scratch resistance.',
     id: 'ceramic-shield',
-    imgSrc: 'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/ceramic_shield__de0653vp43cm_large_2x.jpg',
+    imgSrc:
+      'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/ceramic_shield__de0653vp43cm_large_2x.jpg',
     label: 'Ceramic shield',
   },
   {
-    content: 'Our best-ever 6.3-inch and 6.9-inch Super Retina XDR displays. Brighter. Better anti-reflection. ProMotion up to 120Hz.',
+    content:
+      'Our best-ever 6.3-inch and 6.9-inch Super Retina XDR displays. Brighter. Better anti-reflection. ProMotion up to 120Hz.',
     id: 'immersive-pro-display',
-    imgSrc: 'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/pro_display__c0jmzc5emcae_large_2x.jpg',
+    imgSrc:
+      'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/pro_display__c0jmzc5emcae_large_2x.jpg',
     label: 'Immersive pro display',
   },
   {
-    content: 'Instantly take a photo, record video, adjust settings, and more. So you never miss a moment.',
+    content:
+      'Instantly take a photo, record video, adjust settings, and more. So you never miss a moment.',
     id: 'camera-control',
-    imgSrc: 'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/camera_control__cy5kilwa0kwi_large_2x.jpg',
+    imgSrc:
+      'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/camera_control__cy5kilwa0kwi_large_2x.jpg',
     label: 'Camera control',
   },
   {
-    content: 'A customizable fast track to your favorite feature. Long press to launch the action you want: Silent mode, Translation, Shortcuts, and more.',
+    content:
+      'A customizable fast track to your favorite feature. Long press to launch the action you want: Silent mode, Translation, Shortcuts, and more.',
     id: 'action-button',
-    imgSrc: 'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/viewer_action_button_startframe__bb2coc4lpj2a_large_2x.jpg',
+    imgSrc:
+      'https://www.apple.com/v/iphone-17-pro/a/images/overview/product-viewer/viewer_action_button_startframe__bb2coc4lpj2a_large_2x.jpg',
     label: 'Action button',
   },
 ] as const
 
 const selectedId = ref<(typeof showcaseItems)[number]['id']>('colors')
-const selectedIndex = computed(() => showcaseItems.findIndex((item) => item.id === selectedId.value))
+const selectedIndex = computed(() => showcaseItems.findIndex(item => item.id === selectedId.value))
 
 const handleExpandedChange = (id: (typeof showcaseItems)[number]['id'], isExpanded: boolean) => {
   if (isExpanded) selectedId.value = id
@@ -184,7 +210,7 @@ const selectByOffset = (offset: number) => {
     transform 300ms var(--ease-out-quad);
 }
 
-.apple-disclosure-showcase__controls[data-expanded="true"] {
+.apple-disclosure-showcase__controls[data-expanded='true'] {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
@@ -231,12 +257,12 @@ const selectByOffset = (offset: number) => {
 }
 
 .apple-disclosure-showcase__trigger:hover,
-.apple-disclosure-showcase__trigger[data-hovered="true"],
-.apple-disclosure-showcase__trigger[data-selected="true"] {
+.apple-disclosure-showcase__trigger[data-hovered='true'],
+.apple-disclosure-showcase__trigger[data-selected='true'] {
   background: #272729;
 }
 
-.apple-disclosure-showcase__trigger[data-pressed="true"] {
+.apple-disclosure-showcase__trigger[data-pressed='true'] {
   transform: scale(0.98);
 }
 
@@ -289,7 +315,7 @@ const selectByOffset = (offset: number) => {
       transform 800ms cubic-bezier(0.18, 0.89, 0.32, 1.27);
   }
 
-  p[data-expanded="true"] {
+  p[data-expanded='true'] {
     opacity: 1;
     transform: translateY(0);
   }
@@ -314,7 +340,7 @@ const selectByOffset = (offset: number) => {
     transform 900ms var(--ease-out-quad);
 }
 
-.apple-disclosure-showcase__image[data-selected="true"] {
+.apple-disclosure-showcase__image[data-selected='true'] {
   transform: translate(0, -50%) scale(1.5);
   opacity: 1;
 }
@@ -357,7 +383,7 @@ const selectByOffset = (offset: number) => {
     transform: translate(10%, 0) scale(1);
   }
 
-  .apple-disclosure-showcase__image[data-selected="true"] {
+  .apple-disclosure-showcase__image[data-selected='true'] {
     transform: translate(0, 0) scale(1);
   }
 }

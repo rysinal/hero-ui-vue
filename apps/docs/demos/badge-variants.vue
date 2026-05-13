@@ -55,7 +55,7 @@ const colors = ['accent', 'default', 'success', 'warning', 'danger'] as const
   text-align: left;
 }
 
-.demo-badge-heading {
+.demo-badge-stack .demo-badge-heading {
   margin: 0;
   color: var(--color-muted-foreground);
   font-size: 0.875rem;

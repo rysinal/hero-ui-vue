@@ -224,9 +224,13 @@
 /**
  * Element: heading - the main title text
  */
-.drawer__heading {
+.drawer__heading,
+.drawer__dialog .drawer__heading {
   @apply align-middle;
   @apply text-base font-medium text-foreground;
+  margin: 0;
+  border: 0;
+  padding: 0;
 }
 
 /**

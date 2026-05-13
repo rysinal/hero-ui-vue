@@ -62,8 +62,14 @@
 }
 
 /* Popover heading */
-.popover__heading {
+.popover__heading,
+.popover .popover__heading {
   @apply font-medium;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+  line-height: inherit;
 }
 
 /* Popover trigger */

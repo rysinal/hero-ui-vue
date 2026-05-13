@@ -217,9 +217,13 @@
 /**
  * Element: heading - the main title text
  */
-.alert-dialog__heading {
+.alert-dialog__heading,
+.alert-dialog__dialog .alert-dialog__heading {
   @apply align-middle;
   @apply text-base font-medium text-foreground;
+  margin: 0;
+  border: 0;
+  padding: 0;
 }
 
 /**

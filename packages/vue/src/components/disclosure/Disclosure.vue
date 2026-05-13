@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
+import { computed, getCurrentInstance, inject, provide, ref, watch } from 'vue'
 import { disclosureVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
+import { DISCLOSURE_GROUP_CONTEXT_KEY, type DisclosureGroupKey } from '../disclosure-group/context'
 import { DISCLOSURE_CONTEXT_KEY } from './context'
 
 interface DisclosureProps {
@@ -10,6 +11,7 @@ interface DisclosureProps {
   defaultExpanded?: boolean
   disabled?: boolean
   expanded?: boolean
+  id?: DisclosureGroupKey
   isDisabled?: boolean
   isExpanded?: boolean
 }
@@ -38,19 +40,34 @@ const hasProp = (name: string) => {
 }
 
 const internalExpanded = ref(props.defaultExpanded)
+const disclosureGroupContext = inject(DISCLOSURE_GROUP_CONTEXT_KEY, null)
 const slots = computed(() => disclosureVariants())
+const isGroupControlled = computed(() => disclosureGroupContext !== null && props.id !== undefined)
 const isExpanded = computed(() =>
-  hasProp('expanded')
-    ? Boolean(props.expanded)
-    : hasProp('isExpanded')
-      ? Boolean(props.isExpanded)
-      : internalExpanded.value,
+  isGroupControlled.value
+    ? Boolean(disclosureGroupContext?.isExpanded(props.id as DisclosureGroupKey))
+    : hasProp('expanded')
+      ? Boolean(props.expanded)
+      : hasProp('isExpanded')
+        ? Boolean(props.isExpanded)
+        : internalExpanded.value,
 )
-const isDisabled = computed(() => props.disabled ?? props.isDisabled)
+const isDisabled = computed(
+  () => props.disabled ?? props.isDisabled ?? disclosureGroupContext?.isDisabled.value,
+)
 const disclosureClass = computed(() => composeTwClasses(props.class, slots.value.base()))
 
 const setExpanded = (nextExpanded: boolean) => {
   if (isDisabled.value) return
+
+  if (isGroupControlled.value) {
+    disclosureGroupContext?.toggle(props.id as DisclosureGroupKey)
+    emit('update:expanded', nextExpanded)
+    emit('update:isExpanded', nextExpanded)
+    emit('expanded-change', nextExpanded)
+    return
+  }
+
   internalExpanded.value = nextExpanded
   emit('update:expanded', nextExpanded)
   emit('update:isExpanded', nextExpanded)
@@ -81,6 +98,7 @@ provide(DISCLOSURE_CONTEXT_KEY, {
 <template>
   <component
     :is="props.as"
+    :id="props.id"
     :aria-disabled="dataAttr(isDisabled)"
     :class="disclosureClass"
     :data-disabled="dataAttr(isDisabled)"

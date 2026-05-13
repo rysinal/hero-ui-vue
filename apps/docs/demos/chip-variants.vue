@@ -103,7 +103,7 @@ const CircleDashedIcon = defineComponent({
   gap: 1rem;
 }
 
-.demo-chip-heading {
+.demo-chip-variants .demo-chip-heading {
   margin: 0;
   color: var(--color-muted-foreground);
   font-size: 0.875rem;
