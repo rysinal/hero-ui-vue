@@ -72,7 +72,7 @@ const paymentOptions = [
   align-items: stretch;
   padding: 1.5rem;
   border-radius: 1.5rem;
-  background: #f5f5f5;
+  background: var(--color-background);
   text-align: left;
 }
 

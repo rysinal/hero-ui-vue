@@ -19,6 +19,7 @@
   --doc-surface-raised: oklch(100% 0 0);
   --doc-sidebar: oklch(98% 0.006 260 / 86%);
   --doc-shadow: 0 18px 50px oklch(36% 0.05 260 / 10%);
+  --color-muted-foreground: var(--color-muted);
 }
 
 .dark {
@@ -193,7 +194,8 @@ body {
   padding: 40px;
   border: 1px solid color-mix(in oklch, var(--vp-c-divider), transparent 30%);
   border-radius: 22px;
-  background: #f5f5f5;
+  background: var(--color-background);
+  color: var(--color-foreground);
   box-shadow: var(--doc-shadow);
   text-align: left;
 }
@@ -216,7 +218,8 @@ body {
   padding: 40px !important;
   border: 0 !important;
   border-radius: 0 !important;
-  background: #f5f5f5 !important;
+  background: var(--color-background) !important;
+  color: var(--color-foreground) !important;
   box-shadow: none !important;
   text-align: left !important;
 }
@@ -548,7 +551,7 @@ body {
 .vitepress-demo-preview-preview .text-muted,
 .vitepress-demo-preview__ant-design__container .text-muted,
 .demo-preview .text-muted {
-  color: var(--color-muted-foreground);
+  color: var(--color-muted);
 }
 
 .vitepress-demo-preview__element .text-inherit,
