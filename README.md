@@ -109,19 +109,19 @@ Visit the [documentation site](https://hero-ui-vue.pages.dev) for full documenta
 
 ## Component Coverage
 
-Baseline: HeroUI React v3.0.4 docs list 71 React components. HeroUI Vue currently has docs-backed parity entries for 49 of those components, plus 5 additional Vue primitives used by the docs.
+Baseline: HeroUI React v3.0.4 docs list 71 React components. HeroUI Vue currently has docs-backed parity entries for 50 of those components, plus 5 additional Vue primitives used by the docs.
 
-### React parity implemented (49/71)
+### React parity implemented (50/71)
 
-Accordion, Alert, AlertDialog, Autocomplete, Avatar, Badge, Breadcrumbs, Button, ButtonGroup, Card, Checkbox, CheckboxGroup, Chip, CloseButton, Description, Disclosure, DisclosureGroup, ErrorMessage, FieldError, Fieldset, Input, InputGroup, InputOTP, Kbd, Label, Link, ListBox, Meter, Modal, NumberField, Pagination, ProgressBar, ProgressCircle, RadioGroup, ScrollShadow, SearchField, Separator, Skeleton, Spinner, Surface, Switch, Tabs, TagGroup, Text, TextArea, TextField, Toolbar, ToggleButton, ToggleButtonGroup.
+Accordion, Alert, AlertDialog, Autocomplete, Avatar, Badge, Breadcrumbs, Button, ButtonGroup, Card, Checkbox, CheckboxGroup, Chip, CloseButton, Description, Disclosure, DisclosureGroup, Drawer, ErrorMessage, FieldError, Fieldset, Input, InputGroup, InputOTP, Kbd, Label, Link, ListBox, Meter, Modal, NumberField, Pagination, ProgressBar, ProgressCircle, RadioGroup, ScrollShadow, SearchField, Separator, Skeleton, Spinner, Surface, Switch, Tabs, TagGroup, Text, TextArea, TextField, Toolbar, ToggleButton, ToggleButtonGroup.
 
 ### Additional Vue docs components
 
 EmptyState, Header, Radio, SwitchGroup, Tag.
 
-### Remaining React parity gaps (22)
+### Remaining React parity gaps (21)
 
-Calendar, ColorArea, ColorField, ColorSlider, ColorSwatch, ColorSwatchPicker, ColorPicker, ComboBox, DateField, DatePicker, DateRangePicker, Drawer, Dropdown, Form, Popover, RangeCalendar, Select, Slider, Table, TimeField, Toast, Tooltip.
+Calendar, ColorArea, ColorField, ColorSlider, ColorSwatch, ColorSwatchPicker, ColorPicker, ComboBox, DateField, DatePicker, DateRangePicker, Dropdown, Form, Popover, RangeCalendar, Select, Slider, Table, TimeField, Toast, Tooltip.
 
 ## Development
 

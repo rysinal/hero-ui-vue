@@ -54,6 +54,7 @@ General-purpose UI components.
 - [Link](/components/link) - Accessible hyperlink component
 - [Meter](/components/meter) - Known-range scalar measurement
 - [Modal](/components/modal) - Dialog overlay for focused interactions
+- [Drawer](/components/drawer) - Slide-out panel for supplementary content and actions
 - [Pagination](/components/pagination) - Page navigation controls
 - [Progress Bar](/components/progress-bar) - Linear progress indicator
 - [Progress Circle](/components/progress-circle) - Circular progress indicator

@@ -34,6 +34,7 @@ export * from './components/scroll-shadow'
 export * from './components/toolbar'
 export * from './components/list-box'
 export * from './components/modal'
+export * from './components/drawer'
 
 // Form Components (Tier 2)
 export * from './components/input'

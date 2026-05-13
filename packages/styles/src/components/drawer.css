@@ -43,7 +43,8 @@
  */
 .drawer__backdrop {
   @apply fixed inset-0 z-50;
-  @apply h-(--visual-viewport-height) w-full;
+  @apply w-full;
+  height: var(--visual-viewport-height, 100dvh);
   opacity: 1;
   transition: opacity 250ms cubic-bezier(0.32, 0.72, 0, 1);
 
@@ -94,7 +95,8 @@
 .drawer__content {
   @apply pointer-events-none;
   @apply fixed inset-0 z-50 flex;
-  @apply h-(--visual-viewport-height) w-full min-w-0;
+  @apply w-full min-w-0;
+  height: var(--visual-viewport-height, 100dvh);
 }
 
 /**
@@ -243,6 +245,11 @@
   @apply -m-[3px] my-0 p-[3px];
   @apply overflow-y-auto overscroll-contain;
   -webkit-overflow-scrolling: touch;
+}
+
+.drawer__header > :where(p):not([class]),
+.drawer__body > :where(p):not([class]) {
+  margin: 0;
 }
 
 /**
