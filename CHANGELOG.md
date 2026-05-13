@@ -4,10 +4,23 @@ All notable changes to HeroUI Vue are documented here.
 
 ## Unreleased
 
+## 0.0.4
+
+### Fixed
+
+- Restored runtime Tailwind theme variables for the published styles entrypoint.
+- Aligned runtime theme aliases with upstream HeroUI selectors for `.light`, `.default`, `.dark`, and `[data-theme]`.
+- Fixed docs preview shells and the delivery/payment radio demo so dark mode uses HeroUI background and foreground tokens instead of hard-coded light backgrounds.
+
 ### Changed
 
 - Aligned README installation docs with the upstream HeroUI Quick Start structure.
 - Moved package Tailwind source scanning into the styles entrypoint so consumers do not need to configure `@source` manually.
+
+### Packages
+
+- `@rysinal/heroui-vue@0.0.4`
+- `@rysinal/heroui-vue-styles@0.0.4`
 
 ## 0.0.3
 
