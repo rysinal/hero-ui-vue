@@ -33,6 +33,7 @@ export * from './components/close-button'
 export * from './components/scroll-shadow'
 export * from './components/toolbar'
 export * from './components/list-box'
+export * from './components/modal'
 
 // Form Components (Tier 2)
 export * from './components/input'

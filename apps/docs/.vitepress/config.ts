@@ -105,6 +105,7 @@ export default defineConfig({
             { text: 'Link', link: '/components/link' },
             { text: 'List Box', link: '/components/list-box' },
             { text: 'Meter', link: '/components/meter' },
+            { text: 'Modal', link: '/components/modal' },
             { text: 'Pagination', link: '/components/pagination' },
             { text: 'Progress Bar', link: '/components/progress-bar' },
             { text: 'Progress Circle', link: '/components/progress-circle' },

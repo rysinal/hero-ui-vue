@@ -53,6 +53,7 @@ General-purpose UI components.
 - [Kbd](/components/kbd) - Display keyboard shortcuts
 - [Link](/components/link) - Accessible hyperlink component
 - [Meter](/components/meter) - Known-range scalar measurement
+- [Modal](/components/modal) - Dialog overlay for focused interactions
 - [Pagination](/components/pagination) - Page navigation controls
 - [Progress Bar](/components/progress-bar) - Linear progress indicator
 - [Progress Circle](/components/progress-circle) - Circular progress indicator
@@ -72,7 +73,6 @@ More components are being actively developed:
 
 - Select
 - DatePicker
-- Modal
 - Tooltip
 - Dropdown
 - Calendar and date inputs
