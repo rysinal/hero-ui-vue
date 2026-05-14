@@ -26,7 +26,15 @@ export default defineConfig({
 
   themeConfig: {
     nav: [
-      { text: 'Guide', link: '/guide/introduction' },
+      {
+        text: 'Guide',
+        activeMatch: '^/guide/',
+        items: [
+          { text: 'Introduction', link: '/guide/introduction' },
+          { text: 'Installation', link: '/guide/installation' },
+          { text: 'Quick Start', link: '/guide/quick-start' }
+        ]
+      },
       { text: 'Components', link: '/components/' },
       { text: 'GitHub', link: 'https://github.com/rysinal/hero-ui-vue' }
     ],
