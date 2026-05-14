@@ -170,7 +170,7 @@ import { drawerVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
 import { DRAWER_CONTEXT_KEY, type DrawerBackdropVariant } from './context'
 
-interface DrawerBackdropProps {
+export interface DrawerBackdropProps {
   class?: string
   defaultOpen?: boolean
   isDismissable?: boolean

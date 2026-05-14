@@ -15,6 +15,7 @@ All notable changes to HeroUI Vue are documented here.
 ### Fixed
 
 - Fixed Modal preview parity gaps.
+- Exported the DrawerBackdrop props type used by generated Vue declarations.
 - Polished the Drawer navigation demo behavior.
 
 ### Packages
