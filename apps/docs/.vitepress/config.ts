@@ -26,15 +26,7 @@ export default defineConfig({
 
   themeConfig: {
     nav: [
-      {
-        text: 'Guide',
-        activeMatch: '^/guide/',
-        items: [
-          { text: 'Introduction', link: '/guide/introduction' },
-          { text: 'Installation', link: '/guide/installation' },
-          { text: 'Quick Start', link: '/guide/quick-start' }
-        ]
-      },
+      { text: 'Getting Started', link: '/guide/quick-start', activeMatch: '^/guide/' },
       { text: 'Components', link: '/components/' },
       { text: 'GitHub', link: 'https://github.com/rysinal/hero-ui-vue' }
     ],
@@ -51,6 +43,14 @@ export default defineConfig({
         }
       ],
       '/components/': [
+        {
+          text: 'Getting Started',
+          items: [
+            { text: 'Introduction', link: '/guide/introduction' },
+            { text: 'Installation', link: '/guide/installation' },
+            { text: 'Quick Start', link: '/guide/quick-start' }
+          ]
+        },
         {
           text: 'Components',
           items: [
