@@ -4,6 +4,24 @@ All notable changes to HeroUI Vue are documented here.
 
 ## Unreleased
 
+## 0.0.5
+
+### Added
+
+- Added DisclosureGroup component parity coverage.
+- Added Modal and Drawer component parity coverage.
+- Added Quick Start entry points to the docs top navigation and Components sidebar.
+
+### Fixed
+
+- Fixed Modal preview parity gaps.
+- Polished the Drawer navigation demo behavior.
+
+### Packages
+
+- `@rysinal/heroui-vue@0.0.5`
+- `@rysinal/heroui-vue-styles@0.0.5`
+
 ## 0.0.4
 
 ### Fixed
