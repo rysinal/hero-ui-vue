@@ -10,7 +10,7 @@ interface InputGroupSuffixProps {
 const props = defineProps<InputGroupSuffixProps>()
 const context = inject(INPUT_GROUP_CONTEXT_KEY, null)
 
-const suffixClass = computed(() => composeTwClasses(props.class, context?.slots.suffix()))
+const suffixClass = computed(() => composeTwClasses(props.class, context?.slots.value.suffix()))
 </script>
 
 <template>

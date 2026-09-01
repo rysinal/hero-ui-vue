@@ -10,7 +10,7 @@ interface InputGroupPrefixProps {
 const props = defineProps<InputGroupPrefixProps>()
 const context = inject(INPUT_GROUP_CONTEXT_KEY, null)
 
-const prefixClass = computed(() => composeTwClasses(props.class, context?.slots.prefix()))
+const prefixClass = computed(() => composeTwClasses(props.class, context?.slots.value.prefix()))
 </script>
 
 <template>

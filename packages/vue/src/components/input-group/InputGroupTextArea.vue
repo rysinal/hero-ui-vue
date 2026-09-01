@@ -31,7 +31,7 @@ const context = inject(INPUT_GROUP_CONTEXT_KEY, null)
 const finalIsDisabled = computed(() => props.disabled ?? props.isDisabled)
 const { interactionAttrs, interactionHandlers } = useInteractionStates(() => finalIsDisabled.value)
 
-const textareaClass = computed(() => composeTwClasses(props.class, context?.slots.input()))
+const textareaClass = computed(() => composeTwClasses(props.class, context?.slots.value.input()))
 
 const handleInput = (event: Event) => {
   const target = event.target as HTMLTextAreaElement

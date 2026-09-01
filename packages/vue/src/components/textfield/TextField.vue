@@ -55,6 +55,13 @@ const finalIsDisabled = computed(() => props.disabled ?? props.isDisabled)
 const finalIsInvalid = computed(() => props.isInvalid ?? Boolean(props.error || slots.error))
 const inputId = computed(() => props.id || `textfield-${Math.random().toString(36).substr(2, 9)}`)
 
+/**
+ * React's TextField is a pure container that renders whatever it is given.
+ * When children are composed, step aside entirely; otherwise keep emitting the
+ * label/input/description shorthand this component has always supported.
+ */
+const isComposed = computed(() => Boolean(slots.default))
+
 const handleInput = (value: string | number) => {
   emit('update:modelValue', value)
 }
@@ -78,6 +85,11 @@ const handleFocus = (event: FocusEvent) => {
     :data-required="dataAttr(finalIsRequired)"
     data-slot="textfield"
   >
+    <template v-if="isComposed">
+      <slot />
+    </template>
+
+    <template v-else>
     <Label
       v-if="props.label || slots.label"
       :for="inputId"
@@ -111,5 +123,6 @@ const handleFocus = (event: FocusEvent) => {
     <FieldError v-if="props.error || slots.error">
       <slot name="error">{{ props.error }}</slot>
     </FieldError>
+    </template>
   </div>
 </template>
