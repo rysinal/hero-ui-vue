@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+/* global HTMLDivElement, ResizeObserver, cancelAnimationFrame, requestAnimationFrame */
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { scrollShadowVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
 
@@ -15,6 +16,10 @@ interface ScrollShadowProps {
   variant?: 'fade'
   visibility?: ScrollShadowVisibility
 }
+
+const emit = defineEmits<{
+  visibilityChange: [visibility: ScrollShadowVisibility]
+}>()
 
 const props = withDefaults(defineProps<ScrollShadowProps>(), {
   hideScrollBar: false,
@@ -80,8 +85,41 @@ const updateVisibility = () => {
           : 'none'
 }
 
+// Report visibility changes so callers can react, matching React's
+// onVisibilityChange.
+watch(controlledVisibility, (visibility) => {
+  emit('visibilityChange', visibility)
+})
+
+// Batch scroll-driven recalculation into a frame.
+let frameId: number | null = null
+const scheduleUpdate = () => {
+  if (frameId !== null) return
+  frameId = requestAnimationFrame(() => {
+    frameId = null
+    updateVisibility()
+  })
+}
+
+let resizeObserver: ResizeObserver | undefined
+
 onMounted(() => {
   void nextTick(updateVisibility)
+
+  // Content and size changes both alter whether the element can scroll.
+  if (rootRef.value && typeof ResizeObserver !== 'undefined') {
+    resizeObserver = new ResizeObserver(scheduleUpdate)
+    resizeObserver.observe(rootRef.value)
+    for (const child of Array.from(rootRef.value.children)) {
+      resizeObserver.observe(child)
+    }
+  }
+})
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+  resizeObserver = undefined
+  if (frameId !== null) cancelAnimationFrame(frameId)
 })
 
 watch(
@@ -127,7 +165,7 @@ watch(
         : undefined
     "
     :style="{ '--scroll-shadow-size': `${props.size}px` }"
-    @scroll="updateVisibility"
+    @scroll="scheduleUpdate"
   >
     <slot />
   </div>
