@@ -67,6 +67,7 @@ const componentSidebar = [
   {
     text: 'Form Elements',
     items: [
+      { text: 'ComboBox', link: '/components/combo-box' },
       { text: 'Description', link: '/components/description' },
       { text: 'Error Message', link: '/components/error-message' },
       { text: 'Field Error', link: '/components/field-error' },

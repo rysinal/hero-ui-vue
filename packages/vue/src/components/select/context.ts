@@ -30,6 +30,11 @@ export interface SelectContext {
   setSelectedKeys: (keys: SelectKey[]) => void
   setTriggerElement: (element: HTMLElement | null) => void
   unregisterItem: (key: SelectKey) => void
+  /**
+   * Set by ComboBox, which filters the list as the user types. Items ask
+   * whether they still match; Select leaves it undefined and shows everything.
+   */
+  matchesFilter?: (textValue: string) => boolean
 }
 
 export const SELECT_CONTEXT_KEY: InjectionKey<SelectContext> = Symbol('SelectContext')

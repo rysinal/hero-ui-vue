@@ -90,10 +90,21 @@ provide(LIST_BOX_ITEM_CONTEXT_KEY, {
   isDisabled: finalIsDisabled,
   isSelected: finalIsSelected,
 })
+
+/**
+ * A ComboBox filters the list as the user types; Select does not set a filter,
+ * so every item stays visible there.
+ */
+const matchesFilter = computed(() => {
+  if (!selectContext?.matchesFilter) return true
+  const text = props.textValue ?? (itemKey.value != null ? String(itemKey.value) : '')
+  return selectContext.matchesFilter(text)
+})
 </script>
 
 <template>
   <div
+    v-if="matchesFilter"
     :aria-disabled="dataAttr(finalIsDisabled)"
     :aria-label="props.textValue"
     :aria-selected="finalIsSelected == null ? undefined : dataAttr(finalIsSelected)"
