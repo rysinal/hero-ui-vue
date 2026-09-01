@@ -10,7 +10,9 @@ interface ToggleButtonGroupSeparatorProps {
 const props = defineProps<ToggleButtonGroupSeparatorProps>()
 const context = inject(TOGGLE_BUTTON_GROUP_CONTEXT_KEY, null)
 
-const separatorClass = computed(() => composeTwClasses(props.class, context?.slots.separator()))
+const separatorClass = computed(() =>
+  composeTwClasses(props.class, context?.slots.value.separator()),
+)
 </script>
 
 <template>
