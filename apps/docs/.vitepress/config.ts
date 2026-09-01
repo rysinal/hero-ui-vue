@@ -37,6 +37,7 @@ const componentSidebar = [
       { text: 'Surface', link: '/components/surface' },
       { text: 'Tag', link: '/components/tag' },
       { text: 'Tag Group', link: '/components/tag-group' },
+      { text: 'Table', link: '/components/table' },
       { text: 'Tabs', link: '/components/tabs' }
     ]
   },

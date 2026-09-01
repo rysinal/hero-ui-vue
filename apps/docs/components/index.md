@@ -70,6 +70,7 @@ General-purpose UI components.
 - [Spinner](/components/spinner) - Loading indicator
 - [Surface](/components/surface) - Base surface wrapper
 - [Tag](/components/tag) - Selectable or removable tag
+- [Table](/components/table) - Data table with sorting and selection
 - [Tabs](/components/tabs) - Tabbed content navigation
 - [Text](/components/text) - Styled text component
 - [Tooltip](/components/tooltip) - Small overlay describing an element on hover
@@ -80,7 +81,6 @@ General-purpose UI components.
 More components are being actively developed:
 
 - ComboBox
-- Table
 - Calendar, DatePicker and the other date inputs
 - The colour components (ColorPicker, ColorField, ColorSlider, ...)
 
