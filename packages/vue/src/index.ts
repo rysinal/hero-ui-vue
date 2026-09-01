@@ -41,6 +41,7 @@ export * from './components/tooltip'
 export * from './components/list-box'
 export * from './components/modal'
 export * from './components/drawer'
+export * from './components/dropdown'
 export * from './components/popover'
 
 // Form Components (Tier 2)

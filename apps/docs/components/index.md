@@ -50,6 +50,7 @@ General-purpose UI components.
 - [Disclosure](/components/disclosure) - Collapsible section with trigger and animated panel
 - [Disclosure Group](/components/disclosure-group) - Coordinate expanded state across disclosure items
 - [Close Button](/components/close-button) - Button for closing/dismissing elements
+- [Dropdown](/components/dropdown) - Menu of actions anchored to a trigger
 - [Empty State](/components/empty-state) - Empty list or search result placeholder
 - [Header](/components/header) - Section heading primitive
 - [Kbd](/components/kbd) - Display keyboard shortcuts
@@ -77,7 +78,7 @@ General-purpose UI components.
 
 More components are being actively developed:
 
-- Dropdown and ComboBox
+- ComboBox
 - Table
 - Toast
 - Calendar, DatePicker and the other date inputs

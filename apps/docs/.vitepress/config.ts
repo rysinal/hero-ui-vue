@@ -31,6 +31,7 @@ const componentSidebar = [
       { text: 'Chip', link: '/components/chip' },
       { text: 'Disclosure', link: '/components/disclosure' },
       { text: 'Disclosure Group', link: '/components/disclosure-group' },
+      { text: 'Dropdown', link: '/components/dropdown' },
       { text: 'Empty State', link: '/components/empty-state' },
       { text: 'Skeleton', link: '/components/skeleton' },
       { text: 'Surface', link: '/components/surface' },
