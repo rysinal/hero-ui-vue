@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, useSlots } from 'vue'
+import { computed, provide, ref, useSlots, watch } from 'vue'
 import { textFieldVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
 import { TEXT_FIELD_CONTEXT_KEY, type TextFieldInputType } from './context'
@@ -22,6 +22,8 @@ interface TextFieldProps {
   isDisabled?: boolean
   isInvalid?: boolean
   variant?: 'primary' | 'secondary'
+  /** Returns an error message for the current value, or null when it is valid. */
+  validate?: (value: string) => string | null | undefined
   // Input props
   type?: TextFieldInputType
   placeholder?: string
@@ -56,7 +58,9 @@ const textFieldClass = computed(() => {
 
 const finalIsRequired = computed(() => props.required ?? props.isRequired)
 const finalIsDisabled = computed(() => props.disabled ?? props.isDisabled)
-const finalIsInvalid = computed(() => props.isInvalid ?? Boolean(props.error || slots.error))
+const finalIsInvalid = computed(
+  () => props.isInvalid ?? Boolean(props.error || slots.error || validationMessage.value),
+)
 const inputId = computed(() => props.id || `textfield-${Math.random().toString(36).substr(2, 9)}`)
 
 /**
@@ -65,6 +69,22 @@ const inputId = computed(() => props.id || `textfield-${Math.random().toString(3
  * label/input/description shorthand this component has always supported.
  */
 const isComposed = computed(() => Boolean(slots.default))
+
+// React Aria only reports validation once the field has been interacted with,
+// so an untouched empty field does not start out red.
+const isDirty = ref(false)
+
+watch(
+  () => props.modelValue,
+  () => {
+    isDirty.value = true
+  },
+)
+
+const validationMessage = computed(() => {
+  if (!props.validate || !isDirty.value) return undefined
+  return props.validate(String(props.modelValue ?? '')) ?? undefined
+})
 
 // Composed children read their state from here, the way React's TextField
 // primitive shares it through context.
@@ -76,6 +96,7 @@ provide(TEXT_FIELD_CONTEXT_KEY, {
   name: computed(() => props.name),
   setValue: (value) => emit('update:modelValue', value),
   type: computed(() => props.type),
+  validationMessage: computed(() => validationMessage.value),
   value: computed(() => props.modelValue),
   variant: computed(() => props.variant),
 })

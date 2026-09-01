@@ -25,6 +25,8 @@ export interface TextFieldContextValue {
   type: ComputedRef<TextFieldInputType | undefined>
   value: ComputedRef<string | number | undefined>
   variant: ComputedRef<'primary' | 'secondary' | undefined>
+  /** Message from the validate prop, when the current value fails it. */
+  validationMessage: ComputedRef<string | undefined>
   setValue: (value: string | number) => void
 }
 

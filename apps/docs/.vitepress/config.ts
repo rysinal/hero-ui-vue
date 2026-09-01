@@ -47,6 +47,7 @@ const componentSidebar = [
       { text: 'Checkbox', link: '/components/checkbox' },
       { text: 'Checkbox Group', link: '/components/checkbox-group' },
       { text: 'Fieldset', link: '/components/fieldset' },
+      { text: 'Form', link: '/components/form' },
       { text: 'Input', link: '/components/input' },
       { text: 'Input Group', link: '/components/input-group' },
       { text: 'Input OTP', link: '/components/input-otp' },

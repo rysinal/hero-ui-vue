@@ -11,6 +11,7 @@ Form components for user input and interaction.
 - [Checkbox](/components/checkbox) - Checkbox for boolean selections
 - [Checkbox Group](/components/checkbox-group) - Group related checkbox values
 - [Fieldset](/components/fieldset) - Form section layout with legend and actions
+- [Form](/components/form) - Group fields and coordinate validation
 - [Input](/components/input) - Single-line text input field
 - [Input Group](/components/input-group) - Input shell with prefix, suffix, and textarea slots
 - [Input OTP](/components/input-otp) - One-time passcode input with visual slots
