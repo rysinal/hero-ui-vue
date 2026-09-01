@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed, inject, provide } from 'vue'
+/* global KeyboardEvent */
+import { computed, inject, onBeforeUnmount, provide, watch } from 'vue'
 import { listboxItemVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
+import { SELECT_CONTEXT_KEY } from '../select/context'
 import { LIST_BOX_CONTEXT_KEY, LIST_BOX_ITEM_CONTEXT_KEY } from './context'
 import type { ListBoxKey } from './context'
 
@@ -21,6 +23,7 @@ const props = withDefaults(defineProps<ListBoxItemProps>(), {
 })
 
 const listBoxContext = inject(LIST_BOX_CONTEXT_KEY, null)
+const selectContext = inject(SELECT_CONTEXT_KEY, null)
 const itemKey = computed(() => props.value ?? props.id)
 const finalVariant = computed(() => props.variant ?? listBoxContext?.variant.value ?? 'default')
 const finalIsDisabled = computed(() => {
@@ -56,6 +59,33 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 }
 
+let registeredSelectKey: ListBoxKey | null = null
+
+watch(
+  () => [itemKey.value, props.textValue] as const,
+  ([key, textValue]) => {
+    if (registeredSelectKey != null && registeredSelectKey !== key) {
+      selectContext?.unregisterItem(registeredSelectKey)
+      registeredSelectKey = null
+    }
+
+    if (key == null) return
+
+    registeredSelectKey = key
+    selectContext?.registerItem({
+      key,
+      textValue: textValue ?? String(key),
+    })
+  },
+  { immediate: true },
+)
+
+onBeforeUnmount(() => {
+  if (registeredSelectKey != null && selectContext?.isOpen.value) {
+    selectContext?.unregisterItem(registeredSelectKey)
+  }
+})
+
 provide(LIST_BOX_ITEM_CONTEXT_KEY, {
   isDisabled: finalIsDisabled,
   isSelected: finalIsSelected,
@@ -73,9 +103,9 @@ provide(LIST_BOX_ITEM_CONTEXT_KEY, {
     data-slot="list-box-item"
     role="option"
     :tabindex="finalIsDisabled ? undefined : 0"
+    v-bind="interactionAttrs"
     @click="handleAction"
     @keydown="handleKeydown"
-    v-bind="interactionAttrs"
     v-on="interactionHandlers"
   >
     <slot :is-disabled="finalIsDisabled" :is-selected="finalIsSelected" />

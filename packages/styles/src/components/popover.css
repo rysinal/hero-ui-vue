@@ -74,7 +74,9 @@
 
 /* Popover trigger */
 .popover__trigger {
-  @apply inline-block;
+  &:not(.button) {
+    @apply inline-block;
+  }
 
   /**
    * Transitions

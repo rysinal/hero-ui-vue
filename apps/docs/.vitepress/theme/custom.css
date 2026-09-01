@@ -561,6 +561,107 @@ body {
   color: inherit;
 }
 
+/* Teleported overlays render outside the demo preview container, so mirror the
+   demo utility shim for Popover content used by the source parity examples. */
+.popover .flex {
+  display: flex;
+}
+
+.popover .flex-col {
+  flex-direction: column;
+}
+
+.popover .items-center {
+  align-items: center;
+}
+
+.popover .justify-between {
+  justify-content: space-between;
+}
+
+.popover .gap-2 {
+  gap: 0.5rem;
+}
+
+.popover .gap-3 {
+  gap: 0.75rem;
+}
+
+.popover .gap-4 {
+  gap: 1rem;
+}
+
+.popover .m-0 {
+  margin: 0;
+}
+
+.popover .mt-2 {
+  margin-top: 0.5rem;
+}
+
+.popover .mt-3 {
+  margin-top: 0.75rem;
+}
+
+.popover .ml-1 {
+  margin-left: 0.25rem;
+}
+
+.popover .text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.popover .text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.popover .font-medium {
+  font-weight: 500;
+}
+
+.popover .font-semibold {
+  font-weight: 600;
+}
+
+.popover .text-muted {
+  color: var(--color-muted);
+}
+
+.popover .rounded-full {
+  border-radius: 999px;
+}
+
+.select__popover .flex {
+  display: flex;
+}
+
+.select__popover .flex-col {
+  flex-direction: column;
+}
+
+.select__popover .items-center {
+  align-items: center;
+}
+
+.select__popover .justify-center {
+  justify-content: center;
+}
+
+.select__popover .gap-2 {
+  gap: 0.5rem;
+}
+
+.select__popover .text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.select__popover .text-muted {
+  color: var(--color-muted);
+}
+
 .vitepress-demo-preview__element .opacity-70,
 .vitepress-demo-preview-preview .opacity-70,
 .vitepress-demo-preview__ant-design__container .opacity-70,

@@ -17,6 +17,7 @@ Form components for user input and interaction.
 - [Number Field](/components/number-field) - Numeric input with increment/decrement controls
 - [Radio](/components/radio) - Radio button for single selection from a group
 - [Radio Group](/components/radio-group) - Group radio buttons with shared state
+- [Select](/components/select) - Popover listbox for single or multiple selection
 - [Switch](/components/switch) - Toggle switch for on/off states
 - [Switch Group](/components/switch-group) - Layout wrapper for related switches
 - [TextField](/components/textfield) - Complete form field with label and validation
@@ -56,6 +57,7 @@ General-purpose UI components.
 - [Modal](/components/modal) - Dialog overlay for focused interactions
 - [Drawer](/components/drawer) - Slide-out panel for supplementary content and actions
 - [Pagination](/components/pagination) - Page navigation controls
+- [Popover](/components/popover) - Floating contextual content anchored to a trigger
 - [Progress Bar](/components/progress-bar) - Linear progress indicator
 - [Progress Circle](/components/progress-circle) - Circular progress indicator
 - [Scroll Shadow](/components/scroll-shadow) - Scrollable region with edge shadows
@@ -72,7 +74,6 @@ General-purpose UI components.
 
 More components are being actively developed:
 
-- Select
 - DatePicker
 - Tooltip
 - Dropdown

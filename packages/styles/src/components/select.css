@@ -221,3 +221,7 @@
 .select__trigger--full-width {
   @apply w-full;
 }
+
+.select__validation-proxy {
+  @apply sr-only;
+}
