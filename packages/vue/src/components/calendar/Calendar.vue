@@ -1,0 +1,148 @@
+<script setup lang="ts">
+import { computed, provide, shallowRef } from 'vue'
+import {
+  CalendarDate,
+  getLocalTimeZone,
+  isSameDay,
+  startOfMonth,
+  today,
+  type DateValue,
+} from '@internationalized/date'
+import { calendarVariants } from '@rysinal/heroui-vue-styles'
+import { composeTwClasses, dataAttr } from '../../utils'
+import { CALENDAR_CONTEXT_KEY } from './context'
+
+interface CalendarProps {
+  class?: string
+  /** Selected date. Supports `v-model`. */
+  modelValue?: DateValue | null
+  defaultValue?: DateValue | null
+  /** Month currently in view. Supports `v-model:focused-value`. */
+  focusedValue?: DateValue
+  defaultFocusedValue?: DateValue
+  minValue?: DateValue
+  maxValue?: DateValue
+  /** Marks individual dates unselectable, e.g. booked days. */
+  isDateUnavailable?: (date: DateValue) => boolean
+  isDisabled?: boolean
+  isReadOnly?: boolean
+  /** How many months to show side by side. */
+  visibleMonths?: number
+  locale?: string
+}
+
+const props = withDefaults(defineProps<CalendarProps>(), {
+  defaultFocusedValue: undefined,
+  defaultValue: null,
+  focusedValue: undefined,
+  isDateUnavailable: undefined,
+  isDisabled: false,
+  isReadOnly: false,
+  locale: 'en-US',
+  maxValue: undefined,
+  minValue: undefined,
+  modelValue: undefined,
+  visibleMonths: 1,
+})
+
+const emit = defineEmits<{
+  'update:modelValue': [value: DateValue]
+  'update:focusedValue': [value: DateValue]
+  change: [value: DateValue]
+  focusChange: [value: DateValue]
+}>()
+
+const toCalendar = (date: DateValue): CalendarDate =>
+  new CalendarDate(date.year, date.month, date.day)
+
+const internalValue = shallowRef<DateValue | null>(props.defaultValue)
+const value = computed(() =>
+  props.modelValue === undefined ? internalValue.value : props.modelValue,
+)
+
+const initialFocus =
+  props.defaultFocusedValue ?? props.defaultValue ?? today(getLocalTimeZone())
+const internalFocused = shallowRef<CalendarDate>(toCalendar(initialFocus))
+const focusedDate = computed(() =>
+  props.focusedValue === undefined ? internalFocused.value : toCalendar(props.focusedValue),
+)
+
+const slots = computed(() => calendarVariants())
+const calendarClass = computed(() => composeTwClasses(props.class, slots.value.base()))
+
+const visibleMonths = computed(() => {
+  const first = startOfMonth(focusedDate.value)
+  return Array.from({ length: props.visibleMonths }, (_, index) =>
+    startOfMonth(first.add({ months: index })),
+  )
+})
+
+const isDateOutOfRange = (date: DateValue) => {
+  if (props.minValue && date.compare(props.minValue) < 0) return true
+  if (props.maxValue && date.compare(props.maxValue) > 0) return true
+  return false
+}
+
+const isDateUnavailable = (date: DateValue) => props.isDateUnavailable?.(date) ?? false
+
+const setFocusedDate = (date: CalendarDate) => {
+  if (props.focusedValue === undefined) internalFocused.value = date
+  emit('update:focusedValue', date)
+  emit('focusChange', date)
+}
+
+const select = (date: CalendarDate) => {
+  if (props.isDisabled || props.isReadOnly) return
+  if (isDateOutOfRange(date) || isDateUnavailable(date)) return
+
+  if (props.modelValue === undefined) internalValue.value = date
+  emit('update:modelValue', date)
+  emit('change', date)
+  setFocusedDate(date)
+}
+
+// A month is reachable only if any of its days falls inside min/max.
+const canGoPrevious = computed(() => {
+  if (!props.minValue) return true
+  const previous = startOfMonth(focusedDate.value).subtract({ months: 1 })
+  return previous.add({ months: 1 }).subtract({ days: 1 }).compare(props.minValue) >= 0
+})
+
+const canGoNext = computed(() => {
+  if (!props.maxValue) return true
+  return startOfMonth(focusedDate.value).add({ months: props.visibleMonths }).compare(props.maxValue) <= 0
+})
+
+provide(CALENDAR_CONTEXT_KEY, {
+  canGoNext,
+  canGoPrevious,
+  focusedDate,
+  goToNextMonth: () => {
+    if (canGoNext.value) setFocusedDate(startOfMonth(focusedDate.value).add({ months: 1 }))
+  },
+  goToPreviousMonth: () => {
+    if (canGoPrevious.value) setFocusedDate(startOfMonth(focusedDate.value).subtract({ months: 1 }))
+  },
+  isDateOutOfRange,
+  isDateUnavailable,
+  isDisabled: computed(() => props.isDisabled),
+  isReadOnly: computed(() => props.isReadOnly),
+  isSelected: (date: DateValue) => (value.value ? isSameDay(date, value.value) : false),
+  locale: computed(() => props.locale),
+  select,
+  setFocusedDate,
+  slots,
+  visibleMonths,
+})
+</script>
+
+<template>
+  <div
+    :class="calendarClass"
+    :data-disabled="dataAttr(props.isDisabled)"
+    data-slot="calendar"
+    role="group"
+  >
+    <slot :focused-date="focusedDate" :value="value" />
+  </div>
+</template>
