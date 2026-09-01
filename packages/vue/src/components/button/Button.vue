@@ -39,9 +39,8 @@ const finalFullWidth = computed(
   () => props.fullWidth ?? buttonGroupContext?.fullWidth,
 )
 
-const { interactionAttrs, interactionHandlers } = useInteractionStates(
-  () => finalIsDisabled.value || props.isPending,
-)
+const { interactionAttrs, interactionHandlers, isFocusVisible, isHovered, isPressed } =
+  useInteractionStates(() => finalIsDisabled.value || props.isPending)
 
 const buttonClass = computed(() => {
   const styles = buttonVariants({
@@ -68,6 +67,12 @@ const buttonClass = computed(() => {
     v-bind="interactionAttrs"
     v-on="interactionHandlers"
   >
-    <slot />
+    <slot
+      :is-disabled="finalIsDisabled"
+      :is-focus-visible="isFocusVisible"
+      :is-hovered="isHovered"
+      :is-pending="props.isPending"
+      :is-pressed="isPressed"
+    />
   </component>
 </template>

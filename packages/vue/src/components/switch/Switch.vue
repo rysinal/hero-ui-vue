@@ -7,6 +7,8 @@ import SwitchControl from './SwitchControl.vue'
 import { SWITCH_CONTEXT_KEY } from './context'
 
 interface SwitchProps {
+  /** Element to render as the root. React exposes this as `render`. */
+  as?: string
   class?: string
   size?: 'sm' | 'md' | 'lg'
   modelValue?: boolean
@@ -132,6 +134,7 @@ const rootChecked = computed({
 
 <template>
   <SwitchRoot
+    :as="props.as"
     :class="baseClass"
     v-model:checked="rootChecked"
     :aria-disabled="dataAttr(finalIsDisabled)"

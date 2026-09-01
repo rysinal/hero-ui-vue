@@ -10,6 +10,8 @@ import { CHECKBOX_GROUP_CONTEXT_KEY } from '../checkbox-group/context'
 type CheckedState = boolean | 'indeterminate'
 
 interface CheckboxProps {
+  /** Element to render as the root. React exposes this as `render`. */
+  as?: string
   class?: string
   controlClass?: string
   contentClass?: string
@@ -182,6 +184,7 @@ const handleCheckedChange = (checked: CheckedState) => {
 
 <template>
   <CheckboxRoot
+    :as="props.as"
     :id="props.id"
     :class="baseClass"
     :checked="rootChecked"

@@ -5,6 +5,8 @@ import { composeTwClasses, dataAttr } from '../../utils'
 import { ACCORDION_CONTEXT_KEY } from './context'
 
 interface AccordionProps {
+  /** Element to render as the root. React exposes this as `render`. */
+  as?: string
   allowsMultipleExpanded?: boolean
   class?: string
   collapsible?: boolean
@@ -84,12 +86,13 @@ provide(ACCORDION_CONTEXT_KEY, {
 </script>
 
 <template>
-  <div
+  <component
+    :is="props.as ?? 'div'"
     :class="accordionClass"
     :data-disabled="dataAttr(finalIsDisabled)"
     :data-orientation="orientation"
     data-slot="accordion"
   >
     <slot :model-value="currentValue" />
-  </div>
+  </component>
 </template>

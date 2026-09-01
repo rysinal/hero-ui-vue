@@ -5,6 +5,8 @@ import { composeTwClasses, dataAttr } from '../../utils'
 import { BREADCRUMBS_CONTEXT_KEY } from './context'
 
 interface BreadcrumbsProps {
+  /** Element to render as the root. React exposes this as `render`. */
+  as?: string
   class?: string
   disabled?: boolean
   isDisabled?: boolean
@@ -32,8 +34,13 @@ provide(BREADCRUMBS_CONTEXT_KEY, {
 
 <template>
   <nav aria-label="Breadcrumbs">
-    <ol :class="breadcrumbsClass" :data-disabled="dataAttr(finalIsDisabled)" data-slot="breadcrumbs">
+    <component
+      :is="props.as ?? 'ol'"
+      :class="breadcrumbsClass"
+      :data-disabled="dataAttr(finalIsDisabled)"
+      data-slot="breadcrumbs"
+    >
       <slot />
-    </ol>
+    </component>
   </nav>
 </template>

@@ -6,6 +6,8 @@ import { composeTwClasses, dataAttr } from '../../utils'
 import { RADIO_GROUP_CONTEXT_KEY } from './context'
 
 interface RadioGroupProps {
+  /** Element to render as the root. React exposes this as `render`. */
+  as?: string
   class?: string
   variant?: 'primary' | 'secondary'
   modelValue?: string
@@ -79,6 +81,7 @@ const handleValueChange = (value: string) => {
 
 <template>
   <RadioGroupRoot
+    :as="props.as"
     :class="radioGroupClass"
     :model-value="selectedValue"
     :default-value="defaultValue"
