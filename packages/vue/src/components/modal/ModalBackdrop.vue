@@ -179,6 +179,8 @@ export interface ModalBackdropProps {
   isKeyboardDismissDisabled?: boolean
   isOpen?: boolean
   modelValue?: boolean
+  /** Dialog placement. Only used when there is no Modal root to own it. */
+  placement?: ModalPlacement
   portalContainer?: HTMLElement | string | null
   unstablePortalContainer?: HTMLElement | null
   variant?: ModalBackdropVariant
@@ -190,6 +192,7 @@ const props = withDefaults(defineProps<ModalBackdropProps>(), {
   isKeyboardDismissDisabled: false,
   isOpen: undefined,
   modelValue: undefined,
+  placement: undefined,
   portalContainer: null,
   unstablePortalContainer: null,
   variant: 'opaque',
@@ -405,15 +408,28 @@ const handleTouchMove = (event: TouchEvent) => {
   lastTouchY = currentY
 }
 
+// Without a Modal root there is nobody to own placement, so keep it locally.
+const localPlacement = ref<ModalPlacement>(props.placement ?? 'auto')
+
+watch(
+  () => props.placement,
+  (value) => {
+    if (value !== undefined) localPlacement.value = value
+  },
+)
+
 provide(MODAL_CONTEXT_KEY, {
   close,
   isEntering: computed(() => isEntering.value),
   isExiting: computed(() => isExiting.value),
   isOpen,
   open: () => setOpen(true),
-  placement: computed<ModalPlacement>(() => rootContext?.placement.value ?? 'auto'),
+  placement: computed<ModalPlacement>(
+    () => props.placement ?? rootContext?.placement.value ?? localPlacement.value,
+  ),
   setOpen,
   setPlacement: (placement) => {
+    localPlacement.value = placement
     rootContext?.setPlacement(placement)
   },
   slots,

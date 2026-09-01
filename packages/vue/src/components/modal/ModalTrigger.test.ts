@@ -98,3 +98,43 @@ describe('Modal trigger semantics', () => {
     wrapper.unmount()
   })
 })
+
+describe('ModalBackdrop used without a Modal root', () => {
+  it('applies its own placement to the dialog', async () => {
+    const wrapper = mount(
+      {
+        components: { ModalBackdrop, ModalContainer, ModalDialog },
+        template: `
+          <ModalBackdrop is-open placement="top">
+            <ModalContainer><ModalDialog>body</ModalDialog></ModalContainer>
+          </ModalBackdrop>
+        `,
+      },
+      { attachTo: document.body },
+    )
+    await flush()
+
+    const dialog = document.querySelector('[data-slot="modal-dialog"]')
+    expect(dialog?.getAttribute('data-placement')).toBe('top')
+    wrapper.unmount()
+  })
+
+  it('defaults to auto placement when none is given', async () => {
+    const wrapper = mount(
+      {
+        components: { ModalBackdrop, ModalContainer, ModalDialog },
+        template: `
+          <ModalBackdrop is-open>
+            <ModalContainer><ModalDialog>body</ModalDialog></ModalContainer>
+          </ModalBackdrop>
+        `,
+      },
+      { attachTo: document.body },
+    )
+    await flush()
+
+    const dialog = document.querySelector('[data-slot="modal-dialog"]')
+    expect(dialog?.getAttribute('data-placement')).toBe('auto')
+    wrapper.unmount()
+  })
+})
