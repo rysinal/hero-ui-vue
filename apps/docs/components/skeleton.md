@@ -12,6 +12,14 @@ import { Skeleton } from '@rysinal/heroui-vue'
 
 :::preview
 
+demo-preview=../demos/skeleton-basic.vue
+
+:::
+
+## Text Content
+
+:::preview
+
 demo-preview=../demos/skeleton-text-content.vue
 
 :::
