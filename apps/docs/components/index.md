@@ -31,6 +31,12 @@ Form components for user input and interaction.
 
 Helper components for building accessible forms.
 
+- [ColorArea](/components/color-area)
+- [ColorField](/components/color-field)
+- [ColorPicker](/components/color-picker)
+- [ColorSlider](/components/color-slider)
+- [ColorSwatch](/components/color-swatch)
+- [ColorSwatchPicker](/components/color-swatch-picker)
 - [ComboBox](/components/combo-box) - Text input that filters a list as you type
 - [Description](/components/description) - Descriptive text for form fields
 - [Field Error](/components/field-error) - Error message display for form validation
@@ -82,7 +88,6 @@ General-purpose UI components.
 More components are being actively developed:
 
 - Calendar, DatePicker and the other date inputs
-- The colour components (ColorPicker, ColorField, ColorSlider, ...)
 
 ## Usage Pattern
 

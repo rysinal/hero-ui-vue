@@ -4,6 +4,10 @@ export { version } from './version'
 // Composables
 export * from './composables'
 
+// Colour model, used by the colour components
+export { Color, parseColor, toColor } from './utils/color'
+export type { ColorChannel, ColorChannelRange, ColorFormat } from './utils/color'
+
 // Foundation Components (Tier 1)
 export * from './components/accordion'
 export * from './components/alert'

@@ -67,6 +67,12 @@ const componentSidebar = [
   {
     text: 'Form Elements',
     items: [
+      { text: 'ColorArea', link: '/components/color-area' },
+      { text: 'ColorField', link: '/components/color-field' },
+      { text: 'ColorPicker', link: '/components/color-picker' },
+      { text: 'ColorSlider', link: '/components/color-slider' },
+      { text: 'ColorSwatch', link: '/components/color-swatch' },
+      { text: 'ColorSwatchPicker', link: '/components/color-swatch-picker' },
       { text: 'ComboBox', link: '/components/combo-box' },
       { text: 'Description', link: '/components/description' },
       { text: 'Error Message', link: '/components/error-message' },
