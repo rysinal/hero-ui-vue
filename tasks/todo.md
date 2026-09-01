@@ -71,38 +71,39 @@
 - [ ] **P1-6 待复验**：嵌套 Modal 一次 Escape 全关（每个 Backdrop 各挂一份 document keydown）
   - 顺延到后续批次，需先构造嵌套场景复现
 
-## Phase 2 · 补两个基础层（收益覆盖全库）
+## Phase 2 · 补两个基础层（收益覆盖全库）✅ 完成
 
 不先做这层，后续每个组件都会重复踩坑。
 
-- [ ] **P2-1 composables 层**（`packages/vue/src/composables/` 当前是**空目录**，React 侧 11 个 / 929 行）
-  - [ ] `useOverlayState`（110 行）— Tooltip/Dropdown/ComboBox 都要用，最优先
-  - [ ] `useCSSVariable`（78 行）— Skeleton 的 `--skeleton-animation` 依赖它
-  - [ ] `useListData`（473 行）— TagGroup/Table/ComboBox 依赖
-  - [ ] `useMediaQuery` / `useTheme` / `useMeasuredHeight` / `useIsHydrated` / `useMounted`
-  - [ ] 从 `index.ts` 公开导出
-- [ ] **P2-2 复合点号 API**（React 79 个组件有，Vue **0 个**；137 个官方 demo 依赖）
-  - [ ] A 档（子部件已存在，只需加 `Object.assign` 层，成本极低）：
-        Card / Tabs / InputOTP / Fieldset / Modal / Drawer / Select / Popover /
-        Accordion / Disclosure / AlertDialog / Pagination / SearchField / NumberField 等
-  - [ ] 确认 Vue 的 `Object.assign` 方案在 `<script setup>` + vue-tsc 下类型正确
-  - [ ] 保留现有扁平导出（`CardHeader`）向后兼容，双轨并存
+- [x] **P2-1 composables 层** ✅ 8 个已移植并公开导出
+  - `useOverlayState` / `useCSSVariable` / `useListData` / `useMediaQuery` /
+    `useTheme` / `useMeasuredHeight` / `useIsHydrated` / `useIsMounted`
+  - 适配 Vue 习惯：响应式入参接受 值/ref/getter（`MaybeRefOrGetter`），
+    监听器统一用 `onScopeDispose` 回收
+  - 立刻兑现两个能力：Skeleton 能读 `--skeleton-animation` 了；
+    `tag-group-with-list-data` 从手写 ref 换成 `useListData`，删除项时选中态会自动同步
+- [x] **P2-2 复合点号 API** ✅ 34 个组件已支持
+  - **关键验证**：点号 API 在 `<script setup>` 里可用，但**选项式 `components` 注册不支持**
+    （会被当成原生标签渲染成 `<card.header>`）。真实用户写 `<script setup>`，所以可行。
+  - namespace 由 React 自己的 `index.ts` 映射表生成，部件名与上游一致而非猜测
+  - 需显式标注 `Object.assign` 的返回类型，否则 tsc 无法为 SFC prop 类型生成声明
+  - 扁平导出（`CardHeader`）全部保留，向后兼容
 - [x] **P2-3 修 CI 隐患**：根 `package.json` 的 `"test": "vitest"` 是 watch 模式，CI 会挂死 ✅
   - 改为 `"test": "vitest run"`，另加 `"test:watch": "vitest"` 保留本地开发用法
 
-## Phase 3 · B 档子部件补全
+## Phase 3 · B 档子部件补全 ✅ 完成
 
 这批做完，`custom-render-function` / `custom-indicator` 类 demo 才具备实现前提。
 
-- [ ] Checkbox → `Control` / `Indicator` / `Content`
-- [ ] Radio → `Control` / `Indicator` / `Content`
-- [ ] Switch → `Control` / `Thumb` / `Icon` / `Content`
-- [ ] Meter → `Output` / `Track` / `Fill`
-- [ ] ProgressBar → `Output` / `Track` / `Fill`（并补 `isIndeterminate`/`formatOptions`/`valueLabel`）
-- [ ] ProgressCircle → `Track` / `TrackCircle` / `FillCircle`
-- [ ] Kbd → `Abbr` / `Content` + `kbdKeysMap`/`kbdKeysLabelMap`（22 键，⌘⇧⌥ 符号映射）
-- [ ] TagGroup → `List`
-- [ ] Tabs → `Indicator`（选中滑块，当前完全缺失）/ `ListContainer`
+- [x] Checkbox → `Control` / `Indicator` / `Content` ✅
+- [x] Radio → `Control` / `Indicator` / `Content` ✅
+- [x] Switch → `Control` / `Thumb` / `Icon` / `Content` ✅
+- [x] Meter → `Output` / `Track` / `Fill` ✅
+- [x] ProgressBar → `Output` / `Track` / `Fill` + `isIndeterminate`/`formatOptions`/`valueLabel` ✅
+- [x] ProgressCircle → `Track` / `TrackCircle` / `FillCircle`（部件可覆盖 cx/cy/r/strokeWidth）✅
+- [x] Kbd → `Abbr` / `Content` + 22 键符号映射表 ✅ 现在渲染 ⌘ 且 `title="Command"`
+- [x] TagGroup → `List` ✅
+- [x] Tabs → `Indicator` / `ListContainer` ✅ **修正了我第一版的错误实现**：指示器应在**每个 Tab 内部**、只为选中项渲染（tabs.css 让它填满父 Tab），而不是放在容器里靠测量移动
 
 ## Phase 4 · 粗糙组件补齐（26 个）
 
@@ -218,3 +219,70 @@ styles variants **已 100% 预移植**（含 table/toast/tooltip/slider/calendar
 - 未做浏览器目视验收。按 `AGENTS.md` 须走 Chrome 插件 skill；
   ProgressCircle 半径 10→16 与 ToggleButton 选中态由「从未生效」变为生效，
   这两处视觉变化建议目视确认。
+
+### Phase 2 + Phase 3 + Phase 4（部分）（2026-09-01）
+
+**成果**：测试 111 → 162 例全绿；typecheck 与 docs build 通过；
+**已实现组件的 demo 覆盖从约 70% 提升到 97%（391/399）**，全库口径 65%（391/595，
+差额全在 19 个未实现组件）。
+
+**两个基础层（Phase 2）**
+
+| 层 | 之前 | 现在 |
+|---|---|---|
+| composables | 空目录 | 8 个，公开导出 |
+| 复合点号 API | 0 个组件 | 34 个组件 |
+
+**补齐的组件（Phase 3 + 4）**
+
+Checkbox / Radio / Switch / Meter / ProgressBar / ProgressCircle / Kbd /
+TagGroup / Tabs 补齐子部件；InputGroup(0→20 demo) / TextField(1→12) /
+AlertDialog(4→14) / ScrollShadow(0→6) / Skeleton(1→8) / Tabs(1→8) /
+Kbd(1→6) / Separator(1→7) / Link(1→7) / Toolbar(1→4) 等补齐 demo 与 API 文档。
+
+**写 demo 时挖出的真实缺陷**（不是补文档，是补能力）
+
+1. **TextField 根本不支持组合** —— 它硬编码 label+input+description 并忽略 children，
+   而 React 的 TextField 是纯容器。所有上游 demo 都在 TextField 里组合 InputGroup，
+   因此一个都搬不过来。现已改为：有 children 就当容器，没有就保留简写用法；
+   并通过 context 下发 type/value/state，组合的 Input/Textarea 能双向绑定。
+2. **AlertDialog 的裸 Button 触发器完全无效** —— 根元素没有任何点击处理，
+   而上游 demo 都把 Button 直接作为第一个子元素。已套用 Modal 的同款规则。
+3. **Textarea 的 v-model 与文档不符** —— 实现是 `value`/`update:value`，
+   文档写的是 modelValue。已补 `modelValue` 并保留旧写法。
+4. **ScrollShadow 阴影会过期** —— 只在 scroll 时重算，容器/内容尺寸变化后不刷新。
+   已加 ResizeObserver + rAF 批处理 + `visibility-change` 事件。
+5. **Link 的 isDisabled 只是看起来禁用** —— 仍可点击跳转、仍可 Tab 聚焦。
+   已改为移除 href 并设 `tabindex="-1"`。
+6. **Meter/ProgressBar 无法格式化输出** —— 只能显示取整百分比。已补
+   `formatOptions`/`valueLabel`，现在能显示 `US$750.00`。
+
+**过程教训（新增）**
+
+6. **点号 API 的可行性验证差点得出错误结论**。第一次探针用选项式 `components: {}`
+   注册，`<Card.Header>` 被渲染成原生标签 `<card.header>`，看起来"Vue 不支持"。
+   改用真实 SFC + `<script setup>` 后完全正常。**探针要还原真实用法，否则结论是反的。**
+7. **我把 Tabs.Indicator 实现错了一版**。先按"容器里一个指示器 + 测量选中 Tab 位置移动"
+   实现，能跑。但读 React 源码 + tabs.css 才发现：CSS 写的是 `width:100%;height:100%`，
+   意味着指示器应当**填满父 Tab**，React 是在每个 Tab 内渲染、只画选中的那个。
+   改对之后测量代码整段删除。**CSS 也是契约，能反推出正确结构。**
+8. **jsdom 里 radix 组件不响应合成 click**。Tabs/ToggleButton 的选中测试要用
+   键盘事件（ArrowRight）或完整 pointer 序列；浏览器里 `.click()` 同样无效，
+   必须派发 pointerdown/mousedown/pointerup/click 全序列。
+   **测试失败先判断是实现问题还是驱动方式问题。**
+9. **删文件要连带查引用**。删掉 `skeleton-basic.vue` 后 docs build 直接失败，
+   因为 md 还在引用；而且 React 侧其实**有**这个 demo，是我误删。
+
+**明确不移植的两处**（已在 commit 说明）
+
+- `button/ripple-effect`：依赖第三方 React 包 `m3-ripple`，Vue 无对应实现。
+- `button/custom-variants`：React 用 tailwind-variants 的 `extend` 扩展 buttonVariants，
+  Vue demo 改为直接组合 class，是等价的惯用写法。
+
+**已知结构性差异（待决策）**
+
+- **Autocomplete**：Vue 是 724 行单体组件（`items` prop 驱动），
+  React 是 6 个子部件的可组合结构（Trigger/Value/Indicator/Popover/Filter/ClearButton）。
+  剩余 7 个 demo（default / user-selection / email-recipients 等）都依赖可组合结构
+  与 `useFilter`。**改造会重写整个组件，且现有 19 个 demo 全部依赖当前 API**，
+  风险与收益需权衡，暂缓并单独排期。
