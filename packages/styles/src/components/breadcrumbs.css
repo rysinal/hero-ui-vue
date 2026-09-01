@@ -17,6 +17,13 @@
       @apply text-link opacity-100;
     }
 
+    /* React routes breadcrumb items through Link, which carries the focus
+       ring. The Vue item renders a bare anchor, so own the style here. */
+    &:focus-visible:not(:focus),
+    &[data-focus-visible="true"] {
+      @apply status-focused;
+    }
+
     &[data-disabled="true"],
     &[aria-disabled="true"] {
       @apply status-disabled no-underline;

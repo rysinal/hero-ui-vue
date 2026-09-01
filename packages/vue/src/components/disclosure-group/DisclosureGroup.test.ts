@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import {
   Disclosure,
   DisclosureContent,
@@ -128,5 +128,33 @@ describe('DisclosureGroup', () => {
     expect(indicator.element.tagName).toBe('svg')
     expect(indicator.attributes('data-expanded')).toBe('true')
     expect(indicator.attributes('viewBox')).toBe('0 0 16 16')
+  })
+})
+
+describe('Disclosure collapsed content', () => {
+  it('hides collapsed content from the tab order', async () => {
+    const wrapper = mount(
+      {
+        components: { Disclosure, DisclosureContent, DisclosureTrigger },
+        template: `
+          <Disclosure>
+            <DisclosureTrigger>Toggle</DisclosureTrigger>
+            <DisclosureContent>
+              <button data-test="inside">Inside</button>
+            </DisclosureContent>
+          </Disclosure>
+        `,
+      },
+      { attachTo: document.body },
+    )
+    await nextTick()
+
+    expect(wrapper.get('[data-slot="disclosure-content"]').attributes('inert')).toBeDefined()
+
+    await wrapper.get('[data-slot="disclosure-trigger"]').trigger('click')
+    await nextTick()
+
+    expect(wrapper.get('[data-slot="disclosure-content"]').attributes('inert')).toBeUndefined()
+    wrapper.unmount()
   })
 })

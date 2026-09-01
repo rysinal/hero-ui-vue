@@ -51,6 +51,7 @@ watch(() => disclosureContext?.isExpanded.value, updateHeight)
     :aria-hidden="disclosureContext?.isExpanded.value ? 'false' : 'true'"
     :class="contentClass"
     :data-expanded="dataAttr(disclosureContext?.isExpanded.value)"
+    :inert="!disclosureContext?.isExpanded.value || undefined"
     :style="{ '--disclosure-panel-height': panelHeight }"
     data-slot="disclosure-content"
   >

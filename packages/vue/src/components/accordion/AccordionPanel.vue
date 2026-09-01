@@ -34,6 +34,7 @@ onMounted(measureHeight)
     :aria-labelledby="itemContext?.triggerId"
     :class="panelClass"
     :data-expanded="dataAttr(isExpanded)"
+    :inert="!isExpanded || undefined"
     :style="panelStyle"
     data-slot="accordion-panel"
     role="region"
