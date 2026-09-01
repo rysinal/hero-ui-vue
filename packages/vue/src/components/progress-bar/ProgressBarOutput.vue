@@ -14,6 +14,6 @@ const outputClass = computed(() => composeTwClasses(props.class, context?.slots.
 
 <template>
   <span :class="outputClass" data-slot="progress-bar-output">
-    <slot />
+    <slot>{{ context?.valueText.value }}</slot>
   </span>
 </template>

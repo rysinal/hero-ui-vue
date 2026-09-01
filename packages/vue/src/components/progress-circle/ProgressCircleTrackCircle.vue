@@ -5,6 +5,11 @@ import { PROGRESS_CIRCLE_CONTEXT_KEY } from './context'
 
 interface ProgressCircleTrackCircleProps {
   class?: string
+  /** Geometry overrides; default to the shared values from the root. */
+  cx?: number
+  cy?: number
+  r?: number
+  strokeWidth?: number
 }
 
 const props = defineProps<ProgressCircleTrackCircleProps>()
@@ -18,10 +23,10 @@ const geometry = computed(() => context?.geometry.value)
 <template>
   <circle
     :class="circleClass"
-    :cx="geometry?.center"
-    :cy="geometry?.center"
-    :r="geometry?.radius"
-    :stroke-width="geometry?.strokeWidth"
+    :cx="props.cx ?? geometry?.center"
+    :cy="props.cy ?? geometry?.center"
+    :r="props.r ?? geometry?.radius"
+    :stroke-width="props.strokeWidth ?? geometry?.strokeWidth"
     data-slot="progress-circle-track-circle"
     fill="none"
   />

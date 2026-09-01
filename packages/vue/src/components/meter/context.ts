@@ -5,6 +5,8 @@ export interface MeterContextValue {
   slots: ComputedRef<ReturnType<typeof meterVariants>>
   /** Fill width as a percentage, or undefined while indeterminate. */
   percentage: ComputedRef<number | undefined>
+  /** Formatted output text, honouring formatOptions and valueLabel. */
+  valueText: ComputedRef<string>
 }
 
 export const METER_CONTEXT_KEY: InjectionKey<MeterContextValue> =
