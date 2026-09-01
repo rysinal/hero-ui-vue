@@ -91,7 +91,8 @@ const componentSidebar = [
       { text: 'Text', link: '/components/text' },
       { text: 'Toggle Button', link: '/components/toggle-button' },
       { text: 'Toggle Button Group', link: '/components/toggle-button-group' },
-      { text: 'Toolbar', link: '/components/toolbar' }
+      { text: 'Toolbar', link: '/components/toolbar' },
+      { text: 'Tooltip', link: '/components/tooltip' }
     ]
   }
 ]

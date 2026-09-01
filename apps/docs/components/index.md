@@ -68,17 +68,19 @@ General-purpose UI components.
 - [Tag](/components/tag) - Selectable or removable tag
 - [Tabs](/components/tabs) - Tabbed content navigation
 - [Text](/components/text) - Styled text component
+- [Tooltip](/components/tooltip) - Small overlay describing an element on hover
 - [Toolbar](/components/toolbar) - Toolbar container for related actions
 
 ## Coming Soon
 
 More components are being actively developed:
 
-- DatePicker
-- Tooltip
-- Dropdown
-- Calendar and date inputs
-- Menus and overlays
+- Dropdown and ComboBox
+- Table
+- Slider
+- Toast
+- Calendar, DatePicker and the other date inputs
+- The colour components (ColorPicker, ColorField, ColorSlider, ...)
 
 ## Usage Pattern
 
