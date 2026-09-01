@@ -203,3 +203,53 @@ describe('Select', () => {
     expect(root.attributes('data-custom')).toBe('foo')
   })
 })
+
+describe('Select value label before first open', () => {
+  const template = (selectProps: string) => `
+    <Select ${selectProps}>
+      <SelectTrigger data-test="trigger">
+        <SelectValue data-test="value" />
+        <SelectIndicator />
+      </SelectTrigger>
+      <SelectPopover portal-container="#select-portal">
+        <ListBox>
+          <ListBoxItem value="california" text-value="California">California</ListBoxItem>
+          <ListBoxItem value="texas" text-value="Texas">Texas</ListBoxItem>
+        </ListBox>
+      </SelectPopover>
+    </Select>
+  `
+
+  it('renders the item label for defaultValue while the popover has never opened', async () => {
+    const wrapper = mount(
+      { components, template: template('default-value="california"') },
+      { attachTo: document.body },
+    )
+    await flushSelect()
+
+    expect(wrapper.get('[data-test="value"]').text()).toBe('California')
+  })
+
+  it('renders the item label for a disabled select', async () => {
+    const wrapper = mount(
+      { components, template: template('default-value="texas" is-disabled') },
+      { attachTo: document.body },
+    )
+    await flushSelect()
+
+    expect(wrapper.get('[data-test="value"]').text()).toBe('Texas')
+  })
+
+  it('renders labels for a multiple selection before opening', async () => {
+    const wrapper = mount(
+      {
+        components,
+        template: template(':default-value="[\'california\', \'texas\']" selection-mode="multiple"'),
+      },
+      { attachTo: document.body },
+    )
+    await flushSelect()
+
+    expect(wrapper.get('[data-test="value"]').text()).toBe('California, Texas')
+  })
+})

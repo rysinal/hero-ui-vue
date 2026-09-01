@@ -1,6 +1,17 @@
 <script setup lang="ts">
 /* global HTMLElement */
-import { computed, getCurrentInstance, nextTick, provide, ref, shallowRef, useAttrs, watch } from 'vue'
+import {
+  computed,
+  getCurrentInstance,
+  nextTick,
+  provide,
+  ref,
+  shallowRef,
+  useAttrs,
+  useSlots,
+  watch,
+  type VNode,
+} from 'vue'
 import { PopoverRoot } from 'radix-vue'
 import { selectVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
@@ -105,8 +116,81 @@ const selectedKeys = computed(() => {
       : internalSelectedKeys.value
 })
 const selectedKeySet = computed(() => new Set(selectedKeys.value))
+const slotContent = useSlots()
+
+/**
+ * The popover only mounts its items once it opens, so nothing has registered a
+ * textValue before then and SelectValue would fall back to the raw key. Walk the
+ * slot vnodes up front to recover the key -> label pairs declared in the markup.
+ *
+ * Child components keep their children as unevaluated slot functions, so those
+ * have to be invoked to reach the items nested inside ListBox/SelectPopover.
+ */
+const collectSlotLabels = (nodes: unknown, into: Map<SelectKey, string>, depth = 0) => {
+  if (depth > 12) return
+
+  if (Array.isArray(nodes)) {
+    nodes.forEach((node) => collectSlotLabels(node, into, depth))
+    return
+  }
+
+  const vnode = nodes as VNode | null
+  if (!vnode || typeof vnode !== 'object') return
+
+  const vnodeProps = (vnode.props ?? {}) as Record<string, unknown>
+  const rawKey = vnodeProps.value ?? vnodeProps.id
+  const textValue = vnodeProps['text-value'] ?? vnodeProps.textValue
+
+  if (
+    (typeof rawKey === 'string' || typeof rawKey === 'number') &&
+    typeof textValue === 'string'
+  ) {
+    into.set(rawKey, textValue)
+  }
+
+  const children = vnode.children
+  if (Array.isArray(children)) {
+    collectSlotLabels(children, into, depth + 1)
+    return
+  }
+
+  if (children && typeof children === 'object') {
+    Object.entries(children as Record<string, unknown>).forEach(([slotName, child]) => {
+      if (slotName === '_') return
+
+      if (typeof child === 'function') {
+        try {
+          collectSlotLabels((child as (scope: object) => unknown)({}), into, depth + 1)
+        } catch {
+          // Slots that read scope props can throw when rendered eagerly; the
+          // registry populated on open still covers those.
+        }
+        return
+      }
+
+      collectSlotLabels(child, into, depth + 1)
+    })
+  }
+}
+
+const slotLabels = computed(() => {
+  const labels = new Map<SelectKey, string>()
+  try {
+    collectSlotLabels(slotContent.default?.({}) ?? [], labels)
+  } catch {
+    // Same rationale as above: never let label discovery break rendering.
+  }
+  return labels
+})
+
 const selectedItems = computed(() =>
-  selectedKeys.value.map((key) => itemMap.value.get(key) ?? { key, textValue: String(key) }),
+  selectedKeys.value.map(
+    (key) =>
+      itemMap.value.get(key) ?? {
+        key,
+        textValue: slotLabels.value.get(key) ?? String(key),
+      },
+  ),
 )
 const hasSelection = computed(() => selectedKeys.value.length > 0)
 const placeholder = computed(() => props.placeholder)
