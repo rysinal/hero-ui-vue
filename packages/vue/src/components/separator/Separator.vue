@@ -5,12 +5,15 @@ import { composeTwClasses } from '../../utils'
 import { SEPARATOR_CONTEXT_KEY, type SeparatorOrientation } from './context'
 
 interface SeparatorProps {
+  /** Element to render as the root. React exposes this as `render`. */
+  as?: string
   class?: string
   orientation?: SeparatorOrientation
   variant?: 'default' | 'secondary' | 'tertiary'
 }
 
 const props = withDefaults(defineProps<SeparatorProps>(), {
+  as: 'div',
   orientation: undefined,
 })
 
@@ -33,7 +36,8 @@ const separatorClass = computed(() => {
 </script>
 
 <template>
-  <div
+  <component
+    :is="props.as"
     :aria-orientation="finalOrientation"
     :class="separatorClass"
     :data-orientation="finalOrientation"
@@ -41,5 +45,5 @@ const separatorClass = computed(() => {
     role="separator"
   >
     <slot />
-  </div>
+  </component>
 </template>

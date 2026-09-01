@@ -1,18 +1,14 @@
 # Kbd
 
-A component for displaying keyboard shortcuts and key combinations.
+Displays keyboard keys and shortcuts.
 
 ## Import
 
-```vue
-<script setup lang="ts">
+```ts
 import { Kbd } from '@rysinal/heroui-vue'
-</script>
 ```
 
 ## Usage
-
-### Basic
 
 :::preview
 
@@ -20,76 +16,89 @@ demo-preview=../demos/kbd-basic.vue
 
 :::
 
-### Key Combinations
+## Anatomy
+
+`Kbd.Abbr` maps a key name to its glyph and an accessible label, so
+`key-value="command"` renders ⌘ with `title="Command"`.
 
 ```vue
 <template>
-  <p>
-    <Kbd>Ctrl</Kbd> + <Kbd>C</Kbd> to copy
-  </p>
-  <p>
-    <Kbd>Cmd</Kbd> + <Kbd>V</Kbd> to paste
-  </p>
-  <p>
-    <Kbd>Shift</Kbd> + <Kbd>Alt</Kbd> + <Kbd>F</Kbd> to format
-  </p>
+  <Kbd>
+    <Kbd.Abbr key-value="command" />
+    <Kbd.Content>K</Kbd.Content>
+  </Kbd>
 </template>
 ```
 
-### Sizes
+## Variants
 
-```vue
-<template>
-  <Kbd>Esc</Kbd>
-  <Kbd>Enter</Kbd>
-  <Kbd>Space</Kbd>
-</template>
-```
+:::preview
 
-### Variants
+demo-preview=../demos/kbd-variants.vue
 
-```vue
-<template>
-  <Kbd>Ctrl</Kbd>
-  <Kbd variant="light">Alt</Kbd>
-</template>
-```
+:::
 
-### Common Keys
+## Special Keys
 
-```vue
-<template>
-  <div>
-    <Kbd>⌘</Kbd> Command
-    <Kbd>⌃</Kbd> Control
-    <Kbd>⌥</Kbd> Option
-    <Kbd>⇧</Kbd> Shift
-    <Kbd>⏎</Kbd> Return
-    <Kbd>⌫</Kbd> Delete
-    <Kbd>⎋</Kbd> Escape
-    <Kbd>⇥</Kbd> Tab
-    <Kbd>⇪</Kbd> Caps Lock
-  </div>
-</template>
-```
+:::preview
+
+demo-preview=../demos/kbd-special.vue
+
+:::
+
+## Navigation Keys
+
+:::preview
+
+demo-preview=../demos/kbd-navigation.vue
+
+:::
+
+## Inline Usage
+
+:::preview
+
+demo-preview=../demos/kbd-inline.vue
+
+:::
+
+## Instructional Text
+
+:::preview
+
+demo-preview=../demos/kbd-instructional.vue
+
+:::
 
 ## API
 
-### Kbd Props
+### Kbd
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'default' \| 'light'` | `'default'` | The kbd variant |
-| `keys` | `string[]` | - | Array of key names to display |
+| `variant` | `'default' \| 'light'` | `'default'` | Visual style |
+| `keys` | `KbdKey[]` | `undefined` | Shortcut keys rendered as glyphs ahead of the content |
+| `class` | `string` | `undefined` | Additional classes |
 
-### Kbd Slots
+### Kbd.Abbr
 
-| Slot | Description |
-|------|-------------|
-| `default` | The key content |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `keyValue` | `KbdKey` | — | The key to render |
+| `class` | `string` | `undefined` | Additional classes |
 
-## Accessibility
+### Kbd.Content
 
-- Kbd uses semantic `<kbd>` HTML element
-- Properly styled to distinguish from regular text
-- Screen reader friendly
+Wraps literal text such as a letter key.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `class` | `string` | `undefined` | Additional classes |
+
+### Supported keys
+
+`command` `shift` `ctrl` `option` `enter` `delete` `escape` `tab` `capslock`
+`up` `right` `down` `left` `pageup` `pagedown` `home` `end` `help` `space`
+`fn` `win` `alt`
+
+The maps are exported as `kbdKeysMap` and `kbdKeysLabelMap`.

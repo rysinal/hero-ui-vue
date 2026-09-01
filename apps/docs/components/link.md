@@ -1,18 +1,14 @@
 # Link
 
-A component for creating accessible hyperlinks with various styles.
+An accessible hyperlink.
 
 ## Import
 
-```vue
-<script setup lang="ts">
+```ts
 import { Link } from '@rysinal/heroui-vue'
-</script>
 ```
 
 ## Usage
-
-### Basic
 
 :::preview
 
@@ -20,45 +16,77 @@ demo-preview=../demos/link-basic.vue
 
 :::
 
-### External Links
+## Icon Placement
 
-```vue
-<template>
-  <Link href="https://example.com" target="_blank" rel="noopener noreferrer">
-    External Link
-  </Link>
-</template>
-```
+:::preview
+
+demo-preview=../demos/link-icon-placement.vue
+
+:::
+
+## Custom Icon
+
+:::preview
+
+demo-preview=../demos/link-custom-icon.vue
+
+:::
+
+## Underline Variants
+
+:::preview
+
+demo-preview=../demos/link-underline-variants.vue
+
+:::
+
+## Underline Offset
+
+:::preview
+
+demo-preview=../demos/link-underline-offset.vue
+
+:::
+
+## Underline and Offset
+
+:::preview
+
+demo-preview=../demos/link-underline-and-offset.vue
+
+:::
+
+## Current and Disabled
+
+:::preview
+
+demo-preview=../demos/link-custom-render-function.vue
+
+:::
 
 ## API
 
-### Link Props
+### Link
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `href` | `string` | - | The link URL |
-| `target` | `string` | - | The link target (e.g. `_blank`) |
-| `rel` | `string` | - | The link rel attribute |
-| `as` | `string` | `'a'` | The HTML element to render |
+| `href` | `string` | `undefined` | Destination |
+| `target` | `string` | `undefined` | Browsing context |
+| `rel` | `string` | `undefined` | Relationship to the destination |
+| `isCurrent` | `boolean` | `undefined` | Marks the current page; sets `aria-current="page"` |
+| `isDisabled` | `boolean` | `undefined` | Prevents navigation and removes the link from the tab order |
+| `download` | `boolean \| string` | `undefined` | Downloads the destination |
+| `hrefLang` | `string` | `undefined` | Language of the destination |
+| `ping` | `string` | `undefined` | URLs notified on click |
+| `referrerPolicy` | `string` | `undefined` | Referrer policy |
+| `as` | `string` | `'a'` | Root element |
+| `class` | `string` | `undefined` | Additional classes |
 
-### Link Events
+### Link.Icon
 
-| Event | Type | Description |
-|-------|------|-------------|
-| `click` | `(event: MouseEvent) => void` | Fired when the link is clicked |
+Renders a trailing external-link icon by default; pass your own via the slot.
 
-### Link Slots
-
-| Slot | Description |
-|------|-------------|
-| `default` | The link content |
-| `startContent` | Content before the link text |
-| `endContent` | Content after the link text |
-
-## Accessibility
-
-- Link uses semantic `<a>` HTML element
-- External links include `rel="noopener noreferrer"` for security
-- External links announce "opens in new tab" to screen readers
-- Disabled links use `aria-disabled` and prevent navigation
-- Proper focus indicators
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `as` | `string` | `'span'` | Root element |
+| `class` | `string` | `undefined` | Additional classes |

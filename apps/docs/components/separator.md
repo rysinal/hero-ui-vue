@@ -1,18 +1,14 @@
 # Separator
 
-A component for visually separating content sections.
+A horizontal or vertical divider.
 
 ## Import
 
-```vue
-<script setup lang="ts">
+```ts
 import { Separator } from '@rysinal/heroui-vue'
-</script>
 ```
 
 ## Usage
-
-### Basic
 
 :::preview
 
@@ -20,64 +16,59 @@ demo-preview=../demos/separator-basic.vue
 
 :::
 
-### Vertical
+## Variants
 
-```vue
-<template>
-  <div style="display: flex; height: 100px;">
-    <span>Left</span>
-    <Separator orientation="vertical" />
-    <span>Right</span>
-  </div>
-</template>
-```
+:::preview
 
-### With Label
+demo-preview=../demos/separator-variants.vue
 
-```vue
-<template>
-  <div>
-    <p>Section 1</p>
-    <Separator>
-      <span>OR</span>
-    </Separator>
-    <p>Section 2</p>
-  </div>
-</template>
-```
+:::
 
-### Colors
+## Vertical
 
-```vue
-<template>
-  <Separator />
-</template>
-```
+:::preview
 
-### Sizes
+demo-preview=../demos/separator-vertical.vue
 
-```vue
-<template>
-  <Separator />
-</template>
-```
+:::
+
+## With Content
+
+:::preview
+
+demo-preview=../demos/separator-with-content.vue
+
+:::
+
+## With Surface
+
+:::preview
+
+demo-preview=../demos/separator-with-surface.vue
+
+:::
+
+## Manual Variant Override
+
+:::preview
+
+demo-preview=../demos/separator-manual-variant-override.vue
+
+:::
+
+## Custom Element
+
+:::preview
+
+demo-preview=../demos/separator-custom-render-function.vue
+
+:::
 
 ## API
 
-### Separator Props
-
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | The separator orientation |
-
-### Separator Slots
-
-| Slot | Description |
-|------|-------------|
-| `default` | Label content in the middle of the separator |
-
-## Accessibility
-
-- Separator uses `role="separator"` for proper semantics
-- Decorative separators use `aria-hidden="true"`
-- Screen reader friendly
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Direction. Inherited from a Toolbar or ToggleButtonGroup ancestor, which imposes the axis crossing their own |
+| `variant` | `'default' \| 'secondary' \| 'tertiary'` | `'default'` | Visual style |
+| `as` | `string` | `'div'` | Root element |
+| `class` | `string` | `undefined` | Additional classes |

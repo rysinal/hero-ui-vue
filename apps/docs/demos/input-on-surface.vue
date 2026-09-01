@@ -1,0 +1,9 @@
+<template>
+  <Surface class="flex h-[180px] w-[280px] items-center justify-center rounded-3xl p-4">
+    <Input class="w-full" placeholder="Your name" variant="secondary" />
+  </Surface>
+</template>
+
+<script setup lang="ts">
+import { Input, Surface } from '@rysinal/heroui-vue'
+</script>
