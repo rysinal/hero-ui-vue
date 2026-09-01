@@ -10,6 +10,12 @@ export interface AlertDialogContext {
   close: () => void
   open: () => void
   isOpen: ComputedRef<boolean>
+  isEntering?: ComputedRef<boolean>
+  isExiting?: ComputedRef<boolean>
+  /** Id of the heading labelling the dialog, when one is rendered. */
+  headingId: ComputedRef<string | undefined>
+  registerHeadingId: (id: string) => void
+  unregisterHeadingId: (id: string) => void
   placement: ComputedRef<AlertDialogPlacement>
   setPlacement: (placement: AlertDialogPlacement) => void
   slots: ComputedRef<ReturnType<typeof alertDialogVariants>>

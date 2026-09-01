@@ -40,8 +40,17 @@ const setOpen = (value: boolean) => {
   emit('openChange', value)
 }
 
+const headingIds = ref<string[]>([])
+
 provide(ALERT_DIALOG_CONTEXT_KEY, {
   close: () => setOpen(false),
+  headingId: computed(() => headingIds.value[0]),
+  registerHeadingId: (id) => {
+    if (!headingIds.value.includes(id)) headingIds.value = [...headingIds.value, id]
+  },
+  unregisterHeadingId: (id) => {
+    headingIds.value = headingIds.value.filter((item) => item !== id)
+  },
   isOpen,
   open: () => setOpen(true),
   placement: computed(() => placement.value),

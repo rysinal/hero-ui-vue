@@ -38,7 +38,8 @@ if (context) {
 <template>
   <div
     :class="containerClass"
-    :data-entering="dataAttr(true)"
+    :data-entering="dataAttr(context?.isEntering?.value)"
+    :data-exiting="dataAttr(context?.isExiting?.value)"
     :data-placement="placement"
     data-slot="alert-dialog-container"
   >

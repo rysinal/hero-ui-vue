@@ -16,6 +16,7 @@ const dialogClass = computed(() => composeTwClasses(props.class, context?.slots.
   <section
     :class="dialogClass"
     :data-placement="context?.placement.value"
+    :aria-labelledby="context?.headingId.value"
     aria-modal="true"
     data-slot="alert-dialog-dialog"
     role="alertdialog"
