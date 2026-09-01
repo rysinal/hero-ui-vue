@@ -1,6 +1,9 @@
 // Export all components here
 export { version } from './version'
 
+// Composables
+export * from './composables'
+
 // Foundation Components (Tier 1)
 export * from './components/accordion'
 export * from './components/alert'
