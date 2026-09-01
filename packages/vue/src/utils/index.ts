@@ -1,5 +1,6 @@
 export * from './assertion'
 export * from './calendar'
+export * from './color'
 export * from './children'
 export * from './compose'
 export * from './compose-tw'
