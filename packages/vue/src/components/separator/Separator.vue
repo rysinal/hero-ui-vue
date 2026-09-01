@@ -1,21 +1,30 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import { separatorVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
+import { SEPARATOR_CONTEXT_KEY, type SeparatorOrientation } from './context'
 
 interface SeparatorProps {
   class?: string
-  orientation?: 'horizontal' | 'vertical'
+  orientation?: SeparatorOrientation
   variant?: 'default' | 'secondary' | 'tertiary'
 }
 
 const props = withDefaults(defineProps<SeparatorProps>(), {
-  orientation: 'horizontal',
+  orientation: undefined,
 })
+
+const context = inject(SEPARATOR_CONTEXT_KEY, null)
+
+// An explicit prop always wins; otherwise follow an ancestor such as Toolbar,
+// which imposes the axis crossing its own.
+const finalOrientation = computed<SeparatorOrientation>(
+  () => props.orientation ?? context?.orientation.value ?? 'horizontal',
+)
 
 const separatorClass = computed(() => {
   const styles = separatorVariants({
-    orientation: props.orientation,
+    orientation: finalOrientation.value,
     variant: props.variant,
   })
 
@@ -25,9 +34,9 @@ const separatorClass = computed(() => {
 
 <template>
   <div
-    :aria-orientation="props.orientation"
+    :aria-orientation="finalOrientation"
     :class="separatorClass"
-    :data-orientation="props.orientation"
+    :data-orientation="finalOrientation"
     data-slot="separator"
     role="separator"
   >

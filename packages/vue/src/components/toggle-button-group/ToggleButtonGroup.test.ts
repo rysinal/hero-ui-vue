@@ -1,3 +1,4 @@
+/* global document, HTMLElement, KeyboardEvent */
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
@@ -5,7 +6,10 @@ import ToggleButton from '../toggle-button/ToggleButton.vue'
 import ToggleButtonGroup from './ToggleButtonGroup.vue'
 
 const mountGroup = (template: string) =>
-  mount({ components: { ToggleButtonGroup, ToggleButton }, template })
+  mount(
+    { components: { ToggleButtonGroup, ToggleButton }, template },
+    { attachTo: document.body },
+  )
 
 const pressed = (wrapper: ReturnType<typeof mount>) =>
   wrapper.findAll('button').map((button) => button.attributes('data-selected') === 'true')
@@ -125,6 +129,27 @@ describe('ToggleButtonGroup selection model', () => {
     await nextTick()
 
     expect(wrapper.find('button').attributes('data-selected')).toBe('true')
+    wrapper.unmount()
+  })
+})
+
+describe('ToggleButtonGroup keyboard navigation', () => {
+  it('moves focus between buttons with arrow keys', async () => {
+    const wrapper = mountGroup(`
+      <ToggleButtonGroup selection-mode="multiple">
+        <ToggleButton id="bold">B</ToggleButton>
+        <ToggleButton id="italic">I</ToggleButton>
+      </ToggleButtonGroup>
+    `)
+    await nextTick()
+
+    const buttons = wrapper.findAll('button')
+    const first = buttons[0]!.element as HTMLElement
+    first.focus()
+    first.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'ArrowRight' }))
+    await nextTick()
+
+    expect(document.activeElement).toBe(buttons[1]!.element)
     wrapper.unmount()
   })
 })
