@@ -1,4 +1,7 @@
-export { default as Drawer } from './Drawer.vue'
+// Drawer carries the dot-notation parts (Drawer.Root, ...)
+// while every part stays available as a flat export below.
+export { DrawerNamespace as Drawer } from './namespace'
+export { default as DrawerRoot } from './Drawer.vue'
 export { default as DrawerBackdrop } from './DrawerBackdrop.vue'
 export { default as DrawerBody } from './DrawerBody.vue'
 export { default as DrawerCloseTrigger } from './DrawerCloseTrigger.vue'

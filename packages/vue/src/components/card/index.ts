@@ -1,4 +1,7 @@
-export { default as Card } from './Card.vue'
+// Card carries the dot-notation parts (Card.Root, ...)
+// while every part stays available as a flat export below.
+export { CardNamespace as Card } from './namespace'
+export { default as CardRoot } from './Card.vue'
 export { default as CardContent } from './CardContent.vue'
 export { default as CardDescription } from './CardDescription.vue'
 export { default as CardFooter } from './CardFooter.vue'

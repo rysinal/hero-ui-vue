@@ -1,4 +1,7 @@
-export { default as AlertDialog } from './AlertDialog.vue'
+// AlertDialog carries the dot-notation parts (AlertDialog.Root, ...)
+// while every part stays available as a flat export below.
+export { AlertDialogNamespace as AlertDialog } from './namespace'
+export { default as AlertDialogRoot } from './AlertDialog.vue'
 export { default as AlertDialogBackdrop } from './AlertDialogBackdrop.vue'
 export { default as AlertDialogBody } from './AlertDialogBody.vue'
 export { default as AlertDialogCloseTrigger } from './AlertDialogCloseTrigger.vue'

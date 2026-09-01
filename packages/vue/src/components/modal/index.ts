@@ -1,4 +1,7 @@
-export { default as Modal } from './Modal.vue'
+// Modal carries the dot-notation parts (Modal.Root, ...)
+// while every part stays available as a flat export below.
+export { ModalNamespace as Modal } from './namespace'
+export { default as ModalRoot } from './Modal.vue'
 export { default as ModalBackdrop } from './ModalBackdrop.vue'
 export { default as ModalBody } from './ModalBody.vue'
 export { default as ModalCloseTrigger } from './ModalCloseTrigger.vue'

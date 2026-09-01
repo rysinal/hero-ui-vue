@@ -1,6 +1,7 @@
-export {
-  default as InputOTP,
-} from './InputOTP.vue'
+// InputOTP carries the dot-notation parts (InputOTP.Root, ...)
+// while every part stays available as a flat export below.
+export { InputOTPNamespace as InputOTP } from './namespace'
+export { default as InputOTPRoot } from './InputOTP.vue'
 export {
   REGEXP_ONLY_CHARS,
   REGEXP_ONLY_CHARS_AND_DIGITS,
