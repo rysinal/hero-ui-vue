@@ -7,6 +7,13 @@ export type DrawerBackdropVariant = 'transparent' | 'opaque' | 'blur'
 export interface DrawerContext {
   close: () => void
   open: () => void
+  /** Id of the heading labelling the dialog, when one is rendered. */
+  headingId: ComputedRef<string | undefined>
+  registerHeadingId: (id: string) => void
+  unregisterHeadingId: (id: string) => void
+  /** Remembers the element that opened the drawer so focus can return to it. */
+  setTriggerElement: (element: HTMLElement | null) => void
+  triggerElement?: ComputedRef<HTMLElement | null>
   isDismissable: ComputedRef<boolean>
   isEntering: ComputedRef<boolean>
   isExiting: ComputedRef<boolean>

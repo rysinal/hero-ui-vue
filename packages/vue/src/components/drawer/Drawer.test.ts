@@ -354,3 +354,30 @@ describe('Drawer', () => {
     expect(document.querySelector('[data-slot="drawer-backdrop"]')).toBeNull()
   })
 })
+
+describe('Drawer accessibility', () => {
+  it('labels the dialog with its heading', async () => {
+    const wrapper = createDrawer()
+
+    await wrapper.get('[data-test="trigger"]').trigger('click')
+    await flushDrawerAnimation()
+
+    const dialog = document.querySelector('[data-slot="drawer-dialog"]')
+    const heading = document.querySelector('[data-slot="drawer-heading"]')
+
+    expect(heading?.id).toBeTruthy()
+    expect(dialog?.getAttribute('aria-labelledby')).toBe(heading?.id)
+  })
+
+  it('restores focus to the trigger on close', async () => {
+    const wrapper = createDrawer()
+
+    await wrapper.get('[data-test="trigger"]').trigger('click')
+    await flushDrawerAnimation()
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    await flushDrawerAnimation()
+
+    expect(document.activeElement).toBe(wrapper.get('[data-test="trigger"]').element)
+  })
+})

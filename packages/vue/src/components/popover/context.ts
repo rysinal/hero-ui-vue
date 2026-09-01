@@ -6,6 +6,10 @@ export type PopoverAlign = 'start' | 'center' | 'end'
 
 export interface PopoverContext {
   close: () => void
+  /** Id of the heading labelling the dialog, when one is rendered. */
+  headingId: ComputedRef<string | undefined>
+  registerHeadingId: (id: string) => void
+  unregisterHeadingId: (id: string) => void
   isOpen: ComputedRef<boolean>
   open: () => void
   setOpen: (value: boolean) => void

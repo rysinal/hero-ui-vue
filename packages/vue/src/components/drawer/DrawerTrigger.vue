@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+/* global HTMLElement */
+import { computed, inject, ref } from 'vue'
 import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
 import { DRAWER_CONTEXT_KEY } from './context'
 
@@ -17,12 +18,22 @@ const props = withDefaults(defineProps<DrawerTriggerProps>(), {
 })
 
 const context = inject(DRAWER_CONTEXT_KEY, null)
+const triggerRef = ref<HTMLElement | { $el?: HTMLElement } | null>(null)
 const finalIsDisabled = computed(() => props.disabled ?? props.isDisabled)
 const triggerClass = computed(() => composeTwClasses(props.class, context?.slots.value.trigger()))
 const { interactionAttrs, interactionHandlers } = useInteractionStates(() => finalIsDisabled.value)
 
+const resolveElement = (): HTMLElement | null => {
+  const target = triggerRef.value
+  if (!target) return null
+  return target instanceof HTMLElement ? target : (target.$el ?? null)
+}
+
 const handleOpen = () => {
   if (finalIsDisabled.value) return
+  // Report ourselves so focus can return here on close, even though clicking a
+  // div[tabindex] does not necessarily focus it.
+  context?.setTriggerElement(resolveElement())
   context?.open()
 }
 </script>
@@ -30,6 +41,7 @@ const handleOpen = () => {
 <template>
   <component
     :is="as"
+    ref="triggerRef"
     :aria-disabled="dataAttr(finalIsDisabled)"
     :class="triggerClass"
     :data-disabled="dataAttr(finalIsDisabled)"

@@ -49,8 +49,22 @@ const handleRootClick = (event: MouseEvent) => {
   setOpen(true)
 }
 
+const headingIds = ref<string[]>([])
+const triggerElement = ref<HTMLElement | null>(null)
+
 provide(DRAWER_CONTEXT_KEY, {
   close: () => setOpen(false),
+  headingId: computed(() => headingIds.value[0]),
+  registerHeadingId: (id) => {
+    if (!headingIds.value.includes(id)) headingIds.value = [...headingIds.value, id]
+  },
+  unregisterHeadingId: (id) => {
+    headingIds.value = headingIds.value.filter((item) => item !== id)
+  },
+  setTriggerElement: (element) => {
+    triggerElement.value = element
+  },
+  triggerElement: computed(() => triggerElement.value),
   isDismissable,
   isEntering,
   isExiting,

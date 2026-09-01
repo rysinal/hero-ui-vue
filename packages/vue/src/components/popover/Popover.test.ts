@@ -193,3 +193,36 @@ describe('Popover', () => {
     expect(document.querySelector('[data-slot="popover-content"]')).toBeNull()
   })
 })
+
+describe('Popover accessibility', () => {
+  it('labels the dialog with its heading', async () => {
+    const wrapper = mount(
+      {
+        components: { Popover, PopoverTrigger, PopoverContent, PopoverDialog, PopoverHeading },
+        template: `
+          <Popover>
+            <PopoverTrigger data-test="trigger">Open</PopoverTrigger>
+            <PopoverContent>
+              <PopoverDialog>
+                <PopoverHeading>Popover title</PopoverHeading>
+                <p>Body</p>
+              </PopoverDialog>
+            </PopoverContent>
+          </Popover>
+        `,
+      },
+      { attachTo: document.body },
+    )
+
+    await wrapper.get('[data-test="trigger"]').trigger('click')
+    await nextTick()
+    await new Promise((resolve) => setTimeout(resolve, 50))
+
+    const dialog = document.querySelector('[data-slot="popover-dialog"]')
+    const heading = document.querySelector('[data-slot="popover-heading"]')
+
+    expect(heading?.id).toBeTruthy()
+    expect(dialog?.getAttribute('aria-labelledby')).toBe(heading?.id)
+    wrapper.unmount()
+  })
+})

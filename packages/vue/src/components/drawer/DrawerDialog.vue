@@ -149,6 +149,7 @@ const handleClick = (event: MouseEvent) => {
     :class="dialogClass"
     :data-placement="context?.placement.value"
     :style="context?.isDismissable.value ? { touchAction: 'none' } : undefined"
+    :aria-labelledby="context?.headingId.value"
     aria-modal="true"
     data-slot="drawer-dialog"
     role="dialog"

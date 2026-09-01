@@ -13,7 +13,13 @@ const dialogClass = computed(() => composeTwClasses(props.class, context?.slots.
 </script>
 
 <template>
-  <section :class="dialogClass" data-slot="popover-dialog" role="dialog" tabindex="-1">
+  <section
+    :aria-labelledby="context?.headingId.value"
+    :class="dialogClass"
+    data-slot="popover-dialog"
+    role="dialog"
+    tabindex="-1"
+  >
     <slot :close="context?.close" />
   </section>
 </template>
