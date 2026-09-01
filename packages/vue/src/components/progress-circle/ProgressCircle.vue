@@ -24,7 +24,13 @@ const props = withDefaults(defineProps<ProgressCircleProps>(), {
 const slots = computed(() => progressCircleVariants({ color: props.color, size: props.size }))
 const finalIsDisabled = computed(() => props.disabled ?? props.isDisabled)
 const isIndeterminate = computed(() => props.value === undefined)
-const circumference = 2 * Math.PI * 10
+
+// Keep these in sync with the React source (progress-circle.tsx).
+const STROKE_WIDTH = 4
+const CENTER = 18
+const RADIUS = CENTER - STROKE_WIDTH / 2
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS
+
 const percentage = computed(() => {
   if (isIndeterminate.value) return undefined
   const range = props.maxValue - props.minValue
@@ -32,7 +38,9 @@ const percentage = computed(() => {
   return Math.min(100, Math.max(0, ((props.value! - props.minValue) / range) * 100))
 })
 const dashOffset = computed(() =>
-  percentage.value === undefined ? circumference * 0.25 : circumference * (1 - percentage.value / 100),
+  percentage.value === undefined
+    ? CIRCUMFERENCE * 0.75
+    : CIRCUMFERENCE - (percentage.value / 100) * CIRCUMFERENCE,
 )
 const circleClass = computed(() => composeTwClasses(props.class, slots.value.base()))
 </script>
@@ -48,26 +56,33 @@ const circleClass = computed(() => composeTwClasses(props.class, slots.value.bas
     data-slot="progress-circle"
     role="progressbar"
   >
-    <svg :class="slots.track()" data-slot="progress-circle-track" viewBox="0 0 24 24">
+    <svg
+      :class="slots.track()"
+      :viewBox="`0 0 ${CENTER * 2} ${CENTER * 2}`"
+      data-slot="progress-circle-track"
+      fill="none"
+    >
       <circle
         :class="slots.trackCircle()"
-        cx="12"
-        cy="12"
+        :cx="CENTER"
+        :cy="CENTER"
+        :r="RADIUS"
+        :stroke-width="STROKE_WIDTH"
+        data-slot="progress-circle-track-circle"
         fill="none"
-        r="10"
-        stroke-width="3"
       />
       <circle
         :class="slots.fillCircle()"
-        :stroke-dasharray="circumference"
+        :cx="CENTER"
+        :cy="CENTER"
+        :r="RADIUS"
+        :stroke-dasharray="CIRCUMFERENCE"
         :stroke-dashoffset="dashOffset"
-        cx="12"
-        cy="12"
+        :stroke-width="STROKE_WIDTH"
+        :transform="`rotate(-90 ${CENTER} ${CENTER})`"
+        data-slot="progress-circle-fill-circle"
         fill="none"
-        r="10"
         stroke-linecap="round"
-        stroke-width="3"
-        transform="rotate(-90 12 12)"
       />
     </svg>
   </div>
