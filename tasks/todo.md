@@ -137,9 +137,11 @@
 styles variants **已 100% 预移植**（含 table/toast/tooltip/slider/calendar/dropdown/combo-box
 的 `.styles.ts`，与 React 行数 1:1），只差 Vue 组件层。
 
-- [ ] **浮层族**（复用 Popover/Select 经验，依赖 P2-1 的 `useOverlayState`）
-  - [ ] Tooltip（5 demo）→ Dropdown（16）→ ComboBox（18）
-- [ ] **Slider**（5 demo）
+- [x] **Tooltip**（5 demo）✅ 基于 radix-vue Tooltip，裸控件可直接作触发器
+- [x] **Dropdown**（16 demo）✅ 9 个子部件，含 section / 多选 / 子菜单
+- [ ] **ComboBox**（18 demo）
+- [x] **Slider**（5 demo）✅ 值进值出保持形状；修了未受控被冻结与浮点精度两个问题
+- [x] **Form**（2 demo）✅ 顺带补上 TextField 的 validate 与 FieldError 自动显示
 - [ ] **Table**（12 demo，依赖 `useListData`；含排序/选择/展开/虚拟化/列宽调整）
 - [ ] **日期时间族**（6 个，86 demo）—— 需先选定日期库（React 用 `@internationalized/date`）
   - [ ] Calendar（15）→ RangeCalendar（16）→ DateField（16）→ TimeField（14）
@@ -147,8 +149,7 @@ styles variants **已 100% 预移植**（含 table/toast/tooltip/slider/calendar
 - [ ] **颜色族**（6 个，47 demo）
   - [ ] ColorArea（6）→ ColorSlider（8）→ ColorField（12）→ ColorSwatch（7）
         → ColorSwatchPicker（9）→ ColorPicker（5）
-- [ ] **Toast**（9 demo）—— 需先设计全局队列机制，单独排期
-- [ ] **Form**（2 demo）
+- [ ] **Toast**（9 demo）—— 需先设计全局队列机制
 
 ## Phase 6 · 文档与收尾
 
@@ -286,3 +287,38 @@ Kbd(1→6) / Separator(1→7) / Link(1→7) / Toolbar(1→4) 等补齐 demo 与 
   剩余 7 个 demo（default / user-selection / email-recipients 等）都依赖可组合结构
   与 `useFilter`。**改造会重写整个组件，且现有 19 个 demo 全部依赖当前 API**，
   风险与收益需权衡，暂缓并单独排期。
+
+### Phase 5 首批（2026-09-02）
+
+**新增 4 个组件**：Tooltip、Slider、Form、Dropdown。
+测试 162 → 179 例全绿；demo 覆盖 65% → **70%（419/595）**；
+未实现组件从 19 降到 15。
+
+**每个都在实现中发现了真问题**
+
+| 组件 | 发现 |
+|---|---|
+| Slider | 未受控时被冻结：根把静态 `defaultValue` 喂给 radix，覆盖掉每次变更 |
+| Slider | 填充宽度算出 `55.00000000000001%`，浮点噪声会进 DOM |
+| Form | TextField 没有 `validate`，FieldError 也不会自动显示消息 |
+| Form | 校验若不等交互就跑，未触碰的必填空字段一挂载就标红 |
+| Dropdown | radix 写的是 `data-disabled=""`，而 `menu-item.css` 匹配 `[data-disabled="true"]` |
+
+**两处与 React 的有意差异（已在文档注明）**
+
+- **Dropdown 触发器必须包 `Dropdown.Trigger`**。React 允许裸 `<Button>` 作第一个子元素，
+  但 Vue 模板无法在不改变书写形态的前提下重新包裹任意子节点。
+  （Tooltip 能做到是因为它只有一个触发器，可以整体包住。）
+- **Dropdown 的 `selectionMode` 两处都能写**：React 声明在 `Menu` 上，
+  Vue 两处都接受，状态统一由根持有。
+
+**过程教训（新增）**
+
+10. **CSS 能反推出结构错误**。Tabs.Indicator 那次是靠 `width:100%;height:100%` 反推出
+    "应该填满父 Tab"；这次 Dropdown 的 `[data-disabled="true"]` 又暴露了 radix 的空值属性。
+    **移植时把 CSS 选择器当契约读，比只读组件源码发现得多。**
+11. **浏览器验证要按组件的真实交互方式驱动**。radix 的子菜单不响应合成 `pointerenter`，
+    要用 `ArrowRight`；Tabs 不响应 `.click()`，要用完整 pointer 序列。
+    第一次探针失败**先怀疑驱动方式，再怀疑实现**——这几次全是驱动方式的问题。
+12. **别用"标题的下一个兄弟节点"定位 demo**。多次因此拿到空结果，
+    改用触发器文案等内容特征定位才稳定。
