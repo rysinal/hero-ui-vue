@@ -87,6 +87,7 @@ const componentSidebar = [
       { text: 'Progress Circle', link: '/components/progress-circle' },
       { text: 'Scroll Shadow', link: '/components/scroll-shadow' },
       { text: 'Separator', link: '/components/separator' },
+      { text: 'Slider', link: '/components/slider' },
       { text: 'Spinner', link: '/components/spinner' },
       { text: 'Text', link: '/components/text' },
       { text: 'Toggle Button', link: '/components/toggle-button' },

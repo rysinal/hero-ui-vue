@@ -63,6 +63,7 @@ General-purpose UI components.
 - [Scroll Shadow](/components/scroll-shadow) - Scrollable region with edge shadows
 - [Separator](/components/separator) - Visual divider between content sections
 - [Skeleton](/components/skeleton) - Loading placeholder
+- [Slider](/components/slider) - Choose a value or range from a scale
 - [Spinner](/components/spinner) - Loading indicator
 - [Surface](/components/surface) - Base surface wrapper
 - [Tag](/components/tag) - Selectable or removable tag
@@ -77,7 +78,6 @@ More components are being actively developed:
 
 - Dropdown and ComboBox
 - Table
-- Slider
 - Toast
 - Calendar, DatePicker and the other date inputs
 - The colour components (ColorPicker, ColorField, ColorSlider, ...)
