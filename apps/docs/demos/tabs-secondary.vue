@@ -1,5 +1,5 @@
 <template>
-  <Tabs class="w-full max-w-md" default-value="overview">
+  <Tabs class="w-full max-w-md" default-value="overview" variant="secondary">
     <Tabs.ListContainer>
       <Tabs.List>
         <Tabs.Tab value="overview">

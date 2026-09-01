@@ -60,6 +60,6 @@ const handleValueChange = (value: string | number) => {
     data-slot="tabs"
     @update:model-value="handleValueChange"
   >
-    <slot />
+    <slot :selected-value="selectedValue" />
   </TabsRoot>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <Tabs class="w-full max-w-md" default-value="overview">
+  <Tabs v-slot="{ selectedValue }" class="w-full max-w-md" default-value="overview">
     <Tabs.ListContainer>
       <Tabs.List>
         <Tabs.Tab value="overview">
@@ -10,15 +10,11 @@
           Analytics
           <Tabs.Indicator />
         </Tabs.Tab>
-        <Tabs.Tab value="reports">
-          Reports
-          <Tabs.Indicator />
-        </Tabs.Tab>
       </Tabs.List>
     </Tabs.ListContainer>
-    <Tabs.Panel class="pt-4" value="overview">Overview content</Tabs.Panel>
-    <Tabs.Panel class="pt-4" value="analytics">Analytics content</Tabs.Panel>
-    <Tabs.Panel class="pt-4" value="reports">Reports content</Tabs.Panel>
+    <p class="pt-4 text-sm text-muted">
+      Selected tab: <span class="font-medium">{{ selectedValue }}</span>
+    </p>
   </Tabs>
 </template>
 

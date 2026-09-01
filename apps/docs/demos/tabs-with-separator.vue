@@ -7,10 +7,12 @@
           <Tabs.Indicator />
         </Tabs.Tab>
         <Tabs.Tab value="analytics">
+          <Tabs.Separator />
           Analytics
           <Tabs.Indicator />
         </Tabs.Tab>
         <Tabs.Tab value="reports">
+          <Tabs.Separator />
           Reports
           <Tabs.Indicator />
         </Tabs.Tab>

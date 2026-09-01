@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { computed, inject, provide } from 'vue'
 import { TabsTrigger } from 'radix-vue'
 import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
 import { TABS_CONTEXT_KEY } from './context'
+import { TAB_CONTEXT_KEY } from './tab-context'
 
 interface TabProps {
   class?: string
@@ -19,6 +20,11 @@ const tabsContext = inject(TABS_CONTEXT_KEY, null)
 const finalIsDisabled = computed(() => props.disabled ?? props.isDisabled)
 const isSelected = computed(() => tabsContext?.selectedValue.value === props.value)
 const { interactionAttrs, interactionHandlers } = useInteractionStates(() => finalIsDisabled.value)
+provide(TAB_CONTEXT_KEY, {
+  isDisabled: computed(() => finalIsDisabled.value),
+  isSelected: computed(() => isSelected.value),
+})
+
 const tabClass = computed(() => composeTwClasses(props.class, tabsContext?.slots.tab()))
 </script>
 

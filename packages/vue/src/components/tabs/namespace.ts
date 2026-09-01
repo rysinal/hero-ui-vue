@@ -4,6 +4,7 @@
 import Tab from './Tab.vue'
 import TabIndicator from './TabIndicator.vue'
 import TabList from './TabList.vue'
+import TabListContainer from './TabListContainer.vue'
 import TabPanel from './TabPanel.vue'
 import TabSeparator from './TabSeparator.vue'
 import Tabs from './Tabs.vue'
@@ -11,6 +12,7 @@ import Tabs from './Tabs.vue'
 type TabsCompound = typeof Tabs & {
   Indicator: typeof TabIndicator
   List: typeof TabList
+  ListContainer: typeof TabListContainer
   Panel: typeof TabPanel
   Root: typeof Tabs
   Separator: typeof TabSeparator
@@ -20,6 +22,7 @@ type TabsCompound = typeof Tabs & {
 export const TabsNamespace: TabsCompound = Object.assign(Tabs, {
   Indicator: TabIndicator,
   List: TabList,
+  ListContainer: TabListContainer,
   Panel: TabPanel,
   Root: Tabs,
   Separator: TabSeparator,
