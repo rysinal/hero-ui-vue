@@ -92,6 +92,7 @@ const componentSidebar = [
       { text: 'Slider', link: '/components/slider' },
       { text: 'Spinner', link: '/components/spinner' },
       { text: 'Text', link: '/components/text' },
+      { text: 'Toast', link: '/components/toast' },
       { text: 'Toggle Button', link: '/components/toggle-button' },
       { text: 'Toggle Button Group', link: '/components/toggle-button-group' },
       { text: 'Toolbar', link: '/components/toolbar' },

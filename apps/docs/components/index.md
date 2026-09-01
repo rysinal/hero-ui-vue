@@ -23,6 +23,7 @@ Form components for user input and interaction.
 - [Switch Group](/components/switch-group) - Layout wrapper for related switches
 - [TextField](/components/textfield) - Complete form field with label and validation
 - [Textarea](/components/textarea) - Multi-line text input field
+- [Toast](/components/toast) - Brief notifications that stack in a corner
 - [Toggle Button](/components/toggle-button) - Pressable toggle control
 - [Toggle Button Group](/components/toggle-button-group) - Group related toggle controls
 
@@ -80,7 +81,6 @@ More components are being actively developed:
 
 - ComboBox
 - Table
-- Toast
 - Calendar, DatePicker and the other date inputs
 - The colour components (ColorPicker, ColorField, ColorSlider, ...)
 
