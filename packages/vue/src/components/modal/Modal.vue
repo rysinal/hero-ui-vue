@@ -43,8 +43,32 @@ const setOpen = (value: boolean) => {
   emit('openChange', value)
 }
 
+const rootRef = ref<HTMLElement | null>(null)
+
+const INTERACTIVE_TRIGGER_SELECTOR = 'button, [role="button"], a[href], input, select, textarea'
+
+/**
+ * React's Modal root is a DialogTrigger, which wires up only its first child as
+ * the trigger, and only when that child is an interactive control. Mirror that:
+ * a click opens the modal only when it originates from an interactive element
+ * inside the first child, and never from an explicit disabled ModalTrigger.
+ */
 const handleRootClick = (event: MouseEvent) => {
   if (event.target === event.currentTarget || isOpen.value) return
+
+  const target = event.target as HTMLElement | null
+  const root = rootRef.value
+  if (!target || !root) return
+
+  // ModalTrigger owns its disabled handling and calls open() itself.
+  if (target.closest('[data-slot="modal-trigger"]')) return
+
+  const firstChild = root.firstElementChild
+  if (!firstChild || !firstChild.contains(target)) return
+
+  const control = target.closest(INTERACTIVE_TRIGGER_SELECTOR)
+  if (!control || !firstChild.contains(control)) return
+
   setOpen(true)
 }
 
@@ -64,7 +88,7 @@ provide(MODAL_CONTEXT_KEY, {
 </script>
 
 <template>
-  <div data-slot="modal-root" @click="handleRootClick">
+  <div ref="rootRef" data-slot="modal-root" @click="handleRootClick">
     <slot :close="() => setOpen(false)" :is-open="isOpen" :open="() => setOpen(true)" />
   </div>
 </template>
