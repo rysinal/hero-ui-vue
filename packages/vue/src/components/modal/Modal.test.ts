@@ -282,7 +282,7 @@ describe('Modal', () => {
     expect(wheel.defaultPrevented).toBe(false)
   })
 
-  it('focuses the dialog on open and does not restore focus-visible to the trigger on Escape', async () => {
+  it('focuses the dialog on open and restores focus to the trigger on Escape', async () => {
     const wrapper = createModal()
 
     await wrapper.get('[data-test="trigger"]').trigger('click')
@@ -293,8 +293,21 @@ describe('Modal', () => {
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
     await flushModalAnimation()
 
-    expect(document.activeElement).not.toBe(wrapper.get('[data-test="trigger"]').element)
+    expect(document.activeElement).toBe(wrapper.get('[data-test="trigger"]').element)
     expect(document.querySelector('[data-slot="modal-backdrop"]')).toBeNull()
+  })
+
+  it('labels the dialog with its heading', async () => {
+    const wrapper = createModal()
+
+    await wrapper.get('[data-test="trigger"]').trigger('click')
+    await flushModalAnimation()
+
+    const dialog = document.querySelector('[data-slot="modal-dialog"]')
+    const heading = document.querySelector('[data-slot="modal-heading"]')
+
+    expect(heading?.id).toBeTruthy()
+    expect(dialog?.getAttribute('aria-labelledby')).toBe(heading?.id)
   })
 
   it('can keep Escape from dismissing the modal', async () => {

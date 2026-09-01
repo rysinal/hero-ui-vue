@@ -21,6 +21,7 @@ const handleClick = (event: MouseEvent) => {
 
 <template>
   <section
+    :aria-labelledby="context?.headingId.value"
     :class="dialogClass"
     :data-placement="context?.placement.value"
     aria-modal="true"

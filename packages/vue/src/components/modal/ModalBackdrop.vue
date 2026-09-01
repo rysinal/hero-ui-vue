@@ -236,6 +236,20 @@ const setOpen = (value: boolean) => {
   if (!isControlled.value) rootContext?.setOpen(value)
 }
 
+/** Element focused before the modal opened, so focus can go back on close. */
+let triggerElement: HTMLElement | null = null
+
+const restoreTriggerFocus = () => {
+  const target = triggerElement
+  triggerElement = null
+
+  if (!target) return
+  // The overlay is torn down asynchronously; focus once it is really gone.
+  nextTick(() => {
+    if (target.isConnected) target.focus({ preventScroll: true })
+  })
+}
+
 const close = () => {
   if (typeof document === 'undefined') {
     setOpen(false)
@@ -249,6 +263,7 @@ const close = () => {
   }
 
   setOpen(false)
+  restoreTriggerFocus()
 }
 
 const focusDialog = async () => {
@@ -346,6 +361,22 @@ watch(
     document.removeEventListener('keydown', onKeydown)
 
     if (open) {
+      // ModalTrigger reports itself on activation (clicking a div[tabindex]
+      // does not necessarily focus it). Fall back to the Modal root's record,
+      // then to whatever currently has focus.
+      if (!triggerElement) {
+        const rootTrigger = rootContext?.triggerElement?.value ?? null
+        const previouslyFocused = document.activeElement
+
+        if (rootTrigger) {
+          triggerElement = rootTrigger
+        } else if (
+          previouslyFocused instanceof HTMLElement &&
+          previouslyFocused !== document.body
+        ) {
+          triggerElement = previouslyFocused
+        }
+      }
       isRendered.value = true
       isEntering.value = true
       isExiting.value = false
@@ -363,6 +394,7 @@ watch(
       isEntering.value = false
       isExiting.value = true
       void finishExitAnimation(runId)
+      restoreTriggerFocus()
     }
   },
   { immediate: true },
@@ -418,8 +450,11 @@ watch(
   },
 )
 
+const headingIds = ref<string[]>([])
+
 provide(MODAL_CONTEXT_KEY, {
   close,
+  headingId: computed(() => headingIds.value[0]),
   isEntering: computed(() => isEntering.value),
   isExiting: computed(() => isExiting.value),
   isOpen,
@@ -427,12 +462,22 @@ provide(MODAL_CONTEXT_KEY, {
   placement: computed<ModalPlacement>(
     () => props.placement ?? rootContext?.placement.value ?? localPlacement.value,
   ),
+  registerHeadingId: (id) => {
+    if (!headingIds.value.includes(id)) headingIds.value = [...headingIds.value, id]
+  },
   setOpen,
   setPlacement: (placement) => {
     localPlacement.value = placement
     rootContext?.setPlacement(placement)
   },
+  setTriggerElement: (element) => {
+    triggerElement = element
+    rootContext?.setTriggerElement(element)
+  },
   slots,
+  unregisterHeadingId: (id) => {
+    headingIds.value = headingIds.value.filter((item) => item !== id)
+  },
 })
 </script>
 

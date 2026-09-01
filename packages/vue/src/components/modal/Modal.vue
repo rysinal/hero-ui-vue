@@ -69,21 +69,36 @@ const handleRootClick = (event: MouseEvent) => {
   const control = target.closest(INTERACTIVE_TRIGGER_SELECTOR)
   if (!control || !firstChild.contains(control)) return
 
+  triggerElement.value = control as HTMLElement
   setOpen(true)
 }
 
+const headingIds = ref<string[]>([])
+const triggerElement = ref<HTMLElement | null>(null)
+
 provide(MODAL_CONTEXT_KEY, {
   close: () => setOpen(false),
+  headingId: computed(() => headingIds.value[0]),
   isEntering,
   isExiting,
   isOpen,
   open: () => setOpen(true),
   placement: computed(() => placement.value),
+  registerHeadingId: (id) => {
+    if (!headingIds.value.includes(id)) headingIds.value = [...headingIds.value, id]
+  },
   setOpen,
   setPlacement: (value) => {
     placement.value = value
   },
+  setTriggerElement: (element) => {
+    triggerElement.value = element
+  },
+  triggerElement: computed(() => triggerElement.value),
   slots,
+  unregisterHeadingId: (id) => {
+    headingIds.value = headingIds.value.filter((item) => item !== id)
+  },
 })
 </script>
 
