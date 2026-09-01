@@ -1,5 +1,11 @@
 <template>
-  <TextField class="w-full max-w-64" name="email" type="email">
+  <TextField
+    as="section"
+    class="w-full max-w-64"
+    data-custom="foo"
+    name="email"
+    type="email"
+  >
     <Label>Email</Label>
     <Input placeholder="Enter your email" />
   </TextField>

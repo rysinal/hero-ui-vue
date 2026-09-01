@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { computed, useSlots } from 'vue'
+import { computed, provide, useSlots } from 'vue'
 import { textFieldVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
+import { TEXT_FIELD_CONTEXT_KEY, type TextFieldInputType } from './context'
 import Label from '../label/Label.vue'
 import Description from '../description/Description.vue'
 import FieldError from '../field-error/FieldError.vue'
 import Input from '../input/Input.vue'
 
 interface TextFieldProps {
+  /** Element or component to render as the root. React exposes this as `render`. */
+  as?: string
   class?: string
   fullWidth?: boolean
   label?: string
@@ -20,7 +23,7 @@ interface TextFieldProps {
   isInvalid?: boolean
   variant?: 'primary' | 'secondary'
   // Input props
-  type?: 'text' | 'email' | 'password' | 'search' | 'tel' | 'url' | 'number'
+  type?: TextFieldInputType
   placeholder?: string
   modelValue?: string | number
   name?: string
@@ -28,6 +31,7 @@ interface TextFieldProps {
 }
 
 const props = withDefaults(defineProps<TextFieldProps>(), {
+  as: 'div',
   disabled: undefined,
   fullWidth: false,
   isDisabled: undefined,
@@ -62,6 +66,20 @@ const inputId = computed(() => props.id || `textfield-${Math.random().toString(3
  */
 const isComposed = computed(() => Boolean(slots.default))
 
+// Composed children read their state from here, the way React's TextField
+// primitive shares it through context.
+provide(TEXT_FIELD_CONTEXT_KEY, {
+  inputId: computed(() => inputId.value),
+  isDisabled: computed(() => finalIsDisabled.value),
+  isInvalid: computed(() => finalIsInvalid.value),
+  isRequired: computed(() => finalIsRequired.value),
+  name: computed(() => props.name),
+  setValue: (value) => emit('update:modelValue', value),
+  type: computed(() => props.type),
+  value: computed(() => props.modelValue),
+  variant: computed(() => props.variant),
+})
+
 const handleInput = (value: string | number) => {
   emit('update:modelValue', value)
 }
@@ -76,7 +94,8 @@ const handleFocus = (event: FocusEvent) => {
 </script>
 
 <template>
-  <div
+  <component
+    :is="props.as"
     :aria-disabled="dataAttr(finalIsDisabled)"
     :aria-invalid="dataAttr(finalIsInvalid)"
     :class="textFieldClass"
@@ -124,5 +143,5 @@ const handleFocus = (event: FocusEvent) => {
       <slot name="error">{{ props.error }}</slot>
     </FieldError>
     </template>
-  </div>
+  </component>
 </template>

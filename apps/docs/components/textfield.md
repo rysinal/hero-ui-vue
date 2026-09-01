@@ -1,18 +1,14 @@
 # TextField
 
-A complete form field component that combines input, label, description, and error message.
+A complete form field: label, input, description, and validation message.
 
 ## Import
 
-```vue
-<script setup lang="ts">
-import { TextField } from '@rysinal/heroui-vue'
-</script>
+```ts
+import { Description, FieldError, Input, Label, TextField, Textarea } from '@rysinal/heroui-vue'
 ```
 
 ## Usage
-
-### Basic
 
 :::preview
 
@@ -20,125 +16,157 @@ demo-preview=../demos/textfield-basic.vue
 
 :::
 
-### With Description
+## Anatomy
+
+`TextField` is a container. Compose the parts you need and they read their
+state — type, value, disabled, invalid, required — from the field.
 
 ```vue
 <template>
-  <TextField 
-    label="Username"
-    description="Choose a unique username"
-    placeholder="Enter username"
-  />
-</template>
-```
-
-### With Error
-
-```vue
-<template>
-  <TextField 
-    label="Password"
-    :error="hasError ? 'Password must be at least 8 characters' : undefined"
-    v-model="password"
-  />
-</template>
-
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-
-const password = ref('')
-const hasError = computed(() => password.value.length > 0 && password.value.length < 8)
-</script>
-```
-
-### Required
-
-```vue
-<template>
-  <TextField 
-    label="Full Name"
-    required
-    placeholder="Enter your full name"
-  />
-</template>
-```
-
-### Disabled
-
-```vue
-<template>
-  <TextField 
-    label="Disabled Field"
-    :disabled="true"
-    value="Cannot edit this"
-  />
-</template>
-```
-
-### Input Types
-
-```vue
-<template>
-  <TextField label="Email" type="email" />
-  <TextField label="Password" type="password" />
-  <TextField label="Number" type="number" />
-  <TextField label="URL" type="url" />
-  <TextField label="Tel" type="tel" />
-</template>
-```
-
-### With Prefix/Suffix
-
-```vue
-<template>
-  <TextField label="Website">
-    <template #prefix>https://</template>
-    <template #suffix>.com</template>
-  </TextField>
-
-  <TextField label="Price">
-    <template #prefix>$</template>
+  <TextField name="email" type="email">
+    <Label>Email</Label>
+    <Input placeholder="Enter your email" />
+    <Description>We'll never share this</Description>
   </TextField>
 </template>
 ```
+
+For simple cases the shorthand props still work without any children:
+
+```vue
+<template>
+  <TextField label="Email" description="We'll never share this" placeholder="you@example.com" />
+</template>
+```
+
+## With Description
+
+:::preview
+
+demo-preview=../demos/textfield-with-description.vue
+
+:::
+
+## Input Types
+
+:::preview
+
+demo-preview=../demos/textfield-input-types.vue
+
+:::
+
+## Controlled
+
+Bind the value with `v-model`. A composed `Input` or `Textarea` updates it.
+
+:::preview
+
+demo-preview=../demos/textfield-controlled.vue
+
+:::
+
+## Textarea
+
+:::preview
+
+demo-preview=../demos/textfield-textarea.vue
+
+:::
+
+## Required
+
+:::preview
+
+demo-preview=../demos/textfield-required.vue
+
+:::
+
+## With Error
+
+:::preview
+
+demo-preview=../demos/textfield-with-error.vue
+
+:::
+
+## Validation
+
+:::preview
+
+demo-preview=../demos/textfield-validation.vue
+
+:::
+
+## Full Width
+
+:::preview
+
+demo-preview=../demos/textfield-full-width.vue
+
+:::
+
+## Disabled
+
+:::preview
+
+demo-preview=../demos/textfield-disabled.vue
+
+:::
+
+## On Surface
+
+:::preview
+
+demo-preview=../demos/textfield-on-surface.vue
+
+:::
+
+## Custom Render
+
+Use `as` to change the root element. React exposes the same capability as `render`.
+
+:::preview
+
+demo-preview=../demos/textfield-custom-render-function.vue
+
+:::
 
 ## API
 
-### TextField Props
+### TextField
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `modelValue` | `string` | - | The field value |
-| `label` | `string` | - | The field label |
-| `description` | `string` | - | The field description |
-| `placeholder` | `string` | - | The input placeholder |
-| `type` | `string` | `'text'` | The input type |
-| `required` | `boolean` | `false` | Whether the field is required |
-| `disabled` | `boolean` | `false` | Whether the field is disabled |
-| `readonly` | `boolean` | `false` | Whether the field is read-only |
+| `modelValue` | `string \| number` | `undefined` | Field value. Supports `v-model` |
+| `type` | `'text' \| 'email' \| 'password' \| 'search' \| 'tel' \| 'url' \| 'number' \| 'date' \| 'time' \| 'datetime-local' \| 'month' \| 'week' \| 'color' \| 'file'` | `'text'` | Input type, inherited by a composed `Input` |
+| `variant` | `'primary' \| 'secondary'` | `'primary'` | Visual style, inherited by composed children |
+| `name` | `string` | `undefined` | Form field name |
+| `isRequired` / `required` | `boolean` | `undefined` | Marks the field required |
+| `isDisabled` / `disabled` | `boolean` | `undefined` | Disables the field and its children |
+| `isInvalid` | `boolean` | `undefined` | Marks the field invalid |
+| `fullWidth` | `boolean` | `false` | Fill the parent width |
+| `as` | `string` | `'div'` | Root element |
+| `class` | `string` | `undefined` | Additional classes |
 
-### TextField Events
+Shorthand props, used only when nothing is composed:
 
-| Event | Type | Description |
-|-------|------|-------------|
-| `update:modelValue` | `(value: string) => void` | Fired when value changes |
-| `blur` | `(event: FocusEvent) => void` | Fired when field loses focus |
-| `focus` | `(event: FocusEvent) => void` | Fired when field receives focus |
+| Prop | Type | Description |
+|------|------|-------------|
+| `label` | `string` | Renders a `Label` |
+| `description` | `string` | Renders a `Description` |
+| `error` | `string` | Renders a `FieldError` and marks the field invalid |
+| `placeholder` | `string` | Placeholder for the generated input |
 
-### TextField Slots
+| Event | Payload | Description |
+|-------|---------|-------------|
+| `update:modelValue` | `string \| number` | Value changed. Supports `v-model` |
+| `focus` | `FocusEvent` | The field gained focus |
+| `blur` | `FocusEvent` | The field lost focus |
 
-| Slot | Description |
-|------|-------------|
-| `label` | Custom label content |
-| `description` | Custom description content |
-| `prefix` | Content before the input |
-| `suffix` | Content after the input |
+### Data attributes
 
-## Accessibility
-
-- TextField combines all form field elements with proper associations
-- Label is properly linked to input via `for` attribute
-- Description uses `aria-describedby`
-- Error messages use `aria-describedby` and `aria-invalid`
-- Required fields are indicated with `aria-required`
-- Full keyboard navigation support
+| Attribute | Description |
+|-----------|-------------|
+| `data-disabled` | Present when the field is disabled |
+| `data-invalid` | Present when the field is invalid |
+| `data-required` | Present when the field is required |
