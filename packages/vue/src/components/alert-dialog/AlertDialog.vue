@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/* global HTMLElement, MouseEvent */
 import { computed, provide, ref, watch } from 'vue'
 import { alertDialogVariants } from '@rysinal/heroui-vue-styles'
 import { ALERT_DIALOG_CONTEXT_KEY, type AlertDialogPlacement } from './context'
@@ -42,6 +43,34 @@ const setOpen = (value: boolean) => {
 
 const headingIds = ref<string[]>([])
 
+const rootRef = ref<HTMLElement | null>(null)
+
+const INTERACTIVE_TRIGGER_SELECTOR = 'button, [role="button"], a[href], input, select, textarea'
+
+/**
+ * React's AlertDialog root is a DialogTrigger, which wires up only its first
+ * child as the trigger. Mirror that: open only when the click comes from an
+ * interactive control inside the first child.
+ */
+const handleRootClick = (event: MouseEvent) => {
+  if (event.target === event.currentTarget || isOpen.value) return
+
+  const target = event.target as HTMLElement | null
+  const root = rootRef.value
+  if (!target || !root) return
+
+  // AlertDialogTrigger owns its own handling.
+  if (target.closest('[data-slot="alert-dialog-trigger"]')) return
+
+  const firstChild = root.firstElementChild
+  if (!firstChild || !firstChild.contains(target)) return
+
+  const control = target.closest(INTERACTIVE_TRIGGER_SELECTOR)
+  if (!control || !firstChild.contains(control)) return
+
+  setOpen(true)
+}
+
 provide(ALERT_DIALOG_CONTEXT_KEY, {
   close: () => setOpen(false),
   headingId: computed(() => headingIds.value[0]),
@@ -62,7 +91,7 @@ provide(ALERT_DIALOG_CONTEXT_KEY, {
 </script>
 
 <template>
-  <div data-slot="alert-dialog-root">
+  <div ref="rootRef" data-slot="alert-dialog-root" @click="handleRootClick">
     <slot :close="() => setOpen(false)" :is-open="isOpen" :open="() => setOpen(true)" />
   </div>
 </template>

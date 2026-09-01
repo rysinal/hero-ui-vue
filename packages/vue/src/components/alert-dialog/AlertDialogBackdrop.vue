@@ -7,6 +7,8 @@ import { ALERT_DIALOG_CONTEXT_KEY, type AlertDialogBackdropVariant } from './con
 
 interface AlertDialogBackdropProps {
   class?: string
+  /** Element or selector to portal into. Defaults to document.body. */
+  portalContainer?: HTMLElement | string | null
   isDismissable?: boolean
   isKeyboardDismissDisabled?: boolean
   variant?: AlertDialogBackdropVariant
@@ -15,8 +17,11 @@ interface AlertDialogBackdropProps {
 const props = withDefaults(defineProps<AlertDialogBackdropProps>(), {
   isDismissable: false,
   isKeyboardDismissDisabled: true,
+  portalContainer: null,
   variant: 'opaque',
 })
+
+const portalTarget = computed(() => props.portalContainer ?? 'body')
 
 const context = inject(ALERT_DIALOG_CONTEXT_KEY, null)
 const slots = computed(() => alertDialogVariants({ variant: props.variant }))
@@ -154,7 +159,7 @@ if (context) {
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport :to="portalTarget">
     <div
       v-if="isRendered"
       ref="overlayRef"
