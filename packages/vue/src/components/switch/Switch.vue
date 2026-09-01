@@ -59,11 +59,11 @@ const internalChecked = ref(
 const isSelected = computed(
   () =>
     hasProp('checked')
-      ? props.checked
+      ? (props.checked ?? false)
       : hasProp('isSelected')
-        ? props.isSelected
+        ? (props.isSelected ?? false)
         : hasProp('modelValue')
-          ? props.modelValue
+          ? (props.modelValue ?? false)
           : internalChecked.value,
 )
 const finalIsDisabled = computed(() => props.disabled ?? props.isDisabled)
