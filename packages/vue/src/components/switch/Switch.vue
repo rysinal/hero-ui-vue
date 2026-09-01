@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref, watch } from 'vue'
-import { SwitchRoot, SwitchThumb } from 'radix-vue'
+import { computed, getCurrentInstance, provide, ref, useSlots, watch } from 'vue'
+import { SwitchRoot, SwitchThumb as RadixSwitchThumb } from 'radix-vue'
 import { switchVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
+import SwitchControl from './SwitchControl.vue'
+import { SWITCH_CONTEXT_KEY } from './context'
 
 interface SwitchProps {
   class?: string
@@ -89,6 +91,32 @@ const thumbClass = computed(() => styles.value.thumb())
 const contentClass = computed(() => styles.value.content())
 const iconClass = computed(() => styles.value.icon())
 
+const slotContent = useSlots()
+
+/** True when the caller composed <Switch.Control> themselves. */
+const hasComposedControl = computed(() => {
+  const containsControl = (list: unknown): boolean => {
+    if (Array.isArray(list)) return list.some(containsControl)
+    const vnode = list as { type?: unknown; children?: unknown } | null
+    if (!vnode || typeof vnode !== 'object') return false
+    if (vnode.type === SwitchControl) return true
+    return containsControl(vnode.children)
+  }
+  try {
+    return containsControl(slotContent.default?.({}) ?? [])
+  } catch {
+    return false
+  }
+})
+
+provide(SWITCH_CONTEXT_KEY, {
+  slots: styles,
+  state: computed(() => ({
+    isDisabled: finalIsDisabled.value === true,
+    isSelected: isSelected.value === true,
+  })),
+})
+
 const handleCheckedChange = (checked: boolean) => {
   internalChecked.value = checked
   emit('update:checked', checked)
@@ -121,14 +149,17 @@ const rootChecked = computed({
     v-bind="interactionAttrs"
     v-on="interactionHandlers"
   >
-    <span :class="controlClass" data-slot="switch-control">
-      <SwitchThumb :class="thumbClass" data-slot="switch-thumb">
+    <span v-if="!hasComposedControl" :class="controlClass" data-slot="switch-control">
+      <RadixSwitchThumb :class="thumbClass" data-slot="switch-thumb">
         <span v-if="$slots.icon" :class="iconClass" data-slot="switch-icon">
           <slot name="icon" :checked="isSelected" :is-selected="isSelected" />
         </span>
-      </SwitchThumb>
+      </RadixSwitchThumb>
     </span>
-    <div v-if="$slots.default" :class="contentClass" data-slot="switch-content">
+    <!-- Composed: render the caller's parts as-is. Otherwise wrap the default
+         slot in the content element for the common `<Switch>Label</Switch>`. -->
+    <slot v-if="hasComposedControl" :checked="isSelected" :is-selected="isSelected" />
+    <div v-else-if="$slots.default" :class="contentClass" data-slot="switch-content">
       <slot :checked="isSelected" :is-selected="isSelected" />
     </div>
   </SwitchRoot>

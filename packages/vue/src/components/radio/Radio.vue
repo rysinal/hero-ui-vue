@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { computed, inject, provide, useSlots } from 'vue'
 import { RadioGroupItem, RadioGroupIndicator } from 'radix-vue'
 import { radioVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
+import RadioControl from './RadioControl.vue'
+import { RADIO_CONTEXT_KEY } from './context'
 import { RADIO_GROUP_CONTEXT_KEY } from '../radio-group/context'
 
 interface RadioProps {
@@ -41,6 +43,33 @@ const finalIsDisabled = computed(
 const finalIsInvalid = computed(() => props.isInvalid ?? radioGroupContext?.isInvalid.value)
 const finalIsReadOnly = computed(() => radioGroupContext?.isReadOnly.value)
 const isSelected = computed(() => radioGroupContext?.selectedValue.value === props.value)
+const slotContent = useSlots()
+
+/** True when the caller composed <Radio.Control> themselves. */
+const hasComposedControl = computed(() => {
+  const containsControl = (list: unknown): boolean => {
+    if (Array.isArray(list)) return list.some(containsControl)
+    const vnode = list as { type?: unknown; children?: unknown } | null
+    if (!vnode || typeof vnode !== 'object') return false
+    if (vnode.type === RadioControl) return true
+    return containsControl(vnode.children)
+  }
+  try {
+    return containsControl(slotContent.default?.({}) ?? [])
+  } catch {
+    return false
+  }
+})
+
+provide(RADIO_CONTEXT_KEY, {
+  slots: styles,
+  state: computed(() => ({
+    isDisabled: finalIsDisabled.value === true,
+    isInvalid: finalIsInvalid.value === true,
+    isSelected: isSelected.value,
+  })),
+})
+
 const { interactionAttrs, interactionHandlers } = useInteractionStates(
   () => finalIsDisabled.value || finalIsReadOnly.value,
 )
@@ -64,7 +93,7 @@ const { interactionAttrs, interactionHandlers } = useInteractionStates(
     v-bind="interactionAttrs"
     v-on="interactionHandlers"
   >
-    <div :class="controlClass" data-slot="radio-control">
+    <div v-if="!hasComposedControl" :class="controlClass" data-slot="radio-control">
       <RadioGroupIndicator :class="indicatorClass" data-slot="radio-indicator" force-mount>
         <slot
           name="indicator"
@@ -76,7 +105,17 @@ const { interactionAttrs, interactionHandlers } = useInteractionStates(
         />
       </RadioGroupIndicator>
     </div>
-    <div v-if="$slots.default" :class="contentClass" data-slot="radio-content">
+    <!-- Composed: render the caller's parts as-is. Otherwise wrap the default
+         slot in the content element for the common `<Radio>Label</Radio>`. -->
+    <slot
+      v-if="hasComposedControl"
+      :checked="isSelected"
+      :is-selected="isSelected"
+      :is-disabled="finalIsDisabled"
+      :is-invalid="finalIsInvalid"
+      :is-read-only="finalIsReadOnly"
+    />
+    <div v-else-if="$slots.default" :class="contentClass" data-slot="radio-content">
       <slot
         :checked="isSelected"
         :is-selected="isSelected"

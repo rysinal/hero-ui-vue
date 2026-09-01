@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, provide } from 'vue'
 import { meterVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
+import { METER_CONTEXT_KEY } from './context'
 
 interface MeterProps {
   class?: string
@@ -34,6 +35,11 @@ const percentage = computed(() => {
 })
 const valueText = computed(() => `${Math.round(percentage.value)}%`)
 const meterClass = computed(() => composeTwClasses(props.class, slots.value.base()))
+
+provide(METER_CONTEXT_KEY, {
+  percentage: computed(() => percentage.value),
+  slots,
+})
 </script>
 
 <template>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, provide } from 'vue'
 import { progressBarVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
+import { PROGRESS_BAR_CONTEXT_KEY } from './context'
 
 interface ProgressBarProps {
   class?: string
@@ -37,6 +38,11 @@ const valueText = computed(() =>
   percentage.value === undefined ? undefined : `${Math.round(percentage.value)}%`,
 )
 const progressClass = computed(() => composeTwClasses(props.class, slots.value.base()))
+
+provide(PROGRESS_BAR_CONTEXT_KEY, {
+  percentage: computed(() => percentage.value),
+  slots,
+})
 </script>
 
 <template>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, provide } from 'vue'
 import { progressCircleVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
+import { PROGRESS_CIRCLE_CONTEXT_KEY } from './context'
 
 interface ProgressCircleProps {
   class?: string
@@ -43,6 +44,17 @@ const dashOffset = computed(() =>
     : CIRCUMFERENCE - (percentage.value / 100) * CIRCUMFERENCE,
 )
 const circleClass = computed(() => composeTwClasses(props.class, slots.value.base()))
+
+provide(PROGRESS_CIRCLE_CONTEXT_KEY, {
+  geometry: computed(() => ({
+    center: CENTER,
+    circumference: CIRCUMFERENCE,
+    dashOffset: dashOffset.value,
+    radius: RADIUS,
+    strokeWidth: STROKE_WIDTH,
+  })),
+  slots,
+})
 </script>
 
 <template>

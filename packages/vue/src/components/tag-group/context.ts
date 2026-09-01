@@ -1,9 +1,11 @@
 import type { ComputedRef, InjectionKey } from 'vue'
+import type { tagGroupVariants } from '@rysinal/heroui-vue-styles'
 
 export type TagGroupKey = string | number
 export type TagGroupSelectionMode = 'none' | 'single' | 'multiple'
 
 export interface TagGroupContext {
+  slots: ComputedRef<ReturnType<typeof tagGroupVariants>>
   disabledKeySet: ComputedRef<Set<TagGroupKey>>
   isDisabled: ComputedRef<boolean | undefined>
   isInvalid: ComputedRef<boolean | undefined>

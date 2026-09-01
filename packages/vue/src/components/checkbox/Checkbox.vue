@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, getCurrentInstance, inject, ref, watch } from 'vue'
-import { CheckboxIndicator, CheckboxRoot } from 'radix-vue'
+import { computed, getCurrentInstance, inject, provide, ref, useSlots, watch } from 'vue'
+import { CheckboxIndicator as RadixCheckboxIndicator, CheckboxRoot } from 'radix-vue'
 import { checkboxVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
+import CheckboxControl from './CheckboxControl.vue'
+import { CHECKBOX_CONTEXT_KEY } from './context'
 import { CHECKBOX_GROUP_CONTEXT_KEY } from '../checkbox-group/context'
 
 type CheckedState = boolean | 'indeterminate'
@@ -130,6 +132,41 @@ const indicatorClass = computed(() =>
   composeTwClasses(props.indicatorClass, styles.value.indicator()),
 )
 
+const slotContent = useSlots()
+
+/**
+ * True when the caller composed <Checkbox.Control> themselves, in which case
+ * the root must not also emit its default control markup.
+ */
+const hasComposedControl = computed(() => {
+  const nodes = slotContent.default?.({}) ?? []
+  const containsControl = (list: unknown): boolean => {
+    if (Array.isArray(list)) return list.some(containsControl)
+    const vnode = list as { type?: unknown; children?: unknown } | null
+    if (!vnode || typeof vnode !== 'object') return false
+    if (vnode.type === CheckboxControl) return true
+    return containsControl(vnode.children)
+  }
+  try {
+    return containsControl(nodes)
+  } catch {
+    return false
+  }
+})
+
+provide(CHECKBOX_CONTEXT_KEY, {
+  hasComposedControl,
+  registerControl: () => {},
+  slots: styles,
+  state: computed(() => ({
+    isDisabled: finalIsDisabled.value === true,
+    isIndeterminate: isIndeterminate.value,
+    isInvalid: finalIsInvalid.value === true,
+    isReadOnly: finalIsReadOnly.value === true,
+    isSelected: isSelected.value,
+  })),
+})
+
 const handleCheckedChange = (checked: CheckedState) => {
   if (finalIsReadOnly.value) return
 
@@ -165,8 +202,8 @@ const handleCheckedChange = (checked: CheckedState) => {
     v-on="interactionHandlers"
     @update:checked="handleCheckedChange"
   >
-    <div :class="controlClass" data-slot="checkbox-control">
-      <CheckboxIndicator :class="indicatorClass" data-slot="checkbox-indicator" force-mount>
+    <div v-if="!hasComposedControl" :class="controlClass" data-slot="checkbox-control">
+      <RadixCheckboxIndicator :class="indicatorClass" data-slot="checkbox-indicator" force-mount>
         <svg
           v-if="!$slots.indicator && isIndeterminate"
           aria-hidden="true"
@@ -205,10 +242,21 @@ const handleCheckedChange = (checked: CheckedState) => {
           :is-invalid="finalIsInvalid"
           :is-read-only="finalIsReadOnly"
         />
-      </CheckboxIndicator>
+      </RadixCheckboxIndicator>
     </div>
 
-    <div v-if="$slots.default" :class="contentClass" data-slot="checkbox-content">
+    <!-- Composed: render the caller's parts as-is. Otherwise wrap the default
+         slot in the content element for the common `<Checkbox>Label</Checkbox>`. -->
+    <slot
+      v-if="hasComposedControl"
+      :checked="isSelected"
+      :is-selected="isSelected"
+      :is-indeterminate="isIndeterminate"
+      :is-disabled="finalIsDisabled"
+      :is-invalid="finalIsInvalid"
+      :is-read-only="finalIsReadOnly"
+    />
+    <div v-else-if="$slots.default" :class="contentClass" data-slot="checkbox-content">
       <slot
         :checked="isSelected"
         :is-selected="isSelected"

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, getCurrentInstance, provide, ref, watch } from 'vue'
+import { computed, getCurrentInstance, provide, ref, useSlots, watch } from 'vue'
 import { tagGroupVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
+import TagGroupList from './TagGroupList.vue'
 import { TAG_GROUP_CONTEXT_KEY } from './context'
 import type { TagGroupKey, TagGroupSelectionMode } from './context'
 
@@ -64,6 +65,24 @@ const finalIsInvalid = computed(() => props.isInvalid)
 const selectionMode = computed(() => props.selectionMode)
 const size = computed(() => props.size)
 const variant = computed(() => props.variant)
+const slotContent = useSlots()
+
+/** True when the caller composed <TagGroup.List> themselves. */
+const hasComposedList = computed(() => {
+  const containsList = (list: unknown): boolean => {
+    if (Array.isArray(list)) return list.some(containsList)
+    const vnode = list as { type?: unknown; children?: unknown } | null
+    if (!vnode || typeof vnode !== 'object') return false
+    if (vnode.type === TagGroupList) return true
+    return containsList(vnode.children)
+  }
+  try {
+    return containsList(slotContent.default?.({}) ?? [])
+  } catch {
+    return false
+  }
+})
+
 const groupClass = computed(() => composeTwClasses(props.class, slots.value.base()))
 
 const setSelectedKeys = (nextKeys: TagGroupKey[]) => {
@@ -107,6 +126,7 @@ watch(
 )
 
 provide(TAG_GROUP_CONTEXT_KEY, {
+  slots,
   disabledKeySet,
   isDisabled: finalIsDisabled,
   isInvalid: finalIsInvalid,
@@ -132,13 +152,16 @@ provide(TAG_GROUP_CONTEXT_KEY, {
     <span v-if="props.label || $slots.label" data-slot="label">
       <slot name="label">{{ props.label }}</slot>
     </span>
-    <div
-      :aria-multiselectable="selectionMode === 'multiple' ? 'true' : undefined"
-      :class="slots.list()"
-      data-slot="tag-group-list"
-      :role="selectionMode === 'none' ? undefined : 'listbox'"
-    >
-      <slot :selected-keys="selectedKeys" :toggle-key="toggleKey" :remove-key="removeKey" />
-    </div>
+    <!-- Composed: the caller supplies TagGroup.List. Otherwise wrap the slot
+         in a default list so `<TagGroup><Tag/></TagGroup>` keeps working. -->
+    <slot
+      v-if="hasComposedList"
+      :remove-key="removeKey"
+      :selected-keys="selectedKeys"
+      :toggle-key="toggleKey"
+    />
+    <TagGroupList v-else>
+      <slot :remove-key="removeKey" :selected-keys="selectedKeys" :toggle-key="toggleKey" />
+    </TagGroupList>
   </div>
 </template>

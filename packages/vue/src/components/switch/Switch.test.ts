@@ -72,3 +72,13 @@ describe('Switch controlled state', () => {
     wrapper.unmount()
   })
 })
+
+describe('Switch composition', () => {
+  it('renders default control, thumb and content', () => {
+    const wrapper = mount(Switch, { slots: { default: 'Wi-Fi' } })
+
+    expect(wrapper.find('[data-slot="switch-control"]').exists()).toBe(true)
+    expect(wrapper.find('[data-slot="switch-thumb"]').exists()).toBe(true)
+    expect(wrapper.find('[data-slot="switch-content"]').text()).toBe('Wi-Fi')
+  })
+})

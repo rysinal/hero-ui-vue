@@ -1,36 +1,33 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, provide } from 'vue'
 import { kbdVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses } from '../../utils'
+import KbdAbbr from './KbdAbbr.vue'
+import KbdContent from './KbdContent.vue'
+import type { KbdKey } from './constants'
+import { KBD_CONTEXT_KEY } from './context'
 
 interface KbdProps {
   class?: string
   variant?: 'default' | 'light'
-  keys?: string[]
+  /** Shortcut keys rendered as symbols ahead of the content, e.g. ['command']. */
+  keys?: KbdKey[]
 }
 
 const props = defineProps<KbdProps>()
 
-const slots = computed(() => {
-  return kbdVariants({
-    variant: props.variant,
-  })
-})
+const slots = computed(() => kbdVariants({ variant: props.variant }))
+
+provide(KBD_CONTEXT_KEY, { slots })
 
 const baseClass = computed(() => composeTwClasses(props.class, slots.value.base()))
-const contentClass = computed(() => slots.value.content())
-const abbrClass = computed(() => slots.value.abbr())
 </script>
 
 <template>
   <kbd :class="baseClass" data-slot="kbd">
-    <abbr v-if="props.keys && props.keys.length > 0" :class="abbrClass" title="">
-      <span v-for="(key, index) in props.keys" :key="index">
-        {{ key }}
-      </span>
-    </abbr>
-    <span :class="contentClass">
+    <KbdAbbr v-for="key in props.keys" :key="key" :key-value="key" />
+    <KbdContent v-if="$slots.default">
       <slot />
-    </span>
+    </KbdContent>
   </kbd>
 </template>
