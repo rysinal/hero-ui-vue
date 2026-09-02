@@ -1,39 +1,77 @@
 <template>
-  <div class="demo-autocomplete-width">
-    <Autocomplete
-      v-model="selectedCountry"
-      label="Country"
-      placeholder="Select a country"
-      search-placeholder="Search countries..."
-      :items="countries"
-    />
-  </div>
+  <Autocomplete v-model="selectedKey" class="w-[256px]" placeholder="Select a country">
+    <Label>Country</Label>
+    <Autocomplete.Trigger>
+      <Autocomplete.Value />
+      <Autocomplete.ClearButton />
+      <Autocomplete.Indicator />
+    </Autocomplete.Trigger>
+    <Autocomplete.Popover>
+      <Autocomplete.Filter :filter="contains">
+        <template #default="{ inputValue }">
+          <SearchField variant="secondary">
+            <SearchFieldGroup>
+              <SearchFieldSearchIcon />
+              <SearchFieldInput autofocus placeholder="Search countries..." />
+              <SearchFieldClearButton />
+            </SearchFieldGroup>
+          </SearchField>
+          <ListBox>
+            <template v-for="(section, index) in visibleSections(inputValue)" :key="section.id">
+              <ListBoxSection>
+                <Header>{{ section.name }}</Header>
+                <ListBoxItem
+                  v-for="country in section.items"
+                  :key="country.id"
+                  :text-value="country.name"
+                  :value="country.id"
+                >
+                  {{ country.name }}
+                  <ListBoxItemIndicator />
+                </ListBoxItem>
+              </ListBoxSection>
+              <Separator v-if="index < visibleSections(inputValue).length - 1" />
+            </template>
+            <EmptyState v-if="visibleSections(inputValue).length === 0">
+              No results found
+            </EmptyState>
+          </ListBox>
+        </template>
+      </Autocomplete.Filter>
+    </Autocomplete.Popover>
+  </Autocomplete>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Autocomplete } from '@rysinal/heroui-vue'
+import {
+  Autocomplete,
+  EmptyState,
+  Header,
+  Label,
+  ListBox,
+  ListBoxItem,
+  ListBoxItemIndicator,
+  ListBoxSection,
+  Separator,
+  useFilter,
+  SearchField,
+  SearchFieldClearButton,
+  SearchFieldGroup,
+  SearchFieldInput,
+  SearchFieldSearchIcon,
+} from '@rysinal/heroui-vue'
+import { countrySections } from './autocomplete-data'
 
-const selectedCountry = ref<string | number | null>(null)
+const { contains } = useFilter({ sensitivity: 'base' })
+const selectedKey = ref<string | number | null>(null)
 
-const countries = [
-  { id: 'usa', label: 'United States', section: 'North America' },
-  { id: 'canada', label: 'Canada', section: 'North America' },
-  { id: 'mexico', label: 'Mexico', section: 'North America' },
-  { id: 'uk', label: 'United Kingdom', section: 'Europe' },
-  { id: 'france', label: 'France', section: 'Europe' },
-  { id: 'germany', label: 'Germany', section: 'Europe' },
-  { id: 'spain', label: 'Spain', section: 'Europe' },
-  { id: 'italy', label: 'Italy', section: 'Europe' },
-  { id: 'japan', label: 'Japan', section: 'Asia' },
-  { id: 'china', label: 'China', section: 'Asia' },
-  { id: 'india', label: 'India', section: 'Asia' },
-  { id: 'south-korea', label: 'South Korea', section: 'Asia' },
-]
+/**
+ * Items hide themselves once they stop matching, but their section header and
+ * separator would linger — so empty sections are dropped up front.
+ */
+const visibleSections = (inputValue: string) =>
+  countrySections.filter((section) =>
+    section.items.some((country) => contains(country.name, inputValue)),
+  )
 </script>
-
-<style lang="less">
-.demo-autocomplete-width {
-  width: 16rem;
-}
-</style>

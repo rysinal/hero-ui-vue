@@ -1,26 +1,46 @@
 <template>
-  <div class="demo-autocomplete-width">
-    <Autocomplete
-      v-model="selectedState"
-      label="State"
-      placeholder="Select one"
-      search-placeholder="Search states..."
-      empty-text="No results found"
-      :items="states"
-    />
-  </div>
+  <Autocomplete
+    class="w-[256px]"
+    placeholder="Select one"
+    selection-mode="single"
+  >
+    <Label>State</Label>
+    <Autocomplete.Trigger>
+      <Autocomplete.Value />
+      <Autocomplete.ClearButton />
+      <Autocomplete.Indicator />
+    </Autocomplete.Trigger>
+    <Autocomplete.Popover>
+      <Autocomplete.Filter :filter="contains">
+        <SearchField variant="secondary">
+          <SearchFieldGroup>
+            <SearchFieldSearchIcon />
+            <SearchFieldInput autofocus placeholder="Search states..." />
+            <SearchFieldClearButton />
+          </SearchFieldGroup>
+        </SearchField>
+        <ListBox>
+          <EmptyState>No results found</EmptyState>
+        </ListBox>
+      </Autocomplete.Filter>
+    </Autocomplete.Popover>
+  </Autocomplete>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Autocomplete } from '@rysinal/heroui-vue'
+import {
+  Autocomplete,
+  EmptyState,
+  Label,
+  ListBox,
+  SearchField,
+  SearchFieldClearButton,
+  SearchFieldGroup,
+  SearchFieldInput,
+  SearchFieldSearchIcon,
+  useFilter,
+} from '@rysinal/heroui-vue'
 
-const selectedState = ref<string | number | null>(null)
-const states: Array<{ id: string; label: string }> = []
+// An empty collection still opens the popover, so the empty state is what shows.
+const { contains } = useFilter({ sensitivity: 'base' })
 </script>
-
-<style lang="less">
-.demo-autocomplete-width {
-  width: 16rem;
-}
-</style>

@@ -1,50 +1,67 @@
 <template>
-  <div class="demo-autocomplete-with-state">
-    <Autocomplete
-      v-model="selectedState"
-      label="State (controlled)"
-      placeholder="Select a state"
-      search-placeholder="Search states..."
-      :items="states"
-    />
-
-    <p class="demo-autocomplete-note">
-      Selected: {{ selectedStateLabel }}
-    </p>
+  <div class="space-y-2">
+    <Autocomplete v-model="selectedKey" class="w-[256px]" placeholder="Select a state">
+      <Label>State (controlled)</Label>
+      <Autocomplete.Trigger>
+        <Autocomplete.Value />
+        <Autocomplete.ClearButton />
+        <Autocomplete.Indicator />
+      </Autocomplete.Trigger>
+      <Autocomplete.Popover>
+        <Autocomplete.Filter :filter="contains">
+          <template #default="{ inputValue }">
+            <SearchField variant="secondary">
+              <SearchFieldGroup>
+                <SearchFieldSearchIcon />
+                <SearchFieldInput autofocus placeholder="Search states..." />
+                <SearchFieldClearButton />
+              </SearchFieldGroup>
+            </SearchField>
+            <ListBox>
+              <ListBoxItem
+                v-for="state in extendedStates"
+                :key="state.id"
+                :text-value="state.name"
+                :value="state.id"
+              >
+                {{ state.name }}
+                <ListBoxItemIndicator />
+              </ListBoxItem>
+              <EmptyState v-if="!hasMatch(inputValue)">No results found</EmptyState>
+            </ListBox>
+          </template>
+        </Autocomplete.Filter>
+      </Autocomplete.Popover>
+    </Autocomplete>
+    <p class="text-sm text-muted">Selected: {{ selectedName }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Autocomplete } from '@rysinal/heroui-vue'
+import {
+  Autocomplete,
+  EmptyState,
+  Label,
+  ListBox,
+  ListBoxItem,
+  ListBoxItemIndicator,
+  SearchField,
+  SearchFieldClearButton,
+  SearchFieldGroup,
+  SearchFieldInput,
+  SearchFieldSearchIcon,
+  useFilter,
+} from '@rysinal/heroui-vue'
+import { extendedStates } from './autocomplete-data'
 
-const selectedState = ref<string | number | null>('california')
+const { contains } = useFilter({ sensitivity: 'base' })
+const selectedKey = ref<string | number | null>('california')
 
-const states = [
-  { id: 'california', label: 'California' },
-  { id: 'texas', label: 'Texas' },
-  { id: 'florida', label: 'Florida' },
-  { id: 'new-york', label: 'New York' },
-  { id: 'illinois', label: 'Illinois' },
-  { id: 'pennsylvania', label: 'Pennsylvania' },
-]
-
-const selectedStateLabel = computed(
-  () => states.find((state) => state.id === selectedState.value)?.label ?? 'None',
+const selectedName = computed(
+  () => extendedStates.find((state) => state.id === selectedKey.value)?.name ?? 'None',
 )
+
+const hasMatch = (inputValue: string) =>
+  extendedStates.some((state) => contains(state.name, inputValue))
 </script>
-
-<style lang="less">
-.demo-autocomplete-with-state {
-  display: flex;
-  width: 16rem;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.demo-autocomplete-note {
-  margin: 0;
-  color: var(--color-muted);
-  font-size: 0.875rem;
-}
-</style>

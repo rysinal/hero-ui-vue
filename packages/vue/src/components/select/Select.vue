@@ -1,28 +1,15 @@
 <script setup lang="ts">
-/* global HTMLElement */
-import {
-  computed,
-  getCurrentInstance,
-  nextTick,
-  provide,
-  ref,
-  shallowRef,
-  useAttrs,
-  useSlots,
-  watch,
-  type VNode,
-} from 'vue'
+import { computed, provide, useAttrs } from 'vue'
 import { PopoverRoot } from 'radix-vue'
 import { selectVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
-import { SELECT_CONTEXT_KEY, type SelectItemRecord, type SelectKey } from './context'
+import { SELECT_CONTEXT_KEY, type SelectKey } from './context'
+import { useSelectState, type SelectValue } from './useSelectState'
 import type { SelectSelectionMode } from './context'
 
 defineOptions({
   inheritAttrs: false,
 })
-
-type SelectValue = SelectKey | SelectKey[] | null
 
 interface SelectProps {
   as?: string
@@ -73,236 +60,35 @@ const emit = defineEmits<{
   'update:value': [value: SelectValue]
 }>()
 
-const instance = getCurrentInstance()
 const attrs = useAttrs()
-const hasProp = (name: string) => {
-  const rawProps = instance?.vnode.props ?? {}
-  const kebabName = name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)
-
-  return name in rawProps || kebabName in rawProps
-}
-
-const normalizeValue = (value: SelectValue | undefined, mode = props.selectionMode): SelectKey[] => {
-  if (value == null) return []
-  const values = Array.isArray(value) ? value : [value]
-
-  return mode === 'multiple' ? values : values.slice(0, 1)
-}
-
-const toEmitValue = (keys: SelectKey[]): SelectValue =>
-  props.selectionMode === 'multiple' ? [...keys] : (keys[0] ?? null)
-
-const internalOpen = ref(props.defaultOpen)
-const internalSelectedKeys = ref<SelectKey[]>(normalizeValue(props.defaultValue))
-const pendingSelectedKeys = ref<SelectKey[] | null>(null)
-const itemMap = shallowRef(new Map<SelectKey, SelectItemRecord>())
-const triggerElement = shallowRef<HTMLElement | null>(null)
 
 const slots = computed(() => selectVariants({ fullWidth: props.fullWidth, variant: props.variant }))
 const isDisabled = computed(() => props.disabled ?? props.isDisabled)
 const isRequired = computed(() => props.required ?? props.isRequired)
 const isInvalid = computed(() => props.isInvalid)
-const disabledKeySet = computed(() => new Set(props.disabledKeys))
-const isOpen = computed(() =>
-  hasProp('isOpen') ? Boolean(props.isOpen && !isDisabled.value) : internalOpen.value,
-)
-const selectedKeys = computed(() => {
-  if (pendingSelectedKeys.value) return pendingSelectedKeys.value
 
-  return hasProp('modelValue')
-    ? normalizeValue(props.modelValue)
-    : hasProp('value')
-      ? normalizeValue(props.value)
-      : internalSelectedKeys.value
-})
-const selectedKeySet = computed(() => new Set(selectedKeys.value))
-const slotContent = useSlots()
-
-/**
- * The popover only mounts its items once it opens, so nothing has registered a
- * textValue before then and SelectValue would fall back to the raw key. Walk the
- * slot vnodes up front to recover the key -> label pairs declared in the markup.
- *
- * Child components keep their children as unevaluated slot functions, so those
- * have to be invoked to reach the items nested inside ListBox/SelectPopover.
- */
-const collectSlotLabels = (nodes: unknown, into: Map<SelectKey, string>, depth = 0) => {
-  if (depth > 12) return
-
-  if (Array.isArray(nodes)) {
-    nodes.forEach((node) => collectSlotLabels(node, into, depth))
-    return
-  }
-
-  const vnode = nodes as VNode | null
-  if (!vnode || typeof vnode !== 'object') return
-
-  const vnodeProps = (vnode.props ?? {}) as Record<string, unknown>
-  const rawKey = vnodeProps.value ?? vnodeProps.id
-  const textValue = vnodeProps['text-value'] ?? vnodeProps.textValue
-
-  if (
-    (typeof rawKey === 'string' || typeof rawKey === 'number') &&
-    typeof textValue === 'string'
-  ) {
-    into.set(rawKey, textValue)
-  }
-
-  const children = vnode.children
-  if (Array.isArray(children)) {
-    collectSlotLabels(children, into, depth + 1)
-    return
-  }
-
-  if (children && typeof children === 'object') {
-    Object.entries(children as Record<string, unknown>).forEach(([slotName, child]) => {
-      if (slotName === '_') return
-
-      if (typeof child === 'function') {
-        try {
-          collectSlotLabels((child as (scope: object) => unknown)({}), into, depth + 1)
-        } catch {
-          // Slots that read scope props can throw when rendered eagerly; the
-          // registry populated on open still covers those.
-        }
-        return
-      }
-
-      collectSlotLabels(child, into, depth + 1)
-    })
-  }
-}
-
-const slotLabels = computed(() => {
-  const labels = new Map<SelectKey, string>()
-  try {
-    collectSlotLabels(slotContent.default?.({}) ?? [], labels)
-  } catch {
-    // Same rationale as above: never let label discovery break rendering.
-  }
-  return labels
-})
-
-const selectedItems = computed(() =>
-  selectedKeys.value.map(
-    (key) =>
-      itemMap.value.get(key) ?? {
-        key,
-        textValue: slotLabels.value.get(key) ?? String(key),
-      },
-  ),
-)
-const hasSelection = computed(() => selectedKeys.value.length > 0)
-const placeholder = computed(() => props.placeholder)
-const selectClass = computed(() => composeTwClasses(props.class, slots.value.base()))
-const hiddenInputValues = computed(() => selectedKeys.value.map((key) => String(key)))
-
-const focusTrigger = () => {
-  nextTick(() => {
-    triggerElement.value?.focus()
-  })
-}
-
-const setOpen = (nextOpen: boolean) => {
-  const finalOpen = isDisabled.value ? false : nextOpen
-
-  if (!hasProp('isOpen')) {
-    internalOpen.value = finalOpen
-  }
-
-  emit('update:isOpen', finalOpen)
-  emit('open-change', finalOpen)
-}
-
-const close = () => {
-  setOpen(false)
-}
-
-const setSelectedKeys = (keys: SelectKey[]) => {
-  if (isDisabled.value) return
-
-  const nextKeys = normalizeValue(keys, props.selectionMode).filter(
-    (key) => !disabledKeySet.value.has(key),
-  )
-  const nextValue = toEmitValue(nextKeys)
-
-  pendingSelectedKeys.value = nextKeys
-
-  if (!hasProp('modelValue') && !hasProp('value')) {
-    internalSelectedKeys.value = nextKeys
-  }
-
-  emit('update:modelValue', nextValue)
-  emit('update:value', nextValue)
-  emit('selection-change', nextKeys)
-  emit('change', nextValue)
-
-  if (props.selectionMode === 'single') {
-    close()
-    focusTrigger()
-  }
-}
-
-const registerItem = (item: SelectItemRecord) => {
-  const nextMap = new Map(itemMap.value)
-  nextMap.set(item.key, item)
-  itemMap.value = nextMap
-}
-
-const unregisterItem = (key: SelectKey) => {
-  const nextMap = new Map(itemMap.value)
-  nextMap.delete(key)
-  itemMap.value = nextMap
-}
-
-const setTriggerElement = (element: HTMLElement | null) => {
-  triggerElement.value = element
-}
-
-watch(
-  () => props.defaultOpen,
-  (defaultOpen) => {
-    if (!hasProp('isOpen')) internalOpen.value = defaultOpen
-  },
-)
-
-watch(
-  () => props.defaultValue,
-  (defaultValue) => {
-    if (!hasProp('modelValue') && !hasProp('value')) {
-      internalSelectedKeys.value = normalizeValue(defaultValue)
-    }
-  },
-)
-
-watch(
-  () => [props.modelValue, props.value, props.selectionMode] as const,
-  () => {
-    pendingSelectedKeys.value = null
-  },
-)
-
-provide(SELECT_CONTEXT_KEY, {
-  close,
-  disabledKeySet,
-  hasSelection,
+const state = useSelectState(props, {
   isDisabled,
   isInvalid,
-  isOpen,
   isRequired,
-  placeholder,
-  registerItem,
-  selectedItems,
-  selectedKeys,
-  selectedKeySet,
-  selectionMode: computed(() => props.selectionMode),
-  setOpen,
-  setSelectedKeys,
-  setTriggerElement,
+  onOpenChange: (nextOpen) => {
+    emit('update:isOpen', nextOpen)
+    emit('open-change', nextOpen)
+  },
+  onSelectionChange: (keys, value) => {
+    emit('update:modelValue', value)
+    emit('update:value', value)
+    emit('selection-change', keys)
+    emit('change', value)
+  },
+  placeholder: computed(() => props.placeholder),
   slots,
-  triggerElement,
-  unregisterItem,
 })
+
+const { hiddenInputValues, isOpen, selectedItems, selectedKeys, setOpen } = state
+const selectClass = computed(() => composeTwClasses(props.class, slots.value.base()))
+
+provide(SELECT_CONTEXT_KEY, state.context)
 </script>
 
 <template>

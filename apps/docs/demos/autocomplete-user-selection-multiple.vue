@@ -2,10 +2,10 @@
   <Autocomplete
     v-model="selectedKeys"
     class="w-[256px]"
-    placeholder="Select states"
+    placeholder="Select your teammates"
     selection-mode="multiple"
   >
-    <Label>States</Label>
+    <Label>Users</Label>
     <Autocomplete.Trigger>
       <Autocomplete.Value>
         <template #default="{ defaultChildren, isPlaceholder, state }">
@@ -14,8 +14,17 @@
           </template>
           <TagGroup v-else size="sm" @remove="removeKey">
             <TagGroupList>
-              <Tag v-for="item in state.selectedItems" :key="item.key" :value="item.key">
-                {{ item.textValue }}
+              <Tag
+                v-for="item in state.selectedItems"
+                v-show="userById(item.key)"
+                :key="item.key"
+                :value="item.key"
+              >
+                <Avatar class="size-4" size="sm">
+                  <AvatarImage :src="userById(item.key)?.avatarUrl" />
+                  <AvatarFallback>{{ userById(item.key)?.fallback }}</AvatarFallback>
+                </Avatar>
+                <span>{{ userById(item.key)?.name }}</span>
                 <TagRemoveButton />
               </Tag>
             </TagGroupList>
@@ -31,18 +40,25 @@
           <SearchField variant="secondary">
             <SearchFieldGroup>
               <SearchFieldSearchIcon />
-              <SearchFieldInput autofocus placeholder="Search..." />
+              <SearchFieldInput autofocus placeholder="Search users..." />
               <SearchFieldClearButton />
             </SearchFieldGroup>
           </SearchField>
           <ListBox>
             <ListBoxItem
-              v-for="state in extendedStates"
-              :key="state.id"
-              :text-value="state.name"
-              :value="state.id"
+              v-for="user in users"
+              :key="user.id"
+              :text-value="user.name"
+              :value="user.id"
             >
-              {{ state.name }}
+              <Avatar size="sm">
+                <AvatarImage :src="user.avatarUrl" />
+                <AvatarFallback>{{ user.fallback }}</AvatarFallback>
+              </Avatar>
+              <div class="flex flex-col">
+                <Label>{{ user.name }}</Label>
+                <Description>{{ user.email }}</Description>
+              </div>
               <ListBoxItemIndicator />
             </ListBoxItem>
             <EmptyState v-if="!hasMatch(inputValue)">No results found</EmptyState>
@@ -57,6 +73,10 @@
 import { ref } from 'vue'
 import {
   Autocomplete,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Description,
   EmptyState,
   Label,
   ListBox,
@@ -73,13 +93,13 @@ import {
   TagRemoveButton,
   useFilter,
 } from '@rysinal/heroui-vue'
-import { extendedStates } from './autocomplete-data'
+import { users } from './autocomplete-data'
 
 const { contains } = useFilter({ sensitivity: 'base' })
-const selectedKeys = ref<Array<string | number>>([])
+const selectedKeys = ref<Array<string | number>>(['1', '2'])
 
-const hasMatch = (inputValue: string) =>
-  extendedStates.some((state) => contains(state.name, inputValue))
+const userById = (key: string | number) => users.find((user) => user.id === key)
+const hasMatch = (inputValue: string) => users.some((user) => contains(user.name, inputValue))
 
 const removeKey = (key: string | number) => {
   selectedKeys.value = selectedKeys.value.filter((selected) => selected !== key)

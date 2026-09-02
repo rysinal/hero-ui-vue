@@ -2,10 +2,10 @@
   <Autocomplete
     v-model="selectedKeys"
     class="w-[256px]"
-    placeholder="Select states"
+    placeholder="Add recipients"
     selection-mode="multiple"
   >
-    <Label>States</Label>
+    <Label>To</Label>
     <Autocomplete.Trigger>
       <Autocomplete.Value>
         <template #default="{ defaultChildren, isPlaceholder, state }">
@@ -15,7 +15,7 @@
           <TagGroup v-else size="sm" @remove="removeKey">
             <TagGroupList>
               <Tag v-for="item in state.selectedItems" :key="item.key" :value="item.key">
-                {{ item.textValue }}
+                {{ item.key }}
                 <TagRemoveButton />
               </Tag>
             </TagGroupList>
@@ -31,21 +31,24 @@
           <SearchField variant="secondary">
             <SearchFieldGroup>
               <SearchFieldSearchIcon />
-              <SearchFieldInput autofocus placeholder="Search..." />
+              <SearchFieldInput autofocus placeholder="Search emails..." />
               <SearchFieldClearButton />
             </SearchFieldGroup>
           </SearchField>
           <ListBox>
             <ListBoxItem
-              v-for="state in extendedStates"
-              :key="state.id"
-              :text-value="state.name"
-              :value="state.id"
+              v-for="recipient in emails"
+              :key="recipient.id"
+              :text-value="recipient.email"
+              :value="recipient.id"
             >
-              {{ state.name }}
+              <div class="flex flex-col">
+                <Label>{{ recipient.name }}</Label>
+                <Description>{{ recipient.email }}</Description>
+              </div>
               <ListBoxItemIndicator />
             </ListBoxItem>
-            <EmptyState v-if="!hasMatch(inputValue)">No results found</EmptyState>
+            <EmptyState v-if="!hasMatch(inputValue)">No recipients found</EmptyState>
           </ListBox>
         </template>
       </Autocomplete.Filter>
@@ -57,6 +60,7 @@
 import { ref } from 'vue'
 import {
   Autocomplete,
+  Description,
   EmptyState,
   Label,
   ListBox,
@@ -73,13 +77,13 @@ import {
   TagRemoveButton,
   useFilter,
 } from '@rysinal/heroui-vue'
-import { extendedStates } from './autocomplete-data'
+import { emails } from './autocomplete-data'
 
 const { contains } = useFilter({ sensitivity: 'base' })
 const selectedKeys = ref<Array<string | number>>([])
 
 const hasMatch = (inputValue: string) =>
-  extendedStates.some((state) => contains(state.name, inputValue))
+  emails.some((recipient) => contains(recipient.email, inputValue))
 
 const removeKey = (key: string | number) => {
   selectedKeys.value = selectedKeys.value.filter((selected) => selected !== key)

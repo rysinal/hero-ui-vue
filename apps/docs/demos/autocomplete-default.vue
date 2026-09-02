@@ -5,7 +5,7 @@
     placeholder="Select states"
     selection-mode="multiple"
   >
-    <Label>States</Label>
+    <Label>States to Visit</Label>
     <Autocomplete.Trigger>
       <Autocomplete.Value>
         <template #default="{ defaultChildren, isPlaceholder, state }">
@@ -22,7 +22,6 @@
           </TagGroup>
         </template>
       </Autocomplete.Value>
-      <Autocomplete.ClearButton />
       <Autocomplete.Indicator />
     </Autocomplete.Trigger>
     <Autocomplete.Popover>
@@ -37,7 +36,7 @@
           </SearchField>
           <ListBox>
             <ListBoxItem
-              v-for="state in extendedStates"
+              v-for="state in states"
               :key="state.id"
               :text-value="state.name"
               :value="state.id"
@@ -73,13 +72,12 @@ import {
   TagRemoveButton,
   useFilter,
 } from '@rysinal/heroui-vue'
-import { extendedStates } from './autocomplete-data'
+import { states } from './autocomplete-data'
 
 const { contains } = useFilter({ sensitivity: 'base' })
 const selectedKeys = ref<Array<string | number>>([])
 
-const hasMatch = (inputValue: string) =>
-  extendedStates.some((state) => contains(state.name, inputValue))
+const hasMatch = (inputValue: string) => states.some((state) => contains(state.name, inputValue))
 
 const removeKey = (key: string | number) => {
   selectedKeys.value = selectedKeys.value.filter((selected) => selected !== key)

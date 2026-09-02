@@ -1,4 +1,5 @@
 export { useCSSVariable, clearCSSVariableCache } from './useCSSVariable'
+export { useFilter } from './useFilter'
 export { useIsHydrated } from './useIsHydrated'
 export { useListData } from './useListData'
 export { useMeasuredHeight } from './useMeasuredHeight'
@@ -8,6 +9,7 @@ export { useOverlayState } from './useOverlayState'
 export { useTheme } from './useTheme'
 
 export type { ListData, ListOptions, Key, Selection } from './useListData'
+export type { UseFilterOptions, UseFilterReturn, UseFilterSensitivity } from './useFilter'
 export type { UseMeasuredHeightReturn } from './useMeasuredHeight'
 export type { UseMediaQueryOptions } from './useMediaQuery'
 export type { UseOverlayStateProps, UseOverlayStateReturn } from './useOverlayState'

@@ -2,10 +2,10 @@
   <Autocomplete
     v-model="selectedKeys"
     class="w-[256px]"
-    placeholder="Select states"
+    placeholder="Select tags"
     selection-mode="multiple"
   >
-    <Label>States</Label>
+    <Label>Tags</Label>
     <Autocomplete.Trigger>
       <Autocomplete.Value>
         <template #default="{ defaultChildren, isPlaceholder, state }">
@@ -31,21 +31,21 @@
           <SearchField variant="secondary">
             <SearchFieldGroup>
               <SearchFieldSearchIcon />
-              <SearchFieldInput autofocus placeholder="Search..." />
+              <SearchFieldInput autofocus placeholder="Search tags..." />
               <SearchFieldClearButton />
             </SearchFieldGroup>
           </SearchField>
           <ListBox>
             <ListBoxItem
-              v-for="state in extendedStates"
-              :key="state.id"
-              :text-value="state.name"
-              :value="state.id"
+              v-for="tag in techTags"
+              :key="tag.id"
+              :text-value="tag.name"
+              :value="tag.id"
             >
-              {{ state.name }}
+              {{ tag.name }}
               <ListBoxItemIndicator />
             </ListBoxItem>
-            <EmptyState v-if="!hasMatch(inputValue)">No results found</EmptyState>
+            <EmptyState v-if="!hasMatch(inputValue)">No tags found</EmptyState>
           </ListBox>
         </template>
       </Autocomplete.Filter>
@@ -73,13 +73,12 @@ import {
   TagRemoveButton,
   useFilter,
 } from '@rysinal/heroui-vue'
-import { extendedStates } from './autocomplete-data'
+import { techTags } from './autocomplete-data'
 
 const { contains } = useFilter({ sensitivity: 'base' })
 const selectedKeys = ref<Array<string | number>>([])
 
-const hasMatch = (inputValue: string) =>
-  extendedStates.some((state) => contains(state.name, inputValue))
+const hasMatch = (inputValue: string) => techTags.some((tag) => contains(tag.name, inputValue))
 
 const removeKey = (key: string | number) => {
   selectedKeys.value = selectedKeys.value.filter((selected) => selected !== key)

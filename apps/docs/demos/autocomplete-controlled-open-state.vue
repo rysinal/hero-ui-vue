@@ -1,52 +1,69 @@
 <template>
-  <div class="demo-autocomplete-with-state">
+  <div class="space-y-4">
     <Autocomplete
-      v-model="selectedState"
-      v-model:is-open="isOpen"
-      label="State"
+      :is-open="isOpen"
+      class="w-[256px]"
       placeholder="Select one"
-      search-placeholder="Search states..."
-      :items="states"
-    />
-
-    <Button @click="isOpen = !isOpen">
-      {{ isOpen ? 'Close' : 'Open' }} Autocomplete
-    </Button>
-
-    <p class="demo-autocomplete-note">
-      Autocomplete is {{ isOpen ? 'open' : 'closed' }}
-    </p>
+      @open-change="isOpen = $event"
+    >
+      <Label>State</Label>
+      <Autocomplete.Trigger>
+        <Autocomplete.Value />
+        <Autocomplete.ClearButton />
+        <Autocomplete.Indicator />
+      </Autocomplete.Trigger>
+      <Autocomplete.Popover>
+        <Autocomplete.Filter :filter="contains">
+          <template #default="{ inputValue }">
+            <SearchField variant="secondary">
+              <SearchFieldGroup>
+                <SearchFieldSearchIcon />
+                <SearchFieldInput autofocus placeholder="Search states..." />
+                <SearchFieldClearButton />
+              </SearchFieldGroup>
+            </SearchField>
+            <ListBox>
+              <ListBoxItem
+                v-for="state in states"
+                :key="state.id"
+                :text-value="state.name"
+                :value="state.id"
+              >
+                {{ state.name }}
+                <ListBoxItemIndicator />
+              </ListBoxItem>
+              <EmptyState v-if="!hasMatch(inputValue)">No results found</EmptyState>
+            </ListBox>
+          </template>
+        </Autocomplete.Filter>
+      </Autocomplete.Popover>
+    </Autocomplete>
+    <Button @click="isOpen = !isOpen">{{ isOpen ? 'Close' : 'Open' }} Autocomplete</Button>
+    <p class="text-sm text-muted">Autocomplete is {{ isOpen ? 'open' : 'closed' }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Autocomplete, Button } from '@rysinal/heroui-vue'
+import {
+  Autocomplete,
+  Button,
+  EmptyState,
+  Label,
+  ListBox,
+  ListBoxItem,
+  ListBoxItemIndicator,
+  SearchField,
+  SearchFieldClearButton,
+  SearchFieldGroup,
+  SearchFieldInput,
+  SearchFieldSearchIcon,
+  useFilter,
+} from '@rysinal/heroui-vue'
+import { states } from './autocomplete-data'
 
+const { contains } = useFilter({ sensitivity: 'base' })
 const isOpen = ref(false)
-const selectedState = ref<string | number | null>(null)
 
-const states = [
-  { id: 'florida', label: 'Florida' },
-  { id: 'delaware', label: 'Delaware' },
-  { id: 'california', label: 'California' },
-  { id: 'texas', label: 'Texas' },
-  { id: 'new-york', label: 'New York' },
-  { id: 'washington', label: 'Washington' },
-]
+const hasMatch = (inputValue: string) => states.some((state) => contains(state.name, inputValue))
 </script>
-
-<style lang="less">
-.demo-autocomplete-with-state {
-  display: flex;
-  width: 16rem;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.demo-autocomplete-note {
-  margin: 0;
-  color: var(--color-muted);
-  font-size: 0.875rem;
-}
-</style>

@@ -1,12 +1,11 @@
 <template>
   <Autocomplete
     v-model="selectedKey"
-    :disabled-keys="['cat', 'kangaroo']"
     class="w-[256px]"
     placeholder="Select an animal"
     selection-mode="single"
   >
-    <Label>Animal</Label>
+    <Label>Favorite Animal</Label>
     <Autocomplete.Trigger>
       <Autocomplete.Value />
       <Autocomplete.ClearButton />
@@ -24,7 +23,7 @@
           </SearchField>
           <ListBox>
             <ListBoxItem
-              v-for="animal in disabledOptionAnimals"
+              v-for="animal in animals"
               :key="animal.id"
               :text-value="animal.name"
               :value="animal.id"
@@ -56,11 +55,10 @@ import {
   SearchFieldSearchIcon,
   useFilter,
 } from '@rysinal/heroui-vue'
-import { disabledOptionAnimals } from './autocomplete-data'
+import { animals } from './autocomplete-data'
 
 const { contains } = useFilter({ sensitivity: 'base' })
 const selectedKey = ref<string | number | null>(null)
 
-const hasMatch = (inputValue: string) =>
-  disabledOptionAnimals.some((animal) => contains(animal.name, inputValue))
+const hasMatch = (inputValue: string) => animals.some((animal) => contains(animal.name, inputValue))
 </script>

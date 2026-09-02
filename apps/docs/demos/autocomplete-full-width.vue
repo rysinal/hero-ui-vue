@@ -1,38 +1,67 @@
 <template>
-  <Surface class="demo-autocomplete-surface">
+  <Surface class="w-[380px] space-y-4 rounded-3xl p-6">
     <Autocomplete
-      v-model="selectedState"
+      v-model="selectedKey"
       full-width
-      label="State"
       placeholder="Select one"
-      search-placeholder="Search states..."
       variant="secondary"
-      :items="states"
-    />
+    >
+      <Label>State</Label>
+      <Autocomplete.Trigger>
+        <Autocomplete.Value />
+        <Autocomplete.ClearButton />
+        <Autocomplete.Indicator />
+      </Autocomplete.Trigger>
+      <Autocomplete.Popover>
+        <Autocomplete.Filter :filter="contains">
+          <template #default="{ inputValue }">
+            <SearchField variant="secondary">
+              <SearchFieldGroup>
+                <SearchFieldSearchIcon />
+                <SearchFieldInput autofocus placeholder="Search states..." />
+                <SearchFieldClearButton />
+              </SearchFieldGroup>
+            </SearchField>
+            <ListBox>
+              <ListBoxItem
+                v-for="state in states"
+                :key="state.id"
+                :text-value="state.name"
+                :value="state.id"
+              >
+                {{ state.name }}
+                <ListBoxItemIndicator />
+              </ListBoxItem>
+              <EmptyState v-if="!hasMatch(inputValue)">No results found</EmptyState>
+            </ListBox>
+          </template>
+        </Autocomplete.Filter>
+      </Autocomplete.Popover>
+    </Autocomplete>
   </Surface>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Autocomplete, Surface } from '@rysinal/heroui-vue'
+import {
+  Autocomplete,
+  EmptyState,
+  Label,
+  ListBox,
+  ListBoxItem,
+  ListBoxItemIndicator,
+  SearchField,
+  SearchFieldClearButton,
+  SearchFieldGroup,
+  SearchFieldInput,
+  SearchFieldSearchIcon,
+  Surface,
+  useFilter,
+} from '@rysinal/heroui-vue'
+import { states } from './autocomplete-data'
 
-const selectedState = ref<string | number | null>(null)
+const { contains } = useFilter({ sensitivity: 'base' })
+const selectedKey = ref<string | number | null>(null)
 
-const states = [
-  { id: 'florida', label: 'Florida' },
-  { id: 'delaware', label: 'Delaware' },
-  { id: 'california', label: 'California' },
-  { id: 'texas', label: 'Texas' },
-  { id: 'new-york', label: 'New York' },
-  { id: 'washington', label: 'Washington' },
-]
+const hasMatch = (inputValue: string) => states.some((state) => contains(state.name, inputValue))
 </script>
-
-<style lang="less">
-.demo-autocomplete-surface {
-  width: 23.75rem;
-  max-width: 100%;
-  padding: 1.5rem;
-  border-radius: 1.5rem;
-}
-</style>
