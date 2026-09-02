@@ -242,3 +242,48 @@ docs build 只保证编译；data-slot 审计只看结构不看几何。
 **副作用提醒**：`git checkout` 切分支时**未跟踪文件会留在原地**，我的审计脚本因此在基线上
 被 `git show develop:...` 覆盖成 0 字节，导致脚本静默 exit 0。切换分支做对照前，
 先把未跟踪的工具脚本备份到 `/tmp`。
+
+## L19 · 靠人逐个测组件不可行,要把「比对基准」做成工具
+
+**事故**：用户连续报了三轮问题（日历、color、toast）,每轮我都是被动定位。用户明确说
+「我不可能一个一个的测,你得想个办法,比如1个1个组件的比对源码」。
+
+**做出来的两层工具**（互补,不能互相替代）：
+
+| 工具 | 命令 | 抓什么 | 抓不到什么 |
+|---|---|---|---|
+| `scripts/compare-with-react.mjs` | `pnpm compare [组件]` | 静态契约漂移：React 有而 Vue 没有的 data-slot / 复合部件 / props；CSS 选了但没人发的死规则 | 布局、几何、运行时 |
+| `apps/docs/scripts/audit-demos.mjs` | `pnpm --filter ...-docs audit:demos` | 真实浏览器里的尺寸塌缩、渲染错误 | 契约命名 |
+
+**首轮就扫出 6 个组件 21 处真实不符**,其中最严重的是 toast：
+`toast.css:104` 有 `[data-slot="toast-default-icon"]{size-4}`,而 Vue 从不发这个 slot
+→ 默认图标尺寸完全失控。这就是用户报的「toast 有问题」。
+
+**关键教训：写检测器必须先压假阳性,否则等于没写。** 我的迭代过程：
+- 第一版 slot 检查报 11 个组件 → 其中 calendar 那批是我把 slot 改成动态绑定
+  （`calendarSlotName(context, 'cell')`）导致静态 grep 抓不到 → 教工具认这个 helper
+- 又发现 `hasCustom ? 'x' : 'x-default'` 三元绑定也抓不到 → 加正则
+- 跨目录消费（year-picker 在独立目录、Calendar 部件消费 range-calendar 的 slot）
+  → 加「全库回退」：名字在库内任何地方出现过就不算缺失
+- 试加「styles.ts 声明但组件未读」检查 → **报 27/81,逐个查证全是假阳性**
+  （变量名可能是 `slots.value.x()` / `styles.value.x()` / `ctx?.slots.x()` / 跨目录）
+  → **直接删掉该检查并在文件头注明为何删**,留着只会掩盖真信号
+- props 检查第一版报 12 个 → 排除 `RenderProps`（那是 slot 载荷不是 props）、
+  认 Vue 的 emits（React 的 `onFooChange` = Vue 的 `foo`）、
+  白名单 React 专属管道（`state`/`containerRef`/`validationErrors`/`inputClassName`）
+  → 收敛到 0 假阳性
+
+**How to apply**：
+- 加新检查后**逐项人工核实**再宣布可用；假阳性率高的检查宁可删掉
+- 删掉的检查要在代码里写明「试过、为何删」,避免后人重复踩
+- 工具跑出来的每一条,修之前仍要自己确认一遍（本轮 21 条我全查了）
+- **prop 检查天生是 advisory**：继承自 primitive 的 props 正则看不见,
+  所以输出措辞是「check, may be inherited」而不是断言缺失
+
+## L20 · 工具立刻回过头抓到了我自己的疏漏
+
+prop-parity 检查上线第一次跑就报 `isYearPickerOpen` / `defaultYearPickerOpen` /
+`onYearPickerOpenChange` 缺失 —— 这是**我本轮实现 YearPicker 时漏的**：
+React 允许外部驱动年份面板,Vue 侧只能从自己的 trigger 打开。已补齐并加受控/非受控双路测试。
+
+**这说明「我实现的东西」同样需要机器复核,不能因为是自己写的就跳过。**
