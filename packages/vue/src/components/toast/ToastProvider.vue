@@ -17,6 +17,8 @@ interface ToastProviderProps {
   maxVisibleToasts?: number
   /** Gap between stacked toasts, in pixels. */
   gap?: number
+  /** How much each toast further back shrinks, as a fraction. */
+  scaleFactor?: number
 }
 
 const props = withDefaults(defineProps<ToastProviderProps>(), {
@@ -24,6 +26,7 @@ const props = withDefaults(defineProps<ToastProviderProps>(), {
   maxVisibleToasts: DEFAULT_MAX_VISIBLE_TOAST,
   placement: 'bottom',
   queue: undefined,
+  scaleFactor: DEFAULT_SCALE_FACTOR,
 })
 
 const queue = computed(() => props.queue ?? globalToastQueue)
@@ -68,7 +71,7 @@ watch(
  */
 const toastStyle = (index: number) => {
   const offset = index * props.gap
-  const scale = 1 - index * DEFAULT_SCALE_FACTOR
+  const scale = 1 - index * props.scaleFactor
   const translate = isFromTop.value ? offset : -offset
 
   return {

@@ -33,7 +33,12 @@ describe('Tooltip', () => {
   })
 
   it('renders the default arrow', () => {
-    expect(document.querySelector('[data-slot="overlay-arrow"]')).not.toBeNull()
+    // React puts tooltip-arrow on the wrapper and overlay-arrow on the svg it
+    // wraps; tooltip.css selects the inner one, so both have to be emitted.
+    const arrow = document.querySelector('[data-slot="tooltip-arrow"]')
+
+    expect(arrow).not.toBeNull()
+    expect(arrow?.querySelector('[data-slot="overlay-arrow"]')).not.toBeNull()
   })
 
   it('resolves every dotted part to a real component', () => {

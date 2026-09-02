@@ -17,7 +17,7 @@ describe('Tabs indicator', () => {
     // sizes it to fill its parent tab.
     expect(indicators).toHaveLength(1)
 
-    const selectedTab = wrapper.get('[data-slot="tab"][data-selected="true"]')
+    const selectedTab = wrapper.get('[data-slot="tabs-tab"][data-selected="true"]')
     expect(selectedTab.find('[data-slot="tabs-indicator"]').exists()).toBe(true)
   })
 
@@ -27,10 +27,10 @@ describe('Tabs indicator', () => {
 
     // radix drives selection from pointer/keyboard events, and jsdom does not
     // synthesise the pointer sequence, so use the keyboard path.
-    await wrapper.findAll('[data-slot="tab"]')[0]!.trigger('keydown', { key: 'ArrowRight' })
+    await wrapper.findAll('[data-slot="tabs-tab"]')[0]!.trigger('keydown', { key: 'ArrowRight' })
     await nextTick()
 
-    const tabs = wrapper.findAll('[data-slot="tab"]')
+    const tabs = wrapper.findAll('[data-slot="tabs-tab"]')
     expect(tabs[0]!.find('[data-slot="tabs-indicator"]').exists()).toBe(false)
     expect(tabs[1]!.find('[data-slot="tabs-indicator"]').exists()).toBe(true)
   })
@@ -40,8 +40,8 @@ describe('Tabs indicator', () => {
     await nextTick()
 
     expect(wrapper.html()).not.toMatch(/<[a-z]+\.[a-z]+/i)
-    expect(wrapper.findAll('[data-slot="tab"]')).toHaveLength(2)
-    expect(wrapper.get('[data-slot="tab-panel"]').text()).toBe('Panel A')
+    expect(wrapper.findAll('[data-slot="tabs-tab"]')).toHaveLength(2)
+    expect(wrapper.get('[data-slot="tabs-panel"]').text()).toBe('Panel A')
   })
 
   it('wraps the list itself when no ListContainer is given', async () => {

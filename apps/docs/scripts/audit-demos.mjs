@@ -74,10 +74,11 @@ for (const name of pages) {
         if (style.clipPath?.startsWith('inset(50%')) return
         const slot = element.getAttribute('data-slot')
         // Plenty of parts are legitimately hairline-thin: separators, indicator
-        // bars and the literal "/" between date segments. Only flag a part that
-        // should occupy real space in both directions.
+        // bars and the literal "/" between date segments. Checkmarks are sized
+        // as a fraction of their swatch, so a small one is correct. Only flag a
+        // part that should occupy real space in both directions.
         const thinByDesign =
-          /separator|indicator/.test(slot ?? '') || element.dataset.type === 'literal'
+          /separator|indicator|checkmark/.test(slot ?? '') || element.dataset.type === 'literal'
         if (thinByDesign) return
         if (bounds.width > 0 && bounds.width < 8) {
           result.collapsed.push({ demo: index, height: Math.round(bounds.height), slot, width: Math.round(bounds.width) })

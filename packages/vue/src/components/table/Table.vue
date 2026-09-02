@@ -106,7 +106,7 @@ const tableClass = computed(() => composeTwClasses(props.class, slots.value.base
 </script>
 
 <template>
-  <div :class="tableClass" data-slot="table-root">
+  <div :class="tableClass" data-slot="table">
     <slot :selected-keys="selectedKeys" :sort-descriptor="sortDescriptor" />
   </div>
 </template>

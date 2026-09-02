@@ -23,6 +23,11 @@ describe('ComboBox', () => {
     expect(document.querySelector('[data-slot="combo-box"]')).not.toBeNull()
     expect(document.querySelector('[data-slot="combo-box-input-group"]')).not.toBeNull()
     expect(document.querySelector('[data-slot="combo-box-trigger"]')).not.toBeNull()
+    // `.combo-box__trigger [data-slot="combo-box-trigger-default-icon"]` sizes
+    // and rotates the chevron, so the slot has to sit on the icon, not the button.
+    const defaultIcon = document.querySelector('[data-slot="combo-box-trigger-default-icon"]')
+    expect(defaultIcon).not.toBeNull()
+    expect(defaultIcon?.tagName.toLowerCase()).toBe('svg')
     expect(optionTexts()).toHaveLength(5)
   })
 

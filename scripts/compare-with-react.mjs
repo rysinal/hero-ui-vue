@@ -78,7 +78,9 @@ const slotsSelectedBy = (text) =>
 
 /** Keys of the Object.assign that builds a compound namespace. */
 const partsIn = (text) => {
-  const body = text.match(/Object\.assign\(\s*\w+\s*,\s*\{([\s\S]*?)\}\s*\)/)
+  // Prettier wraps a long Object.assign onto its own lines, which leaves a
+  // trailing comma after the closing brace, so that comma has to be optional.
+  const body = text.match(/Object\.assign\(\s*\w+\s*,\s*\{([\s\S]*?)\}\s*,?\s*\)/)
   if (!body) return new Set()
   return new Set(
     [...body[1].matchAll(/^\s*([A-Z][A-Za-z]*)\s*:/gm)].map((match) => match[1]),

@@ -9,6 +9,7 @@ import ToastDescription from './ToastDescription.vue'
 import ToastIndicator from './ToastIndicator.vue'
 import ToastProvider from './ToastProvider.vue'
 import ToastTitle from './ToastTitle.vue'
+import { ToastQueue, toast } from './queue'
 
 type ToastCompound = typeof Toast & {
   ActionButton: typeof ToastActionButton
@@ -17,8 +18,12 @@ type ToastCompound = typeof Toast & {
   Description: typeof ToastDescription
   Indicator: typeof ToastIndicator
   Provider: typeof ToastProvider
+  // Not a component: the queue class and the shared helper React hangs off the
+  // same namespace, so `new Toast.Queue()` / `Toast.toast(...)` port verbatim.
+  Queue: typeof ToastQueue
   Root: typeof Toast
   Title: typeof ToastTitle
+  toast: typeof toast
 }
 
 export const ToastNamespace: ToastCompound = Object.assign(Toast, {
@@ -28,6 +33,8 @@ export const ToastNamespace: ToastCompound = Object.assign(Toast, {
   Description: ToastDescription,
   Indicator: ToastIndicator,
   Provider: ToastProvider,
+  Queue: ToastQueue,
   Root: Toast,
   Title: ToastTitle,
+  toast,
 })

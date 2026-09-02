@@ -12,7 +12,7 @@ describe('Table', () => {
     await nextTick()
 
     expect(wrapper.html()).not.toMatch(/<table\.[a-z]+/i)
-    expect(wrapper.find('[data-slot="table-root"]').exists()).toBe(true)
+    expect(wrapper.find('[data-slot="table"]').exists()).toBe(true)
     expect(wrapper.findAll('[data-slot="table-column"]')).toHaveLength(2)
     expect(wrapper.findAll('[data-slot="table-row"]')).toHaveLength(3)
     expect(wrapper.findAll('[data-slot="table-cell"]')).toHaveLength(6)

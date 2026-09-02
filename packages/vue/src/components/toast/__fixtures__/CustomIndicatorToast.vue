@@ -4,18 +4,18 @@ import { Toast, ToastQueue, createToast } from '../index'
 const queue = new ToastQueue()
 const toast = createToast(queue)
 
-toast('First', { timeout: 0 })
-toast('Second', { action: { label: 'Undo' }, timeout: 0 })
+toast('Custom', { timeout: 0 })
 </script>
 
 <template>
   <Toast.Provider :queue="queue">
-    <Toast.Indicator />
+    <!-- Custom children must suppress the default icon, the way React's
+         `children ?? getDefaultIcon()` does. -->
+    <Toast.Indicator>
+      <svg data-slot="custom-icon" viewBox="0 0 16 16" />
+    </Toast.Indicator>
     <Toast.Content>
       <Toast.Title />
-      <Toast.Description />
     </Toast.Content>
-    <Toast.ActionButton />
-    <Toast.CloseButton />
   </Toast.Provider>
 </template>

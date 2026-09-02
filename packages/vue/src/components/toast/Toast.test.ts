@@ -3,6 +3,8 @@ import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
 import ToastHarness from './__fixtures__/ToastHarness.vue'
+import CustomIndicatorToast from './__fixtures__/CustomIndicatorToast.vue'
+import { ToastNamespace as Toast } from './namespace'
 import { ToastQueue, createToast } from './queue'
 
 const flush = async () => {
@@ -135,5 +137,40 @@ describe('ToastProvider', () => {
     expect(toasts[0]?.text()).toContain('Second')
 
     wrapper.unmount()
+  })
+
+  it('emits the slot names React does, so the shipped CSS matches', async () => {
+    const wrapper = mount(ToastHarness, { attachTo: document.body })
+    await flush()
+
+    // `.toast__indicator [data-slot="toast-default-icon"]` sizes the fallback
+    // icon; without the slot that rule never matches and the glyph is unbounded.
+    const defaultIcon = wrapper.find('[data-slot="toast-default-icon"]')
+    expect(defaultIcon.exists()).toBe(true)
+    // The slot belongs on the icon itself, not on the indicator wrapper.
+    expect(defaultIcon.attributes('data-slot')).not.toBe('toast-indicator')
+
+    expect(wrapper.find('[data-slot="toast-close"]').exists()).toBe(true)
+    expect(wrapper.find('[data-slot="toast-action-button"]').exists()).toBe(true)
+    // The pre-rename names must be gone, or consumers get both contracts.
+    expect(wrapper.find('[data-slot="toast-close-button"]').exists()).toBe(false)
+    expect(wrapper.find('[data-slot="toast-action"]').exists()).toBe(false)
+
+    wrapper.unmount()
+  })
+
+  it('drops the default icon when the caller supplies its own', async () => {
+    const wrapper = mount(CustomIndicatorToast, { attachTo: document.body })
+    await flush()
+
+    expect(wrapper.find('[data-slot="custom-icon"]').exists()).toBe(true)
+    expect(wrapper.find('[data-slot="toast-default-icon"]').exists()).toBe(false)
+
+    wrapper.unmount()
+  })
+
+  it('exposes the queue class on the namespace, as Toast.Queue', () => {
+    expect(Toast.Queue).toBe(ToastQueue)
+    expect(new Toast.Queue({ maxVisibleToasts: 2 }).maxVisibleToasts).toBe(2)
   })
 })

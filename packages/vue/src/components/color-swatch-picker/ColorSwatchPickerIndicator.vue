@@ -24,8 +24,19 @@ const isSelected = computed(() => item?.isSelected.value ?? false)
     data-slot="color-swatch-picker-indicator"
   >
     <slot>
-      <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewBox="0 0 24 24">
-        <path d="M20 6 9 17l-5-5" />
+      <!-- Geometry matches React's: a 12-unit box with a polyline tick. -->
+      <svg
+        aria-hidden="true"
+        data-slot="color-swatch-picker-checkmark"
+        fill="none"
+        role="presentation"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.5"
+        viewBox="0 0 12 12"
+      >
+        <polyline points="2.5 6 5 8.5 9.5 3" />
       </svg>
     </slot>
   </span>

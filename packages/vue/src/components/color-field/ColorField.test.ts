@@ -51,6 +51,14 @@ describe('ColorSwatchPicker', () => {
     expect(items[0]?.find('[data-slot="color-swatch-picker-indicator"]').exists()).toBe(false)
   })
 
+  it('renders the default checkmark inside the indicator', async () => {
+    const wrapper = mount(BasicPicker, { attachTo: document.body })
+    await nextTick()
+
+    const indicator = wrapper.get('[data-slot="color-swatch-picker-indicator"]')
+    expect(indicator.find('[data-slot="color-swatch-picker-checkmark"]').exists()).toBe(true)
+  })
+
   it('selects a different swatch on click', async () => {
     const wrapper = mount(BasicPicker, { attachTo: document.body })
     await nextTick()

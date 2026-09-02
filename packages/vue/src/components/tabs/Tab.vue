@@ -35,7 +35,7 @@ const tabClass = computed(() => composeTwClasses(props.class, tabsContext?.slots
     :data-selected="dataAttr(isSelected)"
     :disabled="finalIsDisabled"
     :value="props.value"
-    data-slot="tab"
+    data-slot="tabs-tab"
     v-bind="interactionAttrs"
     v-on="interactionHandlers"
   >

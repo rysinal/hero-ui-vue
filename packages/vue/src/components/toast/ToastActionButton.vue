@@ -23,7 +23,7 @@ const handleClick = () => {
   <button
     v-if="$slots.default || action"
     :class="actionClass"
-    data-slot="toast-action"
+    data-slot="toast-action-button"
     type="button"
     @click="handleClick"
   >

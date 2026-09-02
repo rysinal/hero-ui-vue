@@ -17,7 +17,7 @@ const closeClass = computed(() => composeTwClasses(props.class, item?.slots.valu
   <button
     :class="closeClass"
     aria-label="Close notification"
-    data-slot="toast-close-button"
+    data-slot="toast-close"
     type="button"
     @click="item?.close()"
   >
