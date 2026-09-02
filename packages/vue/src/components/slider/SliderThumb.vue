@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
 import { SliderThumb as RadixSliderThumb } from 'radix-vue'
-import { composeTwClasses } from '../../utils'
+import { composeTwClasses, dataAttr } from '../../utils'
 import { SLIDER_CONTEXT_KEY } from './context'
 
 interface SliderThumbProps {
@@ -15,7 +15,11 @@ const thumbClass = computed(() => composeTwClasses(props.class, context?.slots.v
 </script>
 
 <template>
-  <RadixSliderThumb :class="thumbClass" data-slot="slider-thumb">
+  <RadixSliderThumb
+    :class="thumbClass"
+    :data-dragging="dataAttr(context?.state.value.isDragging)"
+    data-slot="slider-thumb"
+  >
     <slot />
   </RadixSliderThumb>
 </template>

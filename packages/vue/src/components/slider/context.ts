@@ -9,6 +9,8 @@ export interface SliderState {
   /** Position of each thumb as a fraction between 0 and 1. */
   percents: number[]
   isDisabled: boolean
+  /** True while a thumb is being dragged; slider.css changes the cursor. */
+  isDragging: boolean
   orientation: SliderOrientation
   /** Formatted label for each thumb, honouring formatOptions. */
   labels: string[]

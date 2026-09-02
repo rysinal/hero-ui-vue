@@ -1,4 +1,4 @@
-/* global document, setTimeout */
+/* global document */
 import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
@@ -6,6 +6,7 @@ import ToastHarness from './__fixtures__/ToastHarness.vue'
 import CustomIndicatorToast from './__fixtures__/CustomIndicatorToast.vue'
 import { ToastNamespace as Toast } from './namespace'
 import { ToastQueue, createToast } from './queue'
+import { DEFAULT_TOAST_WIDTH } from './constants'
 
 const flush = async () => {
   await nextTick()
@@ -172,5 +173,29 @@ describe('ToastProvider', () => {
   it('exposes the queue class on the namespace, as Toast.Queue', () => {
     expect(Toast.Queue).toBe(ToastQueue)
     expect(new Toast.Queue({ maxVisibleToasts: 2 }).maxVisibleToasts).toBe(2)
+  })
+
+  // toast.css sizes the region with `sm:min-w-(--toast-width)` and every toast is
+  // absolutely positioned inside it, so an unset variable collapses the region to
+  // zero width and each toast shrink-wraps to its longest word. jsdom does no
+  // layout, so only the variable itself can be asserted here.
+  it('sets the width variable the stylesheet sizes the region with', async () => {
+    const wrapper = mount(ToastHarness, { attachTo: document.body })
+    await flush()
+
+    const region = wrapper.get('[data-slot="toast-region"]')
+    expect(region.attributes('style')).toContain(`--toast-width: ${DEFAULT_TOAST_WIDTH}px`)
+
+    wrapper.unmount()
+  })
+
+  it('numbers the stack so each toast knows its depth', async () => {
+    const wrapper = mount(ToastHarness, { attachTo: document.body })
+    await flush()
+
+    const toasts = wrapper.findAll('[data-slot="toast"]')
+    expect(toasts.map((toast) => toast.attributes('data-index'))).toEqual(['0', '1'])
+
+    wrapper.unmount()
   })
 })

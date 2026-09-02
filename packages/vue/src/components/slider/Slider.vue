@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, provide, ref } from 'vue'
+/* global document */
+import { computed, onBeforeUnmount, provide, ref } from 'vue'
 import { SliderRoot as RadixSliderRoot } from 'radix-vue'
 import { sliderVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
@@ -74,10 +75,37 @@ const labels = computed(() => {
   return values.value.map((value) => (formatter ? formatter.format(value) : String(value)))
 })
 
+/**
+ * radix-vue drives the drag itself and reports only `valueCommit` at the end, so
+ * the start has to be observed here. A pointerdown anywhere on the root begins a
+ * slide — clicking the track jumps the thumb and keeps dragging — which is why
+ * this listens on the root rather than the thumb. Keyboard nudges are not drags.
+ */
+const isDragging = ref(false)
+
+let teardown: (() => void) | undefined
+onBeforeUnmount(() => teardown?.())
+
+const handlePointerDown = () => {
+  if (props.isDisabled || isDragging.value) return
+  isDragging.value = true
+
+  const onUp = () => {
+    isDragging.value = false
+    document.removeEventListener('pointerup', onUp)
+    document.removeEventListener('pointercancel', onUp)
+    teardown = undefined
+  }
+  teardown = onUp
+  document.addEventListener('pointerup', onUp)
+  document.addEventListener('pointercancel', onUp)
+}
+
 provide(SLIDER_CONTEXT_KEY, {
   slots,
   state: computed(() => ({
     isDisabled: props.isDisabled,
+    isDragging: isDragging.value,
     labels: labels.value,
     orientation: props.orientation,
     percents: percents.value,
@@ -110,6 +138,7 @@ const handleChange = (next: number[] | undefined) => {
     :orientation="props.orientation"
     :step="props.step"
     data-slot="slider"
+    @pointerdown="handlePointerDown"
     @update:model-value="handleChange"
   >
     <slot :labels="labels" :percents="percents" :values="values" />

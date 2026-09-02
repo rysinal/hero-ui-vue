@@ -9,6 +9,8 @@ export interface ColorSliderContextValue {
   channel: ComputedRef<ColorChannel>
   orientation: ComputedRef<'horizontal' | 'vertical'>
   isDisabled: ComputedRef<boolean>
+  /** True while the thumb is being dragged; color-slider.css changes the cursor. */
+  isDragging: ComputedRef<boolean>
   /** Thumb position along the track, 0 to 1. */
   percent: ComputedRef<number>
   /** Gradient showing the channel's range at the current colour. */

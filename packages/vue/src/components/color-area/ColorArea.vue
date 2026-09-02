@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /* global HTMLElement, KeyboardEvent, PointerEvent, document */
-import { computed, provide, ref, shallowRef } from 'vue'
+import { computed, onBeforeUnmount, provide, ref, shallowRef } from 'vue'
 import { colorAreaVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, toColor, type Color, type ColorChannel } from '../../utils'
 import { COLOR_AREA_CONTEXT_KEY } from './context'
@@ -68,6 +68,14 @@ const areaStyle = computed(() => ({ '--color-area-background': background.value 
 
 const areaRef = ref<HTMLElement | null>(null)
 
+// color-area.css grows the thumb while it is being dragged.
+const isDragging = ref(false)
+
+// A pointer drag listens on the document, so a component torn down mid-drag
+// would otherwise leave both listeners attached.
+let teardown: (() => void) | undefined
+onBeforeUnmount(() => teardown?.())
+
 const commit = (next: Color) => {
   if (props.modelValue === undefined) internalValue.value = next
   emit('update:modelValue', next)
@@ -97,12 +105,16 @@ const handlePointerDown = (event: PointerEvent) => {
   if (props.isDisabled) return
   event.preventDefault()
   setFromPoint(event.clientX, event.clientY)
+  isDragging.value = true
 
   const onMove = (moveEvent: PointerEvent) => setFromPoint(moveEvent.clientX, moveEvent.clientY)
   const onUp = () => {
+    isDragging.value = false
     document.removeEventListener('pointermove', onMove)
     document.removeEventListener('pointerup', onUp)
+    teardown = undefined
   }
+  teardown = onUp
   document.addEventListener('pointermove', onMove)
   document.addEventListener('pointerup', onUp)
 }
@@ -129,6 +141,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 provide(COLOR_AREA_CONTEXT_KEY, {
   isDisabled: computed(() => props.isDisabled),
+  isDragging: computed(() => isDragging.value),
   position,
   slots,
   value,

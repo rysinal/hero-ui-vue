@@ -8,6 +8,8 @@ export interface ColorAreaContextValue {
   xChannel: ComputedRef<ColorChannel>
   yChannel: ComputedRef<ColorChannel>
   isDisabled: ComputedRef<boolean>
+  /** True while the thumb is being dragged; color-area.css enlarges it. */
+  isDragging: ComputedRef<boolean>
   /** Thumb position as fractions of the area, 0 to 1. */
   position: ComputedRef<{ x: number; y: number }>
 }

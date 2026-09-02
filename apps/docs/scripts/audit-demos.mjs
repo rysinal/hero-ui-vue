@@ -46,6 +46,30 @@ for (const name of pages) {
   await page.goto(`${BASE}/components/${name}`, { waitUntil: 'networkidle' })
   await page.waitForTimeout(700)
 
+  // Some components render nothing until asked: a toast only exists after its
+  // trigger fires. Those were invisible to this audit, which is how the toast
+  // region shipped with no width — 32px wide, 264px tall, one word per line.
+  // Only presses buttons whose own demo is on this page, and only ones that read
+  // as "show me one", so nothing destructive or navigational runs.
+  const pressed = await page.evaluate(() => {
+    const triggers = [...document.querySelectorAll('.vitepress-demo-preview-preview button')].filter(
+      (button) => /toast|notify|show|open|add|trigger/i.test(button.textContent ?? ''),
+    )
+    // One per preview is enough to make the overlay exist; clicking every button
+    // on a busy page mostly produces duplicates.
+    const seen = new Set()
+    let count = 0
+    for (const button of triggers) {
+      const preview = button.closest('.vitepress-demo-preview-preview')
+      if (seen.has(preview)) continue
+      seen.add(preview)
+      button.click()
+      count += 1
+    }
+    return count
+  })
+  if (pressed) await page.waitForTimeout(600)
+
   const report = await page.evaluate(() => {
     const result = { collapsed: [], emptyPreviews: 0, roots: 0 }
     const previews = [...document.querySelectorAll('.vitepress-demo-preview-preview')]
@@ -84,6 +108,28 @@ for (const name of pages) {
           result.collapsed.push({ demo: index, height: Math.round(bounds.height), slot, width: Math.round(bounds.width) })
         } else if (bounds.height > 0 && bounds.height < 4) {
           result.collapsed.push({ demo: index, height: Math.round(bounds.height), slot, width: Math.round(bounds.width) })
+        } else if (
+          // A text-bearing box far taller than it is wide has wrapped to a
+          // sliver — one word per line. The toast region lost its width variable
+          // and every toast rendered 32px wide by 264px tall, which no absolute
+          // threshold catches because 32px is a legitimate size for an icon.
+          //
+          // Uses aggregate text, not direct text nodes: a toast's words live in
+          // its title and description children, so a direct-child test never
+          // fires. Excludes explicitly vertical parts, which are tall by design.
+          bounds.width > 0 &&
+          bounds.width < 80 &&
+          bounds.height > bounds.width * 2.5 &&
+          (element.textContent ?? '').trim().length > 12 &&
+          !element.closest('[aria-orientation="vertical"], [data-orientation="vertical"]')
+        ) {
+          result.collapsed.push({
+            demo: index,
+            height: Math.round(bounds.height),
+            slot,
+            width: Math.round(bounds.width),
+            wrapped: true,
+          })
         }
       })
     })

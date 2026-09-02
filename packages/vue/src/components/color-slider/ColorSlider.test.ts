@@ -1,4 +1,4 @@
-/* global document, KeyboardEvent */
+/* global document, PointerEvent */
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
@@ -54,6 +54,34 @@ describe('ColorSlider', () => {
     expect(thumb.attributes('aria-valuemin')).toBe('0')
     expect(thumb.attributes('aria-valuemax')).toBe('360')
     expect(thumb.attributes('role')).toBe('slider')
+  })
+
+  // color-slider.css only switches the thumb to a grabbing cursor from
+  // [data-dragging="true"], so without this attribute the rule never applies.
+  it('marks the thumb as dragging for the duration of a pointer drag', async () => {
+    const wrapper = mount(HueSlider, { attachTo: document.body })
+    await nextTick()
+
+    const thumb = wrapper.get('[data-slot="color-slider-thumb"]')
+    expect(thumb.attributes('data-dragging')).toBeUndefined()
+
+    await wrapper.get('[data-slot="color-slider-track"]').trigger('pointerdown')
+    expect(thumb.attributes('data-dragging')).toBe('true')
+
+    document.dispatchEvent(new PointerEvent('pointerup'))
+    await nextTick()
+    expect(thumb.attributes('data-dragging')).toBeUndefined()
+  })
+
+  it('stops tracking the drag once unmounted', async () => {
+    const wrapper = mount(HueSlider, { attachTo: document.body })
+    await nextTick()
+    await wrapper.get('[data-slot="color-slider-track"]').trigger('pointerdown')
+
+    wrapper.unmount()
+
+    // A drag released after teardown must not reach the removed listeners.
+    expect(() => document.dispatchEvent(new PointerEvent('pointerup'))).not.toThrow()
   })
 })
 

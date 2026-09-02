@@ -93,7 +93,16 @@
   }
 
   /* Use black checkmark on light backgrounds */
-  &[data-light-color="true"] & > * {
+  /*
+   * Deliberate divergence from upstream. React writes `&[data-light-color="true"] &`,
+   * which compiles to
+   *   .color-swatch-picker__indicator[data-light-color="true"] .color-swatch-picker__indicator > *
+   * — an indicator nested inside an indicator, so it matches nothing and a light
+   * swatch keeps its white checkmark. Verified in a browser: 0 matched elements
+   * before, and the swatch reads white-on-cyan. Dropping the second `&` gives the
+   * rule its documented meaning without changing the DOM contract.
+   */
+  &[data-light-color="true"] > * {
     @apply text-black;
   }
 

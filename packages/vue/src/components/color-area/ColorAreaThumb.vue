@@ -28,6 +28,7 @@ const thumbStyle = computed(() => {
     :aria-valuetext="context?.value.value.toString('css')"
     :class="thumbClass"
     :data-disabled="dataAttr(context?.isDisabled.value)"
+    :data-dragging="dataAttr(context?.isDragging.value)"
     :style="thumbStyle"
     :tabindex="context?.isDisabled.value ? undefined : 0"
     data-slot="color-area-thumb"

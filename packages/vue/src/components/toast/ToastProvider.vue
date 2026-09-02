@@ -3,7 +3,7 @@
 import { computed, nextTick, provide, ref, watch } from 'vue'
 import { toastVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr } from '../../utils'
-import { DEFAULT_GAP, DEFAULT_MAX_VISIBLE_TOAST, DEFAULT_SCALE_FACTOR } from './constants'
+import { DEFAULT_GAP, DEFAULT_MAX_VISIBLE_TOAST, DEFAULT_SCALE_FACTOR, DEFAULT_TOAST_WIDTH } from './constants'
 import { TOAST_PROVIDER_KEY, type ToastPlacement } from './context'
 import { globalToastQueue, type QueuedToast, type ToastQueue } from './queue'
 import ToastItem from './Toast.vue'
@@ -19,6 +19,8 @@ interface ToastProviderProps {
   gap?: number
   /** How much each toast further back shrinks, as a fraction. */
   scaleFactor?: number
+  /** Toast width. A number is treated as pixels. */
+  width?: number | string
 }
 
 const props = withDefaults(defineProps<ToastProviderProps>(), {
@@ -27,6 +29,7 @@ const props = withDefaults(defineProps<ToastProviderProps>(), {
   placement: 'bottom',
   queue: undefined,
   scaleFactor: DEFAULT_SCALE_FACTOR,
+  width: DEFAULT_TOAST_WIDTH,
 })
 
 const queue = computed(() => props.queue ?? globalToastQueue)
@@ -39,6 +42,19 @@ provide(TOAST_PROVIDER_KEY, {
 })
 
 const regionClass = computed(() => composeTwClasses(props.class, slots.value.region()))
+
+/**
+ * toast.css sizes the region with `sm:min-w-(--toast-width)`, so without this
+ * variable the fixed region has no width and every toast — positioned absolutely
+ * inside it — shrink-wraps to its longest word.
+ *
+ * React also sets --gap, --scale-factor and --placement here, but nothing in
+ * either stylesheet reads them; this port applies gap and scale directly in
+ * toastStyle, so only the variable the CSS actually consumes is set.
+ */
+const regionStyle = computed(() => ({
+  '--toast-width': typeof props.width === 'number' ? `${props.width}px` : props.width,
+}))
 
 // Newest first, so the most recent toast is the one in front.
 const stack = computed(() => [...queue.value.toasts].reverse())
@@ -90,6 +106,7 @@ const handlePointerLeave = () => queue.value.resumeAll()
     ref="regionRef"
     :class="regionClass"
     :data-placement="props.placement"
+    :style="regionStyle"
     aria-label="Notifications"
     data-slot="toast-region"
     role="region"
@@ -102,6 +119,7 @@ const handlePointerLeave = () => queue.value.resumeAll()
       :key="item.key"
       :data-frontmost="dataAttr(index === 0)"
       :data-hidden="dataAttr(index >= props.maxVisibleToasts)"
+      :data-index="index"
       :style="toastStyle(index)"
       :toast="item as QueuedToast"
     >

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /* global HTMLElement, KeyboardEvent, PointerEvent, document */
-import { computed, provide, ref, shallowRef } from 'vue'
+import { computed, onBeforeUnmount, provide, ref, shallowRef } from 'vue'
 import { colorSliderVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, toColor, type Color, type ColorChannel } from '../../utils'
 import { COLOR_SLIDER_CONTEXT_KEY } from './context'
@@ -62,6 +62,14 @@ const trackBackground = computed(() => {
 
 const trackRef = ref<HTMLElement | null>(null)
 
+// color-slider.css switches the thumb to a grabbing cursor while dragging.
+const isDragging = ref(false)
+
+// A pointer drag listens on the document, so a component torn down mid-drag
+// would otherwise leave both listeners attached.
+let teardown: (() => void) | undefined
+onBeforeUnmount(() => teardown?.())
+
 const commit = (next: Color) => {
   if (props.modelValue === undefined) internalValue.value = next
   emit('update:modelValue', next)
@@ -92,12 +100,16 @@ const handlePointerDown = (event: PointerEvent) => {
   if (props.isDisabled) return
   event.preventDefault()
   setFromPoint(event.clientX, event.clientY)
+  isDragging.value = true
 
   const onMove = (moveEvent: PointerEvent) => setFromPoint(moveEvent.clientX, moveEvent.clientY)
   const onUp = () => {
+    isDragging.value = false
     document.removeEventListener('pointermove', onMove)
     document.removeEventListener('pointerup', onUp)
+    teardown = undefined
   }
+  teardown = onUp
   document.addEventListener('pointermove', onMove)
   document.addEventListener('pointerup', onUp)
 }
@@ -126,6 +138,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 provide(COLOR_SLIDER_CONTEXT_KEY, {
   channel: computed(() => props.channel),
   isDisabled: computed(() => props.isDisabled),
+  isDragging: computed(() => isDragging.value),
   onKeydown: handleKeydown,
   onTrackPointerDown: handlePointerDown,
   orientation: computed(() => props.orientation),

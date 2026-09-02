@@ -3,6 +3,7 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 import BasicPicker from '../color-swatch-picker/__fixtures__/BasicPicker.vue'
+import LuminancePicker from '../color-swatch-picker/__fixtures__/LuminancePicker.vue'
 import BasicColorField from './__fixtures__/BasicColorField.vue'
 
 enableAutoUnmount(afterEach)
@@ -69,6 +70,28 @@ describe('ColorSwatchPicker', () => {
     const items = wrapper.findAll('[data-slot="color-swatch-picker-item"]')
     expect(items[0]?.attributes('data-selected')).toBe('true')
     expect(items[1]?.attributes('data-selected')).toBeUndefined()
+  })
+
+  // The checkmark is white by default, so the stylesheet flips it to black from
+  // [data-light-color="true"]. Without the attribute a white swatch shows a
+  // white tick on white.
+  it('flags a light swatch so the checkmark can invert', async () => {
+    const wrapper = mount(LuminancePicker, { attachTo: document.body })
+    await nextTick()
+
+    const indicator = wrapper.get('[data-slot="color-swatch-picker-indicator"]')
+    expect(indicator.attributes('data-light-color')).toBe('true')
+  })
+
+  it('leaves a dark swatch unflagged', async () => {
+    const wrapper = mount(LuminancePicker, {
+      attachTo: document.body,
+      props: { selected: '#1E1B4B' },
+    })
+    await nextTick()
+
+    const indicator = wrapper.get('[data-slot="color-swatch-picker-indicator"]')
+    expect(indicator.attributes('data-light-color')).toBeUndefined()
   })
 
   it('paints each swatch from the css variable', async () => {

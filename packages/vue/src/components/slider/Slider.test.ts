@@ -1,4 +1,4 @@
-/* global document, ResizeObserver */
+/* global document, ResizeObserver, PointerEvent */
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterAll, afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
@@ -84,5 +84,47 @@ describe('Slider uncontrolled behaviour', () => {
     await nextTick()
 
     expect(wrapper.get('[data-slot="slider-fill"]').attributes('style')).toContain('width: 55%')
+  })
+})
+
+describe('Slider dragging state', () => {
+  // slider.css keys the grabbing cursor and the shrunken thumb off
+  // [data-dragging="true"]. radix-vue drives the drag and only reports
+  // valueCommit at the end, so the start is observed on the root.
+  it('marks the thumb as dragging for the duration of a pointer drag', async () => {
+    const wrapper = mount(BasicSlider, { attachTo: document.body })
+    await nextTick()
+
+    const thumb = wrapper.get('[data-slot="slider-thumb"]')
+    expect(thumb.attributes('data-dragging')).toBeUndefined()
+
+    await wrapper.get('[data-slot="slider"]').trigger('pointerdown')
+    expect(thumb.attributes('data-dragging')).toBe('true')
+
+    document.dispatchEvent(new PointerEvent('pointerup'))
+    await nextTick()
+    expect(thumb.attributes('data-dragging')).toBeUndefined()
+  })
+
+  it('clears the drag when the pointer is cancelled rather than released', async () => {
+    const wrapper = mount(BasicSlider, { attachTo: document.body })
+    await nextTick()
+    await wrapper.get('[data-slot="slider"]').trigger('pointerdown')
+
+    document.dispatchEvent(new PointerEvent('pointercancel'))
+    await nextTick()
+
+    expect(wrapper.get('[data-slot="slider-thumb"]').attributes('data-dragging')).toBeUndefined()
+  })
+
+  it('stops tracking the drag once unmounted', async () => {
+    const wrapper = mount(BasicSlider, { attachTo: document.body })
+    await nextTick()
+    await wrapper.get('[data-slot="slider"]').trigger('pointerdown')
+
+    wrapper.unmount()
+
+    // A drag released after teardown must not reach the removed listeners.
+    expect(() => document.dispatchEvent(new PointerEvent('pointerup'))).not.toThrow()
   })
 })
