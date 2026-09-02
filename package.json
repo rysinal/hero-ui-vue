@@ -20,7 +20,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.{ts,tsx,vue,js,jsx,json,css,md}\"",
     "typecheck": "turbo run typecheck",
-    "clean": "turbo run clean && rm -rf node_modules"
+    "clean": "turbo run clean && rm -rf node_modules",
+    "compare": "node scripts/compare-with-react.mjs"
   },
   "devDependencies": {
     "@rysinal/heroui-vue-standard": "workspace:*",
