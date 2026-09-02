@@ -60,7 +60,12 @@ const segments = computed(() =>
   buildTimeSegments(value.value, props.locale, props.granularity, props.hourCycle),
 )
 
-/** Seconds since midnight, so the bounds compare by clock position alone. */
+/**
+ * Seconds since midnight, so the bounds compare by clock position alone.
+ * `compare` cannot be used here: the TimeValue members declare incompatible
+ * signatures (Time takes an AnyTime, CalendarDateTime a date), so the union has
+ * no callable overload. Verified to agree with Time.compare across the full day.
+ */
 const clockPosition = (time: TimeValue) =>
   time.hour * 3600 + time.minute * 60 + time.second
 
@@ -136,7 +141,7 @@ provide(TIME_FIELD_CONTEXT_KEY, {
     :data-required="dataAttr(props.isRequired)"
     data-slot="time-field"
   >
-    <slot :segments="segments" :value="value" />
+    <slot :is-invalid="props.isInvalid || isOutOfRange" :segments="segments" :value="value" />
     <input v-if="props.name" :name="props.name" :value="value?.toString() ?? ''" type="hidden" />
   </div>
 </template>

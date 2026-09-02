@@ -3,6 +3,7 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 import BasicTimeField from './__fixtures__/BasicTimeField.vue'
+import BoundedTimeField from './__fixtures__/BoundedTimeField.vue'
 import ConfigurableTimeField from './__fixtures__/ConfigurableTimeField.vue'
 
 enableAutoUnmount(afterEach)
@@ -121,6 +122,24 @@ describe('TimeField', () => {
     await nextTick()
 
     // The basic fixture has no bounds, so it starts valid.
+    expect(wrapper.get('[data-slot="time-field"]').attributes('data-invalid')).toBeUndefined()
+  })
+
+  // The demos render their own error text, so they need the derived validity
+  // rather than repeating the bounds check against min/max.
+  it('hands the derived validity to the default slot', async () => {
+    const wrapper = mount(BoundedTimeField, { attachTo: document.body })
+    await nextTick()
+
+    // 20:00 sits past the 17:00 bound.
+    expect(wrapper.get('[data-testid="validity"]').text()).toBe('invalid')
+    expect(wrapper.get('[data-slot="time-field"]').attributes('data-invalid')).toBe('true')
+
+    // Stepping back inside the range clears it.
+    const hour = wrapper.get('[data-slot="date-input-group-segment"][data-type="hour"]')
+    for (let i = 0; i < 5; i += 1) await hour.trigger('keydown', { key: 'ArrowDown' })
+
+    expect(wrapper.get('[data-testid="validity"]').text()).toBe('valid')
     expect(wrapper.get('[data-slot="time-field"]').attributes('data-invalid')).toBeUndefined()
   })
 

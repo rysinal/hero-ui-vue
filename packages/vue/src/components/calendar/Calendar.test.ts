@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 import BasicCalendar from './__fixtures__/BasicCalendar.vue'
 import CellSlotCalendar from './__fixtures__/CellSlotCalendar.vue'
+import MultiMonthCalendar from './__fixtures__/MultiMonthCalendar.vue'
 
 enableAutoUnmount(afterEach)
 
@@ -102,5 +103,27 @@ describe('Calendar', () => {
     const seventh = cells.find((cell) => cell.text().trim() === '7')!
     expect(seventh.attributes('data-unavailable')).toBeUndefined()
     expect(seventh.find('[data-slot="calendar-cell-indicator"]').exists()).toBe(false)
+  })
+
+  // The multi-month demos label each grid themselves, so the visible months have
+  // to come from the calendar rather than being recomputed from today's date;
+  // otherwise the labels stay put while the grids move.
+  it('hands the visible months to the default slot and keeps them in step', async () => {
+    const wrapper = mount(MultiMonthCalendar, { attachTo: document.body })
+    await nextTick()
+
+    const first = () => wrapper.get('[data-testid="first-label"]').text()
+    const second = () => wrapper.get('[data-testid="second-label"]').text()
+
+    expect(first()).toBe('September 2026')
+    expect(second()).toBe('October 2026')
+
+    await wrapper.get('[data-slot="calendar-nav-button"][slot="next"]').trigger('click')
+    expect(first()).toBe('October 2026')
+    expect(second()).toBe('November 2026')
+
+    await wrapper.get('[data-slot="calendar-nav-button"][slot="previous"]').trigger('click')
+    expect(first()).toBe('September 2026')
+    expect(second()).toBe('October 2026')
   })
 })

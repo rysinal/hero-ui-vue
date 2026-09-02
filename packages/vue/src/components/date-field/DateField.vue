@@ -122,7 +122,7 @@ provide(DATE_FIELD_CONTEXT_KEY, {
     :data-invalid="dataAttr(props.isInvalid || isOutOfRange)"
     data-slot="date-field"
   >
-    <slot :segments="segments" :value="value" />
+    <slot :is-invalid="props.isInvalid || isOutOfRange" :segments="segments" :value="value" />
     <input v-if="props.name" :name="props.name" :value="value?.toString() ?? ''" type="hidden" />
   </div>
 </template>

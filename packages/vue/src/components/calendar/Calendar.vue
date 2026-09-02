@@ -181,6 +181,6 @@ provide(YEAR_PICKER_CONTEXT_KEY, {
     data-slot="calendar"
     role="group"
   >
-    <slot :focused-date="focusedDate" :value="value" />
+    <slot :focused-date="focusedDate" :value="value" :visible-months="visibleMonths" />
   </div>
 </template>

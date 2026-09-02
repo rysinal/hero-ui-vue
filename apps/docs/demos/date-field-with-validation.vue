@@ -1,8 +1,12 @@
 <template>
+  <!--
+    The field already derives validity from min/max, so it hands `isInvalid` to
+    the slot rather than having the demo recompute the bounds check.
+  -->
   <div class="flex flex-col gap-4">
     <DateField
+      v-slot="{ isInvalid }"
       v-model="value"
-      :is-invalid="isInvalid"
       :min-value="todayDate"
       class="w-[256px]"
       is-required
@@ -21,11 +25,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, shallowRef } from 'vue'
+import { shallowRef } from 'vue'
 import { DateField, Description, FieldError, Label } from '@rysinal/heroui-vue'
 import { getLocalTimeZone, today, type DateValue } from '@internationalized/date'
 
 const value = shallowRef<DateValue | null>(null)
 const todayDate = today(getLocalTimeZone())
-const isInvalid = computed(() => value.value !== null && value.value.compare(todayDate) < 0)
 </script>
