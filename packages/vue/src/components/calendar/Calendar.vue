@@ -33,16 +33,21 @@ interface CalendarProps {
   locale?: string
   /** Starts each week on this day instead of the one the locale implies. */
   firstDayOfWeek?: DayOfWeek
+  /** Year-picker visibility. Supports `v-model:is-year-picker-open`. */
+  isYearPickerOpen?: boolean
+  defaultYearPickerOpen?: boolean
 }
 
 const props = withDefaults(defineProps<CalendarProps>(), {
   defaultFocusedValue: undefined,
   defaultValue: null,
+  defaultYearPickerOpen: false,
   firstDayOfWeek: undefined,
   focusedValue: undefined,
   isDateUnavailable: undefined,
   isDisabled: false,
   isReadOnly: false,
+  isYearPickerOpen: undefined,
   locale: 'en-US',
   maxValue: undefined,
   minValue: undefined,
@@ -53,8 +58,10 @@ const props = withDefaults(defineProps<CalendarProps>(), {
 const emit = defineEmits<{
   'update:modelValue': [value: DateValue]
   'update:focusedValue': [value: DateValue]
+  'update:isYearPickerOpen': [value: boolean]
   change: [value: DateValue]
   focusChange: [value: DateValue]
+  yearPickerOpenChange: [value: boolean]
 }>()
 
 const toCalendar = (date: DateValue): CalendarDate =>
@@ -154,7 +161,16 @@ provide(CALENDAR_CONTEXT_KEY, {
 // Year picker. The parts are optional, so this is provided unconditionally and
 // simply goes unused when the caller does not render them.
 const calendarRef = ref<HTMLElement | null>(null)
-const isYearPickerOpen = ref(false)
+const internalYearPickerOpen = ref(props.defaultYearPickerOpen)
+const isYearPickerOpen = computed(() =>
+  props.isYearPickerOpen === undefined ? internalYearPickerOpen.value : props.isYearPickerOpen,
+)
+
+const setYearPickerOpen = (open: boolean) => {
+  if (props.isYearPickerOpen === undefined) internalYearPickerOpen.value = open
+  emit('update:isYearPickerOpen', open)
+  emit('yearPickerOpenChange', open)
+}
 
 /** React defaults the selectable years to 1900-2099, offset per calendar system. */
 const yearOffset = computed(() => getGregorianYearOffset(focusedDate.value.calendar.identifier))
@@ -168,12 +184,10 @@ const yearPickerMax = computed<DateValue>(
 provide(YEAR_PICKER_CONTEXT_KEY, {
   calendarGridSlot: 'calendar-grid',
   calendarRef,
-  isOpen: computed(() => isYearPickerOpen.value),
+  isOpen: isYearPickerOpen,
   maxValue: yearPickerMax,
   minValue: yearPickerMin,
-  setIsOpen: (open: boolean) => {
-    isYearPickerOpen.value = open
-  },
+  setIsOpen: setYearPickerOpen,
 })
 </script>
 

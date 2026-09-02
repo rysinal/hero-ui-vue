@@ -3,7 +3,7 @@
  * Compares every Vue component against its React counterpart and against the
  * CSS that ships with it, then prints what does not line up.
  *
- * Three checks, all static, so this runs in a second and needs no browser:
+ * Four checks, all static, so this runs in a second and needs no browser:
  *
  * 1. slot-parity   — data-slot names React emits that Vue never does. These are
  *                    the public hooks consumers and our own CSS select on.
@@ -11,8 +11,11 @@
  *                    emits, so those rules can never match.
  * 3. part-parity   — dot-notation parts React exports that the Vue namespace
  *                    lacks, which is what makes a React demo untranslatable.
+ * 4. prop-parity   — props React declares that Vue does not. Advisory: props
+ *                    inherited from a primitive are invisible to a regex, so
+ *                    treat a hit as a prompt to look, not as proof.
  *
- * A fourth check — variant slots declared but never read — was tried and
+ * A fifth check — variant slots declared but never read — was tried and
  * removed: the access path varies too much (`slots.value.x()`, `styles.value.x()`,
  * `ctx?.slots.x()`, or a sibling directory consuming it through context) for a
  * regex to tell a real miss from a different spelling. It reported 27 of 81
@@ -82,6 +85,63 @@ const partsIn = (text) => {
   )
 }
 
+/**
+ * Prop names declared in any `interface ...Props { ... }` block, plus the events
+ * a Vue component declares, since React passes callbacks as props where Vue
+ * emits them: `onYearPickerOpenChange` is `yearPickerOpenChange` here.
+ *
+ * `...RenderProps` blocks are skipped: those describe what React passes *into*
+ * a render callback, which Vue expresses as slot props, so they are never
+ * component props. Props inherited from a primitive are invisible here, which is
+ * why a React-only name is a prompt to look rather than proof of a gap.
+ */
+const propsIn = (text) => {
+  const names = new Set()
+  for (const block of text.matchAll(/interface\s+(\w*)Props\b[^{]*\{([\s\S]*?)\n\}/g)) {
+    if (block[1].endsWith('Render')) continue
+    for (const prop of block[2].matchAll(/^\s{2}([a-z][a-zA-Z0-9]*)\??\s*:/gm)) {
+      names.add(prop[1])
+    }
+  }
+  const emits = text.match(/defineEmits<\{([\s\S]*?)\}>\(\)/)
+  if (emits) {
+    for (const event of emits[1].matchAll(/^\s*'?([a-zA-Z:]+)'?\s*:/gm)) {
+      const name = event[1].replace(/^update:/, '')
+      names.add(name)
+      // React spells the same thing onFooChange.
+      names.add(`on${name[0].toUpperCase()}${name.slice(1)}`)
+    }
+  }
+  return names
+}
+
+/** React-only concepts with a different shape in Vue, so never a real gap. */
+const PROP_EQUIVALENTS = new Set([
+  'children', // slots
+  'className', // class
+  'render', // slots
+  'style',
+  'slot',
+  'ref',
+  'key',
+  'id',
+  'asChild',
+  'as',
+  // A react-aria hook's return value, handed in so two components can share one
+  // overlay. Vue shares that through provide/inject instead.
+  'state',
+  // React refs passed down as props. Vue components own their template refs.
+  'containerRef',
+  'triggerRef',
+  'inputRef',
+  // react-hook-form style validation payloads, surfaced through slots here.
+  'validationErrors',
+  'validationDetails',
+  // React composes class names per element via extra props; Vue parts each take
+  // their own `class`.
+  'inputClassName',
+])
+
 const isSource = (path) => /\.(vue|ts|tsx)$/.test(path) && !/\.(test|stories|spec)\./.test(path)
 
 // Vue folds several React components into one directory, and names a few
@@ -97,8 +157,12 @@ const components = (only ? [only] : readdirSync(VUE)).filter((name) =>
   statSync(join(VUE, name)).isDirectory(),
 )
 
-// Scanned once: every slot the library emits anywhere.
-const librarySlots = slotsIn(readAll(VUE, isSource))
+// Scanned once: everything the library declares anywhere. A React folder can
+// map to several Vue folders (the year picker lives beside the calendar), so a
+// name found elsewhere in the library is not missing.
+const libraryText = readAll(VUE, isSource)
+const librarySlots = slotsIn(libraryText)
+const libraryProps = propsIn(libraryText)
 
 const findings = []
 
@@ -110,7 +174,7 @@ for (const name of components) {
   const reactText = reactDirs.map((dir) => readAll(join(REACT, dir), isSource)).join('\n')
 
   const vueSlots = slotsIn(vueText)
-  const finding = { deadCss: [], missingParts: [], missingSlots: [], name }
+  const finding = { deadCss: [], missingParts: [], missingProps: [], missingSlots: [], name }
 
   if (reactText.trim()) {
     for (const slot of slotsIn(reactText)) {
@@ -122,6 +186,12 @@ for (const name of components) {
     // React's index.ts also assigns Root; only flag real parts.
     for (const part of reactParts) {
       if (part !== 'Root' && !vueParts.has(part)) finding.missingParts.push(part)
+    }
+
+    const vueProps = propsIn(vueText)
+    for (const prop of propsIn(reactText)) {
+      if (vueProps.has(prop) || libraryProps.has(prop) || PROP_EQUIVALENTS.has(prop)) continue
+      finding.missingProps.push(prop)
     }
   }
 
@@ -140,7 +210,12 @@ for (const name of components) {
     }
   }
 
-  if (finding.missingSlots.length || finding.missingParts.length || finding.deadCss.length) {
+  if (
+    finding.missingSlots.length ||
+    finding.missingParts.length ||
+    finding.missingProps.length ||
+    finding.deadCss.length
+  ) {
     findings.push(finding)
   }
 }
@@ -159,6 +234,9 @@ if (findings.length === 0) {
     }
     if (finding.deadCss.length) {
       console.log(`   css selects nothing: ${finding.deadCss.join(', ')}`)
+    }
+    if (finding.missingProps.length) {
+      console.log(`   react props absent (check, may be inherited): ${finding.missingProps.join(', ')}`)
     }
   }
   process.exitCode = 1

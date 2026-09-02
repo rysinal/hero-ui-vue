@@ -2,6 +2,7 @@
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
+import ControlledYearPickerCalendar from '../calendar/__fixtures__/ControlledYearPickerCalendar.vue'
 import YearPickerCalendar from '../calendar/__fixtures__/YearPickerCalendar.vue'
 
 enableAutoUnmount(afterEach)
@@ -122,5 +123,38 @@ describe('Calendar year picker', () => {
 
     await grid.trigger('keydown', { key: 'End' })
     expect(cell(2028).attributes('tabindex')).toBe('0')
+  })
+
+  // React exposes isYearPickerOpen / onYearPickerOpenChange, so an app can drive
+  // the panel itself. Without the prop the panel could only ever open from its
+  // own trigger.
+  it('honours a controlled open state', async () => {
+    const wrapper = mount(ControlledYearPickerCalendar, {
+      attachTo: document.body,
+      props: { isYearPickerOpen: true },
+    })
+    await nextTick()
+
+    const grid = () => wrapper.get('[data-slot="calendar-year-picker-grid"]')
+    expect(grid().attributes('data-open')).toBe('true')
+
+    // The trigger must not override the prop while it is controlled.
+    await wrapper.get('[data-slot="calendar-year-picker-trigger"]').trigger('click')
+    expect(grid().attributes('data-open')).toBe('true')
+
+    await wrapper.setProps({ isYearPickerOpen: false })
+    expect(grid().attributes('data-open')).toBeUndefined()
+  })
+
+  it('still manages itself when the prop is absent', async () => {
+    // YearPickerCalendar never binds isYearPickerOpen, so this covers the
+    // uncontrolled path the controlled test above deliberately blocks.
+    const wrapper = mount(YearPickerCalendar, { attachTo: document.body })
+    await nextTick()
+
+    await wrapper.get('[data-slot="calendar-year-picker-trigger"]').trigger('click')
+    expect(wrapper.get('[data-slot="calendar-year-picker-grid"]').attributes('data-open')).toBe(
+      'true',
+    )
   })
 })
