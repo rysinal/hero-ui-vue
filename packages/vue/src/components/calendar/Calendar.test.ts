@@ -3,6 +3,7 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 import BasicCalendar from './__fixtures__/BasicCalendar.vue'
+import CellSlotCalendar from './__fixtures__/CellSlotCalendar.vue'
 
 enableAutoUnmount(afterEach)
 
@@ -74,5 +75,24 @@ describe('Calendar', () => {
     await previous.trigger('click')
     expect(wrapper.get('[data-slot="calendar-heading"]').text()).toBe('September 2026')
     expect(previous.attributes('disabled')).toBeDefined()
+  })
+
+  // The React demos render indicators from the cell's own scope, so the cell
+  // has to hand out formattedDate and isUnavailable alongside the date.
+  it('exposes formattedDate and isUnavailable to the cell slot', async () => {
+    const wrapper = mount(CellSlotCalendar, { attachTo: document.body })
+    await nextTick()
+
+    const cells = wrapper.findAll('[data-slot="calendar-cell"]')
+    const fifth = cells.find((cell) => cell.text().startsWith('5'))!
+    // 2026-09-05 is a Saturday, so isUnavailable is true and the slot renders
+    // the indicator; formattedDate keeps the day number visible.
+    expect(fifth.text()).toContain('5')
+    expect(fifth.attributes('data-unavailable')).toBe('true')
+    expect(fifth.find('[data-slot="calendar-cell-indicator"]').exists()).toBe(true)
+
+    const seventh = cells.find((cell) => cell.text().trim() === '7')!
+    expect(seventh.attributes('data-unavailable')).toBeUndefined()
+    expect(seventh.find('[data-slot="calendar-cell-indicator"]').exists()).toBe(false)
   })
 })

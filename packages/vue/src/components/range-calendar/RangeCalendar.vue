@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, shallowRef } from 'vue'
+import { computed, provide, ref, shallowRef } from 'vue'
 import {
   CalendarDate,
   getLocalTimeZone,
@@ -9,7 +9,8 @@ import {
   type DateValue,
 } from '@internationalized/date'
 import { rangeCalendarVariants } from '@rysinal/heroui-vue-styles'
-import { composeTwClasses, dataAttr } from '../../utils'
+import { composeTwClasses, dataAttr, getGregorianYearOffset } from '../../utils'
+import { YEAR_PICKER_CONTEXT_KEY } from '../calendar-year-picker/context'
 import { CALENDAR_CONTEXT_KEY } from '../calendar/context'
 
 export interface DateRange {
@@ -185,10 +186,36 @@ provide(CALENDAR_CONTEXT_KEY, {
   slots: computed(() => slots.value as never),
   visibleMonths,
 })
+
+// Year picker. The parts are optional, so this is provided unconditionally and
+// simply goes unused when the caller does not render them.
+const calendarRef = ref<HTMLElement | null>(null)
+const isYearPickerOpen = ref(false)
+
+/** React defaults the selectable years to 1900-2099, offset per calendar system. */
+const yearOffset = computed(() => getGregorianYearOffset(focusedDate.value.calendar.identifier))
+const yearPickerMin = computed<DateValue>(
+  () => props.minValue ?? new CalendarDate(1900 + yearOffset.value, 1, 1),
+)
+const yearPickerMax = computed<DateValue>(
+  () => props.maxValue ?? new CalendarDate(2099 + yearOffset.value, 12, 31),
+)
+
+provide(YEAR_PICKER_CONTEXT_KEY, {
+  calendarGridSlot: 'range-calendar-grid',
+  calendarRef,
+  isOpen: computed(() => isYearPickerOpen.value),
+  maxValue: yearPickerMax,
+  minValue: yearPickerMin,
+  setIsOpen: (open: boolean) => {
+    isYearPickerOpen.value = open
+  },
+})
 </script>
 
 <template>
   <div
+    ref="calendarRef"
     :class="calendarClass"
     :data-disabled="dataAttr(props.isDisabled)"
     :data-invalid="dataAttr(props.isInvalid)"

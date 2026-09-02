@@ -81,6 +81,14 @@ const componentSidebar = [
     ]
   },
   {
+    text: 'Date and Time',
+    items: [
+      { text: 'Calendar', link: '/components/calendar' },
+      { text: 'DateField', link: '/components/date-field' },
+      { text: 'RangeCalendar', link: '/components/range-calendar' }
+    ]
+  },
+  {
     text: 'General',
     items: [
       { text: 'Close Button', link: '/components/close-button' },

@@ -66,7 +66,14 @@ const handleKeydown = (event: KeyboardEvent) => {
     @keydown="handleKeydown"
     v-on="interactionHandlers"
   >
-    <slot :date="props.date" :is-selected="isSelected" :is-today="isToday">
+    <slot
+      :date="props.date"
+      :formatted-date="props.date.day"
+      :is-disabled="isDisabled"
+      :is-selected="isSelected"
+      :is-today="isToday"
+      :is-unavailable="isUnavailable"
+    >
       {{ props.date.day }}
     </slot>
   </td>

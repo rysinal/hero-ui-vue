@@ -12,6 +12,14 @@ import {
   CalendarHeading,
   CalendarNavButton,
 } from '../calendar'
+import {
+  CalendarYearPickerCell,
+  CalendarYearPickerGrid,
+  CalendarYearPickerGridBody,
+  CalendarYearPickerTrigger,
+  CalendarYearPickerTriggerHeading,
+  CalendarYearPickerTriggerIndicator,
+} from '../calendar-year-picker'
 import RangeCalendar from './RangeCalendar.vue'
 
 type RangeCalendarCompound = typeof RangeCalendar & {
@@ -25,6 +33,12 @@ type RangeCalendarCompound = typeof RangeCalendar & {
   Heading: typeof CalendarHeading
   NavButton: typeof CalendarNavButton
   Root: typeof RangeCalendar
+  YearPickerCell: typeof CalendarYearPickerCell
+  YearPickerGrid: typeof CalendarYearPickerGrid
+  YearPickerGridBody: typeof CalendarYearPickerGridBody
+  YearPickerTrigger: typeof CalendarYearPickerTrigger
+  YearPickerTriggerHeading: typeof CalendarYearPickerTriggerHeading
+  YearPickerTriggerIndicator: typeof CalendarYearPickerTriggerIndicator
 }
 
 export const RangeCalendarNamespace: RangeCalendarCompound = Object.assign(RangeCalendar, {
@@ -38,4 +52,10 @@ export const RangeCalendarNamespace: RangeCalendarCompound = Object.assign(Range
   Heading: CalendarHeading,
   NavButton: CalendarNavButton,
   Root: RangeCalendar,
+  YearPickerCell: CalendarYearPickerCell,
+  YearPickerGrid: CalendarYearPickerGrid,
+  YearPickerGridBody: CalendarYearPickerGridBody,
+  YearPickerTrigger: CalendarYearPickerTrigger,
+  YearPickerTriggerHeading: CalendarYearPickerTriggerHeading,
+  YearPickerTriggerIndicator: CalendarYearPickerTriggerIndicator,
 })
