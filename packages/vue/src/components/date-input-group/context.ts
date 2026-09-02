@@ -1,6 +1,7 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 import type { DateValue } from '@internationalized/date'
 import type { dateInputGroupVariants } from '@rysinal/heroui-vue-styles'
+import type { TimeValue } from './segments'
 
 export type DateSegmentType = 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second' | 'dayPeriod' | 'literal'
 
@@ -18,7 +19,8 @@ export interface DateSegment {
 export interface DateInputGroupContextValue {
   slots: ComputedRef<ReturnType<typeof dateInputGroupVariants>>
   segments: ComputedRef<DateSegment[]>
-  value: ComputedRef<DateValue | null>
+  /** A DateField supplies a date, a TimeField a time; the parts are shared. */
+  value: ComputedRef<DateValue | TimeValue | null>
   isDisabled: ComputedRef<boolean>
   isInvalid: ComputedRef<boolean>
   isReadOnly: ComputedRef<boolean>

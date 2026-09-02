@@ -7,6 +7,6 @@ export { default as DateInputGroupInputContainer } from './DateInputGroupInputCo
 export { default as DateInputGroupPrefix } from './DateInputGroupPrefix.vue'
 export { default as DateInputGroupSegment } from './DateInputGroupSegment.vue'
 export { default as DateInputGroupSuffix } from './DateInputGroupSuffix.vue'
-export { buildSegments } from './segments'
-export type { DateGranularity } from './segments'
+export { buildSegments, buildTimeSegments } from './segments'
+export type { DateGranularity, TimeGranularity, TimeValue } from './segments'
 export type { DateSegment, DateSegmentType } from './context'

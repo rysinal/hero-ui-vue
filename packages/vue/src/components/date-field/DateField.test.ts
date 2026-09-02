@@ -3,6 +3,7 @@ import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'
 import BasicDateField from './__fixtures__/BasicDateField.vue'
+import DateTimeField from './__fixtures__/DateTimeField.vue'
 
 enableAutoUnmount(afterEach)
 
@@ -65,5 +66,52 @@ describe('DateField', () => {
     expect(day.attributes('aria-valuemax')).toBe('31')
     // A separator is not a control.
     expect(wrapper.get('[data-type="literal"]').attributes('role')).toBeUndefined()
+  })
+
+  // The reference instant is built with Date.UTC, so the formatter has to read
+  // it back in UTC. Reading it in the local zone shifted the hour and, past a
+  // large enough offset, reported the wrong half of the day.
+  it('shows the morning hour and day period at time granularity', async () => {
+    const wrapper = mount(DateTimeField, { attachTo: document.body })
+    await nextTick()
+
+    expect(segmentFor(wrapper, 'hour').text()).toBe('08')
+    expect(segmentFor(wrapper, 'minute').text()).toBe('45')
+    expect(segmentFor(wrapper, 'dayPeriod').text()).toBe('AM')
+  })
+
+  it('shows a 24-hour clock without a day period', async () => {
+    const wrapper = mount(DateTimeField, {
+      attachTo: document.body,
+      props: { hourCycle: 24 },
+    })
+    await nextTick()
+
+    expect(segmentFor(wrapper, 'hour').text()).toBe('08')
+    expect(wrapper.find('[data-type="dayPeriod"]').exists()).toBe(false)
+  })
+
+  // The value keeps a 0-23 hour, so an afternoon time used to read "20 PM".
+  it('folds an afternoon hour onto the 12-hour clock', async () => {
+    const wrapper = mount(DateTimeField, { attachTo: document.body, props: { hour: 20 } })
+    await nextTick()
+
+    expect(segmentFor(wrapper, 'hour').text()).toBe('08')
+    expect(segmentFor(wrapper, 'dayPeriod').text()).toBe('PM')
+    // 24-hour mode still shows the stored hour.
+    const full = mount(DateTimeField, {
+      attachTo: document.body,
+      props: { hour: 20, hourCycle: 24 },
+    })
+    await nextTick()
+    expect(segmentFor(full, 'hour').text()).toBe('20')
+  })
+
+  it('shows midnight as 12 on the 12-hour clock', async () => {
+    const wrapper = mount(DateTimeField, { attachTo: document.body, props: { hour: 0 } })
+    await nextTick()
+
+    expect(segmentFor(wrapper, 'hour').text()).toBe('12')
+    expect(segmentFor(wrapper, 'dayPeriod').text()).toBe('AM')
   })
 })
