@@ -83,7 +83,13 @@
 /* -----------------------------------------------------------------------------
  * RangeCalendar Grid
  * -------------------------------------------------------------------------- */
-.range-calendar__grid {
+/*
+ * The grid is a real <table>, so a host page's own table styles (VitePress sets
+ * `.vp-doc table { display: block }`) land on it at the same specificity and win
+ * on order. Pairing the class with its data-slot outranks them, so the layout
+ * holds wherever the calendar is embedded.
+ */
+.range-calendar__grid[data-slot="range-calendar-grid"] {
   /* Override table display with CSS Grid for easier customization */
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -96,7 +102,7 @@
   }
 }
 
-.range-calendar__grid-header {
+.range-calendar__grid-header[data-slot="range-calendar-grid-header"] {
   /* Grid header (thead) styles */
   display: contents;
 
@@ -105,7 +111,7 @@
   }
 }
 
-.range-calendar__grid-body {
+.range-calendar__grid-body[data-slot="range-calendar-grid-body"] {
   /* Grid body (tbody) styles */
   display: contents;
 

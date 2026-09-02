@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
-    "preview": "vitepress preview"
+    "preview": "vitepress preview",
+    "audit:demos": "node scripts/audit-demos.mjs"
   },
   "dependencies": {
     "@internationalized/date": "^3.12.1",

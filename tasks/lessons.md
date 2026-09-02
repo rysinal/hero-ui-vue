@@ -206,3 +206,39 @@ filter/indicator/popover/trigger/value/clearButton 全部 slots，说明样式�
 - 全局指标（lint 总数/typecheck）在多代理并发下不可直接与交接给的基线比
 - 用 `git worktree` 建 HEAD 基线做对照，比 `git stash` 干净（不动队友的工作树）
 - 归因公式要能对上账：基线全量 214 = 排除队友目录 188 + 队友目录 26
+
+## L17 · jsdom 不做布局，所以「测试全绿 + 构建通过」证明不了组件能看
+
+**事故**：用户报「日历有问题、color 也有问题」。我此前跑了 305 个单测、typecheck、docs build
+全绿，还审计了 data-slot 契约，**全都没发现**。真实情况是：
+- 日历日期格子渲染成 **250×250px**（应约 56px）：`.calendar__grid` 是 `<table>`，CSS 把它
+  重排为 `display:grid`，但 VitePress 的 `.vp-doc table{display:block}` 与 docs 主题的
+  `.vp-doc table{display:table}` 同优先级且在后，覆盖掉了 grid；行随之塌陷，
+  `aspect-ratio:1/1` 把格子撑成整表宽。
+- **ColorArea 渲染成 16×16px**（应 224px）：markdown 渲染器把 demo 根节点包进 `<p>`，
+  该 `<p>` 在居中 flex 预览里收缩包裹，`w-full` 于是对着塌缩的父级求值。
+
+**为什么全链路都没抓到**：jsdom 解析 CSS 但**不计算布局**，
+`getBoundingClientRect()` 恒为 0，所以任何尺寸断言在单测里都无意义；
+docs build 只保证编译；data-slot 审计只看结构不看几何。
+
+**How to apply**：
+- **组件库必须有一层真实浏览器的几何审计**。已落地 `apps/docs/scripts/audit-demos.mjs`
+  （`pnpm --filter @rysinal/heroui-vue-docs audit:demos`），遍历 76 个页面检测尺寸塌缩。
+  改完组件/CSS/预览外壳后跑一次。
+- **审计要在生产构建上跑**，不能只跑 dev：hydration 类问题只在 prerender 后暴露。
+- 写检测器要先剔除「设计上就很薄」的部件（separator/indicator 1px、日期分隔符 `/` 4px、
+  `sr-only` 的 `clip-path:inset(50%)`、OTP 的 `opacity:0` 捕获输入框），
+  否则 18 页假阳性会把真信号埋掉 —— 我第一版就是这样，逐个查证后才收敛到真问题。
+- **库自己的布局要能对抗宿主页面**：修在组件 CSS 层（用 `.class[data-slot="..."]` 提权），
+  而不是逐条追着宿主主题打补丁。宿主补丁只用于预览外壳这类确属 docs 的问题。
+
+## L18 · 指标异常先分清「既有」还是「新引入」，用同一脚本测基线
+
+`Hydration completed but contains mismatches` 在**全部 76 页**都报。我用 `git stash` +
+`checkout ca7442f`（本轮起点）在基线上跑同一脚本，**同样在我没碰过的页面上报同样的错**
+→ 确认是既有问题，不是本次引入。已在审计脚本里默认过滤，用 `AUDIT_HYDRATION=1` 可查看。
+
+**副作用提醒**：`git checkout` 切分支时**未跟踪文件会留在原地**，我的审计脚本因此在基线上
+被 `git show develop:...` 覆盖成 0 字节，导致脚本静默 exit 0。切换分支做对照前，
+先把未跟踪的工具脚本备份到 `/tmp`。

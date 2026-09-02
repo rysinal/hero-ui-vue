@@ -250,6 +250,19 @@ body {
   max-width: 100%;
 }
 
+/*
+ * The markdown renderer wraps a demo's root in a <p>, which shrink-wraps inside
+ * the centred flex preview. Components sized with w-full then resolve against a
+ * collapsed parent — ColorArea came out 16px square instead of filling its
+ * max-w-56. Letting the paragraph span the shell restores the intended width.
+ */
+.vitepress-demo-preview-preview > p,
+.vitepress-demo-preview__element > p,
+.demo-preview > p {
+  width: 100%;
+  margin: 0;
+}
+
 .vitepress-demo-preview__ant-design__container .flex,
 .vitepress-demo-preview-preview .flex,
 .vitepress-demo-preview__element .flex,
