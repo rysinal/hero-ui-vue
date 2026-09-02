@@ -121,12 +121,9 @@ EmptyState, Header, Radio, SwitchGroup, Tag.
 
 ### Known gaps
 
-Every React component has a Vue counterpart with a docs page. Two areas still
-differ from upstream:
-
-- **Autocomplete** is missing 7 of its React demos, which depend on composable
-  sub-parts and a `useFilter` equivalent that Vue does not have yet.
-- **`ripple-effect`** is intentionally not ported.
+Every React component has a Vue counterpart with a docs page, and every demo in
+the React docs has a Vue equivalent bar one: **`button/ripple-effect`**, which is
+intentionally not ported.
 
 ## Development
 

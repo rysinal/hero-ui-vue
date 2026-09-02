@@ -13,28 +13,33 @@
 | 维度 | 数值 |
 |---|---|
 | React 组件覆盖 | **71 / 71** |
-| React demo 逐名覆盖 | **587 / 595** |
-| 测试 | 47 files / 287 tests 全绿 |
+| React demo 逐名覆盖 | **594 / 595** |
+| 测试 | 48 files / 305 tests 全绿 |
 | typecheck | 4 successful |
 | docs build | 通过 |
-| lint | 214 problems（**均为历史遗留**，比本轮开始前少 1 个） |
+| lint | 193 problems（**均为历史遗留**，比本轮开始前少 22 个） |
 
-### 剩余缺口（8 个 demo）
+### 剩余缺口（1 个 demo）
 
-- **Autocomplete 7 个**：default / email-recipients / location-search / single-select /
-  tag-group-selection / user-selection / user-selection-multiple
-  → 需要可组合子部件 + `useFilter`。**用户已批准重构**，正在进行中。
-- **button/ripple-effect 1 个**：已决策不移植。
+- **button/ripple-effect**：已决策不移植。
 
-## 本轮完成的工作（4 个 commit）
+日期族与 Autocomplete 均已 100% 逐名对齐。
+
+
+## 本轮完成的工作（8 个 commit）
 
 1. `dcd7291` Calendar / RangeCalendar / DateField 的 47 个 demo + 3 个 docs 页 + "Date and Time"
    nav 分组；实现 YearPicker 六部件族；CalendarCell 暴露 `formattedDate`/`isUnavailable`/`isDisabled`
 2. `d2506e2` TimeField（组件 + 14 demo + docs）；修 `buildSegments` 两处既有缺陷
 3. `790b3c0` DatePicker（10 demo）+ DateRangePicker（11 demo）；修三处 data-slot 契约缺陷
 4. `cf1bdf4` 补齐 eslint 需要的 `/* global */` 声明
+5. `62ae17a` eslint 忽略 `.vitepress/cache`（6 个生成文件曾贡献 597 个问题，使 lint 数字看似不稳定）
+6. `6f85340` 多月标题改由 `visibleMonths` slot 驱动；两个 with-validation demo 改用组件交出的 `isInvalid`
+7. `e25dc19` Calendar/RangeCalendar 补 `firstDayOfWeek` prop + 回填 7 个 demo
+8. `93f549f` Autocomplete 可组合化重构 + `useFilter` + 20 个 demo 逐名对齐
 
-**日期族 6 个组件现已 100% 逐名对齐（82 个此前全缺的 demo 已补齐）。**
+**日期族 6 个组件与 Autocomplete 现已 100% 逐名对齐。**
+
 
 ## 修掉的真实缺陷（都先复现再修）
 
@@ -86,3 +91,27 @@ grep -rho 'data-slot="[a-z-]*"' react-source/heroui/packages/react/src/component
 
 `~/.claude/settings.json` 已加 `CLAUDE_CODE_AUTO_COMPACT_WINDOW=950000`
 修复自动压缩失效（详见 `tasks/lessons.md` L1）。上一个会话是被这个问题撑爆 1M 上下文报废的。
+
+## Autocomplete 可组合化（用户批准的破坏性重构）
+
+原先是 724 行单组件 + `:items` 数组 prop；现在对齐 React 的七部件：
+`Root` / `Trigger` / `Value` / `Indicator` / `Popover` / `Filter` / `ClearButton`。
+
+- **`useFilter`**（`packages/vue/src/composables/useFilter.ts`）对齐 react-aria：
+  `Intl.Collator` 无法回答「是否包含」，所以按切片逐段比较。`sensitivity: 'base'` 下
+  "cafe" 匹配 "Café"（已独立验证 base/variant 两档行为）。
+- **`useSelectState`**（`packages/vue/src/components/select/useSelectState.ts`）
+  由 Select 与 Autocomplete 共用，避免复制选择/开合/注册逻辑。
+  **`Select.test.ts` 刻意未改**，其原有断言就是行为等价性的守卫。
+- **删除 6 个 Vue 独有 demo**（basic / controlled-multiple / custom-value / in-surface /
+  states / with-clear-button）：React 侧均不存在，且已确认无任何页面引用。
+
+### 有意差异（代码内有注释）
+
+- `Autocomplete.Filter` 从 DOM 读查询词 —— SearchField 在兄弟子树独立 provide，值无法 inject。
+  附带好处：SearchField 自带清除按钮（不派发 `input`）也能被捕获。
+- `Trigger` 用 `<div role="button">` —— 内部要嵌 ClearButton，按钮不能嵌按钮（React 用 `Group` 同理）。
+- 浮层宽度用 radix 的 `--radix-popover-trigger-width` 别名，省掉 ResizeObserver
+  （与 SelectPopover / ComboBoxPopover 现有做法一致）。
+- **点号 API 只在 `<script setup>` 可解析**，故测试必须用 `__fixtures__/*.vue`，
+  在 `mount()` 里写内联 template 会报 `Failed to resolve component: Autocomplete.Value`。
