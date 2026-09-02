@@ -1,7 +1,7 @@
 # HeroUI Vue 迁移 · 进度与交接
 
-> 更新：2026-09-02（日期族收尾完成并已推送）
-> 分支 `develop`，已同步 `origin/develop`，HEAD = `cf1bdf4`
+> 更新：2026-09-02（全维度扫描 + 五个缺陷修复，已提交待推送）
+> 分支 `develop`，HEAD = `f735e44`（**尚未 push**）
 
 ## 目标
 
@@ -14,10 +14,12 @@
 |---|---|
 | React 组件覆盖 | **71 / 71** |
 | React demo 逐名覆盖 | **594 / 595** |
-| 测试 | 48 files / 305 tests 全绿 |
+| 测试 | 49 files / **326 tests** 全绿 |
 | typecheck | 4 successful |
 | docs build | 通过 |
-| lint | 193 problems（**均为历史遗留**，比本轮开始前少 22 个） |
+| lint | **191 problems**（均为历史遗留，主要是 demo 缺 `/* global */`） |
+| `pnpm compare` | 81 组件无差异（7 项检查） |
+| 76 页浏览器审计 | 全绿（含点击触发后的 overlay） |
 
 ### 剩余缺口（1 个 demo）
 
@@ -25,8 +27,46 @@
 
 日期族与 Autocomplete 均已 100% 逐名对齐。
 
+## 两个审计工具（本轮强化，是"不用一个个手测"的答案）
 
-## 本轮完成的工作（8 个 commit）
+```bash
+pnpm compare [组件名]        # 静态源码比对，~1 秒，7 项检查
+pnpm --filter @rysinal/heroui-vue-docs build
+pnpm --filter @rysinal/heroui-vue-docs preview     # 审计需要先起服务
+pnpm --filter @rysinal/heroui-vue-docs audit:demos # 真实浏览器量 76 页几何
+```
+
+`compare` 的 7 项：slot / 死 slot CSS / 点号部件 / prop / role / data-* 状态 /
+死状态 CSS + 永不命中的自嵌套选择器。
+`audit:demos` 会**点击 "show/open/toast" 类按钮**，否则 overlay 组件零覆盖。
+
+**两者互补且都不可省**：`compare` 读源码找契约漂移，`audit:demos` 量真实浏览器找塌缩。
+jsdom 永不布局（`getBoundingClientRect()` 恒为 0），所以单测抓不到任何布局问题。
+
+**新增检查必须反证**：手动注入假缺陷 → 确认工具变红 → 删掉。本轮所有检查都这样验证过。
+
+
+## 最近一轮：全维度扫描（2 个 commit）
+
+`263241a` 修五个缺陷 + `f735e44` 沉淀教训（L22–L25）。
+
+| 缺陷 | 表现 | 根因 |
+|---|---|---|
+| toast 宽度 | 渲染成 32×264 竖条，一字一行 | 漏移植 `width` prop（默认 460）→ `--toast-width` 未定义 → fixed region 宽 0 |
+| `data-dragging` ×3 | slider/color-slider/color-area 拖拽无视觉反馈 | 三者自研 pointer 拖拽但从未写该属性，CSS 全是死规则 |
+| 浅色勾选 | 浅色色板上白勾看不见 | 上游 CSS 笔误 `&[attr] &`（indicator 套 indicator，实测命中 0 个元素）|
+| `data-resizing` | 列宽拖拽无反馈 | 同上，属性未写 |
+| `data-index` | 堆叠层级信息缺失 | 属性未写 |
+
+**顺带修了两个工具自身的盲区**（都用"撤销真实修复"反证过）：
+- `compare` 的豁免条件在查**被检查方**（Vue 侧有没有 `isDragging`）——
+  而那正是缺失的代码，导致真缺陷永远被跳过。已改为查证过的显式白名单。
+- `compare` 的规则体正则要求无花括号，**所有嵌套规则不可见**；已改为数花括号配对。
+- `audit:demos` 从不点击 → toast 类组件零覆盖；阈值只认绝对像素 → 32px 竖条漏过。
+
+ColorArea 此前**零测试覆盖**，已补 6 个（含拖拽两分支 + 卸载清理）。
+
+## 更早一轮的工作（8 个 commit）
 
 1. `dcd7291` Calendar / RangeCalendar / DateField 的 47 个 demo + 3 个 docs 页 + "Date and Time"
    nav 分组；实现 YearPicker 六部件族；CalendarCell 暴露 `formattedDate`/`isUnavailable`/`isDisabled`
