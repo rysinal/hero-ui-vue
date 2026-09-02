@@ -318,3 +318,117 @@ combo-box.css:81/86 与 toast 同形。
 - 判断 CSS 规则是否命中,要挑**不可继承**的属性验证（`width`/`padding` 而非 `box-sizing`/`color`）
 - 嵌套 CSS 里的裸 `[attr] {}` 是**后代**选择器,不是自身；要选自身必须写 `&[attr]`
 - 子代理提出"你给的方案在这里不适用"时,先验证再判断 —— 这次它是对的
+
+---
+
+## L22 · 检查器的"豁免条件"绝不能查被检查方,否则必然自我遮蔽
+
+**我犯的错**：`compare` 的死 CSS 检查里,我为"两侧都没实现的交互"加了豁免：
+
+```js
+const INTERACTION_EVIDENCE = { dragging: /isDragging|dragstart|draggable/i }
+// ...
+if (evidence && !evidence.test(vueText)) continue   // ← 循环论证
+```
+
+意图是"Vue 侧没有拖拽实现 → 这条规则不算缺陷"。但**判据查的正是缺失的那段代码**：
+`isDragging` 没写 → 正则不匹配 → 跳过报告。于是 color-area / color-slider / slider
+三个**真实缺陷**被无声吞掉,工具报告 "No mismatches across 81 components"。
+
+**发现方式**：我用 grep 交叉核对"工具说干净"与"属性是否真的存在",两者矛盾。
+
+**正确判据的方向**：参照物必须是 **React 侧 + CSS 契约**,而不是 Vue 侧。改成显式白名单：
+
+```js
+const DEAD_ON_BOTH_SIDES = { table: ['dragging', 'drop-target'] }  // 逐条查证过
+```
+
+table 的豁免是查证过的：两侧都没有 `useDragAndDrop`、React 也没有拖拽行的 story。
+三个 slider 则自研了 pointer 拖拽,属性该补 —— 已补齐并经浏览器确认（cursor
+`grab`→`grabbing`、thumb 16px→20px、`scale: 0.9`）。
+
+**同一次还挖出第二个遮蔽**：`stateAttrsSelectedBy` 的正则要求规则体 `[^{}]*`(无花括号),
+而 slider 的 dragging 规则内嵌了 `&::after` → **所有嵌套规则全部不可见**。改成数花括号
+配对后,slider 立刻现形。越是"有意思"的状态规则越可能嵌套,这个盲区选择性极强。
+
+**How to apply**：
+- 写豁免条件时先问：**这个判据会不会在缺陷存在时恰好为真?** 若会,方向就是反的
+- 参照物永远是**上游 + 契约**,不是待检方
+- 静态检查器的正则一旦要求"结构简单"（无嵌套/无花括号/单行）,就会系统性漏掉复杂case
+- **每个新检查都要反证**：手动注入一个假缺陷,确认工具变红,再删掉。
+  这次三条 `data-dragging` + 自嵌套选择器检查都是这样验证的
+- 工具报"干净"时,至少交叉核对一次原始事实（grep 属性是否真存在)
+
+---
+
+## L23 · 上游的 bug 不该当成 parity 照抄；但偏离必须留证据
+
+**发现**：`color-swatch-picker.css` 的浅色勾选规则,两侧**逐字节相同**：
+
+```css
+&[data-light-color="true"] & > * { @apply text-black; }
+```
+
+编译后是 `.indicator[data-light-color="true"] .indicator > *` —— **indicator 套 indicator**,
+浏览器实测 `matches: 0`。所以浅色色板上的勾一直是白底白勾,看不见。
+React 上游同样坏,`isLightColor` 算了个没人用的值。
+
+我先按 parity 补齐了 Vue 侧的 `data-light-color`(公式与 React 一致),属性正确但**样式仍无效** ——
+**DOM 契约对齐不等于视觉正确**。去掉多余的 `&` 后浏览器实测：浅色 `rgb(0,0,0)`、深色 `rgb(255,255,255)`,两个分支都对。
+
+**How to apply**：
+- parity 的目标是**上游的意图**,不是上游的笔误。规则自带注释说明意图时,注释即判据
+- 偏离上游必须：① 代码注释写清原因+证据 ② 浏览器实测两个分支 ③ 沉淀成可复现的检查
+- 已把这类缺陷做成 `compare` 的第五项检查(自嵌套 `&` 选择器),全库扫描 + 反证通过
+- 只验证"属性出现了"是不够的,要验证**属性驱动的样式真的生效**（查具体 computed 值)
+
+---
+
+## L24 · jsdom 的能力缺口会静默截断我们自己的事件处理
+
+**现象**：给 slider 加 `data-dragging` 测试时失败,`expected undefined to be 'true'`。
+根因不在我的代码：radix-vue 的 pointerdown 里调用了 `setPointerCapture`,
+**jsdom 未实现** → 抛错 → 整条 handler 链中断 → 挂在同一元素上的我方 pointerdown 逻辑根本没跑。
+
+修在 `vitest.setup.ts`(与既有 `ResizeObserver` stub 同一性质,属环境缺口而非单测 workaround):
+`setPointerCapture` / `releasePointerCapture` / `hasPointerCapture`。
+
+**How to apply**：
+- 测试失败先分清:是**我的实现错**,还是**测试环境能力缺口**。看 stderr 有没有第三方抛错
+- 环境缺口修在 `vitest.setup.ts` 全局,不要在单个测试里绕过
+- 同一元素上的多个 handler,前面抛错会吃掉后面的 —— 这类失败看起来极像"我的代码没生效"
+
+---
+
+## L25 · "只加载页面"的审计看不见需要交互才存在的组件
+
+**用户说"toast 也有问题",我当时补了 `data-index`、图标尺寸,以为修完了。实际最严重的缺陷还在**：
+toast 渲染成 **32px 宽 × 264px 高**的竖条(文字一字一行)。76 页审计全绿,单测 324 全绿。
+
+**两层盲区叠加**：
+1. **审计从不点击** → toast/popover 这类"交互后才存在"的组件,页面加载时 DOM 里根本没有,
+   `querySelectorAll` 自然扫不到 → 永远不会被测量
+2. **阈值只认绝对值**(`width < 8px`) → 32px 对图标是合法尺寸,对 toast 是塌缩。
+   **绝对阈值无法表达"相对于内容不合理"**
+
+**根因是漏移植了一个 prop**：React `ToastProvider` 有 `width`(默认 460)写入 `--toast-width`;
+`toast.css` 用 `sm:min-w-(--toast-width)` 定宽,region 又是 `position: fixed`、toast 是
+`position: absolute`。变量未定义 → region 宽 0 → 每个 toast 收缩到最长单词的宽度。
+
+讽刺的是 `DEFAULT_TOAST_WIDTH = 460` **早就在我们 constants.ts 里,只是从没被引用** ——
+死常量是"移植漏了一半"的强信号,值得单独扫一遍。
+
+**修复后审计升级两处,并逐一反证**：
+- 加"点击触发"阶段(只点自己 preview 内、文案像"show/open/toast"的按钮,每个 preview 一个)
+- 加"文字换行成竖条"判据:`width < 80 && height > width * 2.5 && 聚合文字 > 12 字`
+- **反证有效**:撤掉修复重建 → 审计精确报 `toast 32x264`;恢复 → 76 页全绿
+
+我第一版判据写的是"直接子文本节点",**实测 `directText: 0`** —— toast 的字在
+title/description 子元素里。必须用 `element.textContent` 聚合文本。
+
+**How to apply**：
+- 浏览器审计必须包含**交互后状态**,否则 overlay 类组件(toast/popover/dialog/tooltip)零覆盖
+- 塌缩判据要有**相对形状**维度(宽高比 + 有文字),不能只有绝对像素阈值
+- **未被引用的常量/类型是移植不全的线索**,`grep` 一遍死常量很划算
+- 用户报某组件"有问题"时,不要修完第一个发现就收工 —— 继续量到底
+- 每次改审计判据,都要用"撤销真实修复"反证它真能抓到
