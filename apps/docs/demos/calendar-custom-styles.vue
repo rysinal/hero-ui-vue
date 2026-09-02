@@ -1,12 +1,12 @@
 <template>
   <Calendar aria-label="Custom styled calendar">
     <Calendar.Header>
-      <Calendar.NavButton class="text-foreground" slot="previous" />
+      <Calendar.NavButton slot="previous" class="text-foreground" />
       <Calendar.YearPickerTrigger class="w-full justify-center">
         <Calendar.YearPickerTriggerHeading class="text-foreground" />
         <Calendar.YearPickerTriggerIndicator class="text-foreground" />
       </Calendar.YearPickerTrigger>
-      <Calendar.NavButton class="text-foreground" slot="next" />
+      <Calendar.NavButton slot="next" class="text-foreground" />
     </Calendar.Header>
     <Calendar.Grid v-slot="{ weeks }">
       <Calendar.GridHeader />

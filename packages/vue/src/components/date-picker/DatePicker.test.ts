@@ -1,4 +1,4 @@
-/* global document */
+/* global document, MouseEvent */
 import { enableAutoUnmount, mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
 import { nextTick } from 'vue'

@@ -1,3 +1,4 @@
+/* global HTMLElement */
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
 import type { datePickerVariants } from '@rysinal/heroui-vue-styles'
 

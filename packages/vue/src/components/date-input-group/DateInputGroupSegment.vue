@@ -81,8 +81,8 @@ const handleKeydown = (event: KeyboardEvent) => {
     :role="isEditable ? 'spinbutton' : undefined"
     :tabindex="isEditable ? 0 : undefined"
     data-slot="date-input-group-segment"
-    @keydown="handleKeydown"
     v-bind="interactionAttrs"
+    @keydown="handleKeydown"
     v-on="interactionHandlers"
   >{{ props.segment.text }}</span>
 </template>

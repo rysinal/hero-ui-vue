@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/* global HTMLElement */
 import { computed, inject, provide, ref, shallowRef } from 'vue'
 import {
   CalendarDate,
