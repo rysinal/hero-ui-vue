@@ -144,3 +144,29 @@
 `apps/docs` 缺 `@internationalized/date` 依赖，导致所有日期 demo 一编译就
 `Rollup failed to resolve import`。React 侧 demo 也是直接 import 这个库的，
 真实使用者同样要装 → 加到 `apps/docs/package.json` 是正确解法，不是绕路。
+
+## L12 · 指标忽高忽低时，先查它统计了什么，别急着归因到代码
+
+**事故**：`pnpm lint` 在同一个 commit 上先报 215 problems，再报 811/812，反复横跳。
+我一度怀疑是自己引入的、又怀疑是 `git checkout` 时序问题。
+根因：`eslint.config.js` 的 `ignores` 漏了 `**/.vitepress/cache/**`，
+该目录**只在 docs build 之后才存在**，里面 6 个生成文件贡献了 597 个问题。
+所以「有没有跑过 build」决定了 lint 数字，与代码无关。
+
+**How to apply**：
+- 数字对不上先做**可重复性验证**（同一状态连跑两次），再谈归因
+- 分解指标来源（`grep "^/Users" | cut -d/ -f1-2 | sort | uniq -c`）比盯总数有用
+- 判断「是否我引入的」要用 `git stash` + `git checkout` 对照，**但要注意生成物残留会污染对照**——
+  这次基线两次测出 215 和 812，就是因为第二次跑时 dist/cache 还在
+- 顺手修掉配置缺口（把生成目录加进 ignores），别让后人再踩
+
+## L13 · 用户批准破坏性重构前，要把代价与证据一起摆出来
+
+Autocomplete 的可组合化会让 19 个现有 demo 全部重写。我没有直接开工，也没有直接放弃，
+而是先复验「被阻塞」的判断是否成立（成立，且比交接文档描述的更大：Vue 侧是 724 行单文件、
+零子部件，React 侧有 7 个部件），再把**关键证据**（`packages/styles` 已预移植
+filter/indicator/popover/trigger/value/clearButton 全部 slots，说明样式层本就是为可组合 API 准备的）
+和**代价**（19 个 demo 重写、无既有测试束缚）一并给用户选择。
+
+**How to apply**：架构级改动即使在「自主推进」授权下也值得停一次，
+但停下来时必须带着结论和证据，而不是问「要不要做」。
