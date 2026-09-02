@@ -7,7 +7,7 @@ import {
   type CalendarDate,
 } from '@internationalized/date'
 import { composeTwClasses } from '../../utils'
-import { CALENDAR_CONTEXT_KEY, CALENDAR_GRID_CONTEXT_KEY } from './context'
+import { CALENDAR_CONTEXT_KEY, CALENDAR_GRID_CONTEXT_KEY, calendarSlotName } from './context'
 
 interface CalendarGridProps {
   class?: string
@@ -29,6 +29,7 @@ const month = computed<CalendarDate>(() => {
 provide(CALENDAR_GRID_CONTEXT_KEY, { month })
 
 const gridClass = computed(() => composeTwClasses(props.class, context?.slots.value.grid()))
+const slotName = computed(() => calendarSlotName(context, 'grid'))
 
 /** Whole weeks covering the month, so the grid is always rectangular. */
 const weeks = computed(() => {
@@ -52,7 +53,7 @@ const weekdays = computed(() => {
 </script>
 
 <template>
-  <table :class="gridClass" data-slot="calendar-grid">
+  <table :class="gridClass" :data-slot="slotName">
     <slot :month="month" :weekdays="weekdays" :weeks="weeks" />
   </table>
 </template>

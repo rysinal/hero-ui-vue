@@ -85,6 +85,8 @@ const componentSidebar = [
     items: [
       { text: 'Calendar', link: '/components/calendar' },
       { text: 'DateField', link: '/components/date-field' },
+      { text: 'DatePicker', link: '/components/date-picker' },
+      { text: 'DateRangePicker', link: '/components/date-range-picker' },
       { text: 'RangeCalendar', link: '/components/range-calendar' },
       { text: 'TimeField', link: '/components/time-field' }
     ]

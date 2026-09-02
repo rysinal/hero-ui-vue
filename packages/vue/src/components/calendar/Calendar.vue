@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, ref, shallowRef } from 'vue'
+import { computed, inject, provide, ref, shallowRef } from 'vue'
 import {
   CalendarDate,
   getLocalTimeZone,
@@ -11,7 +11,7 @@ import {
 import { calendarVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, getGregorianYearOffset } from '../../utils'
 import { YEAR_PICKER_CONTEXT_KEY } from '../calendar-year-picker/context'
-import { CALENDAR_CONTEXT_KEY } from './context'
+import { CALENDAR_CONTEXT_KEY, DATE_SELECTION_HOST_KEY } from './context'
 
 interface CalendarProps {
   class?: string
@@ -57,12 +57,16 @@ const toCalendar = (date: DateValue): CalendarDate =>
   new CalendarDate(date.year, date.month, date.day)
 
 const internalValue = shallowRef<DateValue | null>(props.defaultValue)
-const value = computed(() =>
-  props.modelValue === undefined ? internalValue.value : props.modelValue,
-)
+// A host such as DatePicker owns the value and merely borrows this calendar to
+// present it; without one the calendar keeps its own.
+const host = inject(DATE_SELECTION_HOST_KEY, null)
+const value = computed(() => {
+  if (host) return host.value.value
+  return props.modelValue === undefined ? internalValue.value : props.modelValue
+})
 
 const initialFocus =
-  props.defaultFocusedValue ?? props.defaultValue ?? today(getLocalTimeZone())
+  props.defaultFocusedValue ?? props.defaultValue ?? host?.value.value ?? today(getLocalTimeZone())
 const internalFocused = shallowRef<CalendarDate>(toCalendar(initialFocus))
 const focusedDate = computed(() =>
   props.focusedValue === undefined ? internalFocused.value : toCalendar(props.focusedValue),
@@ -95,6 +99,12 @@ const setFocusedDate = (date: CalendarDate) => {
 const select = (date: CalendarDate) => {
   if (props.isDisabled || props.isReadOnly) return
   if (isDateOutOfRange(date) || isDateUnavailable(date)) return
+
+  if (host) {
+    host.select(date)
+    setFocusedDate(date)
+    return
+  }
 
   if (props.modelValue === undefined) internalValue.value = date
   emit('update:modelValue', date)

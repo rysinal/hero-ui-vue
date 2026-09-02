@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
 import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
-import { CALENDAR_CONTEXT_KEY } from './context'
+import { CALENDAR_CONTEXT_KEY, calendarSlotName } from './context'
 
 interface CalendarNavButtonProps {
   class?: string
@@ -32,6 +32,9 @@ const navigate = () => {
   if (isPrevious.value) context?.goToPreviousMonth()
   else context?.goToNextMonth()
 }
+
+const slotName = computed(() => calendarSlotName(context, 'nav-button'))
+const iconSlotName = computed(() => calendarSlotName(context, 'nav-button-icon'))
 </script>
 
 <template>
@@ -41,7 +44,7 @@ const navigate = () => {
     :data-disabled="dataAttr(isDisabled)"
     :disabled="isDisabled"
     :slot="props.slot"
-    data-slot="calendar-nav-button"
+    :data-slot="slotName"
     type="button"
     v-bind="interactionAttrs"
     v-on="interactionHandlers"
@@ -50,6 +53,7 @@ const navigate = () => {
     <slot>
       <svg
         :class="iconClass"
+        :data-slot="iconSlotName"
         fill="none"
         stroke="currentColor"
         stroke-linecap="round"

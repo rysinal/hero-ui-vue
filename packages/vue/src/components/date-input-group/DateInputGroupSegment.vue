@@ -33,7 +33,11 @@ const commitTyped = (next: string) => {
   const wouldOverflow = numeric * 10 > maxValue
   typed.value = wouldOverflow ? '' : next
 
-  context?.setSegment(type, Math.min(maxValue, Math.max(minValue, numeric)))
+  context?.setSegment(
+    type,
+    Math.min(maxValue, Math.max(minValue, numeric)),
+    props.segment.end,
+  )
 }
 
 const handleKeydown = (event: KeyboardEvent) => {
@@ -42,13 +46,13 @@ const handleKeydown = (event: KeyboardEvent) => {
   if (event.key === 'ArrowUp') {
     event.preventDefault()
     typed.value = ''
-    context?.adjustSegment(props.segment.type, 1)
+    context?.adjustSegment(props.segment.type, 1, props.segment.end)
     return
   }
   if (event.key === 'ArrowDown') {
     event.preventDefault()
     typed.value = ''
-    context?.adjustSegment(props.segment.type, -1)
+    context?.adjustSegment(props.segment.type, -1, props.segment.end)
     return
   }
   if (/^[0-9]$/.test(event.key)) {

@@ -3,7 +3,7 @@ import { computed, inject } from 'vue'
 import { startOfWeek } from '@internationalized/date'
 import { composeTwClasses } from '../../utils'
 import CalendarHeaderCell from './CalendarHeaderCell.vue'
-import { CALENDAR_CONTEXT_KEY, CALENDAR_GRID_CONTEXT_KEY } from './context'
+import { CALENDAR_CONTEXT_KEY, CALENDAR_GRID_CONTEXT_KEY, calendarSlotName } from './context'
 
 interface CalendarGridHeaderProps {
   class?: string
@@ -32,10 +32,11 @@ const weekdays = computed(() => {
     return { label: formatter.format(day), title: long.format(day) }
   })
 })
+const slotName = computed(() => calendarSlotName(context, 'grid-header'))
 </script>
 
 <template>
-  <thead :class="headerClass" data-slot="calendar-grid-header">
+  <thead :class="headerClass" :data-slot="slotName">
     <tr :class="rowClass">
       <slot :weekdays="weekdays">
         <CalendarHeaderCell v-for="day in weekdays" :key="day.title" :title="day.title">

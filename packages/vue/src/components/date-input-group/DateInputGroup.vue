@@ -23,19 +23,33 @@ const dateField = inject(DATE_FIELD_CONTEXT_KEY, null)
 const timeField = inject(TIME_FIELD_CONTEXT_KEY, null)
 const field = computed(() => dateField ?? timeField)
 
+// A range picker provides this context itself, since one value feeds two
+// inputs and there is no single field above the group. Its state is kept.
+const host = inject(DATE_INPUT_GROUP_KEY, null)
+
 const slots = computed(() =>
   dateInputGroupVariants({ fullWidth: props.fullWidth, variant: props.variant }),
 )
 
+const isDisabled = computed(() => field.value?.isDisabled.value ?? host?.isDisabled.value ?? false)
+const isInvalid = computed(() => field.value?.isInvalid.value ?? host?.isInvalid.value ?? false)
+const isReadOnly = computed(() => field.value?.isReadOnly.value ?? host?.isReadOnly.value ?? false)
+
 provide(DATE_INPUT_GROUP_KEY, {
-  adjustSegment: (type, delta) => field.value?.adjustSegment(type, delta),
-  isDisabled: computed(() => field.value?.isDisabled.value ?? false),
-  isInvalid: computed(() => field.value?.isInvalid.value ?? false),
-  isReadOnly: computed(() => field.value?.isReadOnly.value ?? false),
-  segments: computed(() => field.value?.segments.value ?? []),
-  setSegment: (type, value) => field.value?.setSegment(type, value),
+  adjustSegment: (type, delta, end) =>
+    field.value
+      ? field.value.adjustSegment(type, delta)
+      : host?.adjustSegment(type, delta, end),
+  isDisabled,
+  isInvalid,
+  isReadOnly,
+  segments: computed(() => field.value?.segments.value ?? host?.segments.value ?? []),
+  segmentsFor: host?.segmentsFor,
+  setSegment: (type, value, end) =>
+    field.value ? field.value.setSegment(type, value) : host?.setSegment(type, value, end),
+  // Only the variants are re-derived, so the group's own props still apply.
   slots,
-  value: computed(() => field.value?.value.value ?? null),
+  value: computed(() => field.value?.value.value ?? host?.value.value ?? null),
 })
 
 const groupClass = computed(() => composeTwClasses(props.class, slots.value.base()))
@@ -43,8 +57,8 @@ const groupClass = computed(() => composeTwClasses(props.class, slots.value.base
 
 <template>
   <div
-    :data-disabled="dataAttr(field?.isDisabled.value)"
-    :data-invalid="dataAttr(field?.isInvalid.value)"
+    :data-disabled="dataAttr(isDisabled)"
+    :data-invalid="dataAttr(isInvalid)"
     :class="groupClass"
     data-slot="date-input-group"
   >

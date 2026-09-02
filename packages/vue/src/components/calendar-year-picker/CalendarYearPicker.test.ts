@@ -49,7 +49,7 @@ describe('Calendar year picker', () => {
     await nextTick()
 
     const trigger = wrapper.get('[data-slot="calendar-year-picker-trigger"]')
-    const grid = () => wrapper.get('[data-slot="calendar-year-picker-year-grid"]')
+    const grid = () => wrapper.get('[data-slot="calendar-year-picker-grid"]')
 
     expect(grid().attributes('data-open')).toBeUndefined()
 
@@ -79,7 +79,7 @@ describe('Calendar year picker', () => {
       wrapper.get('[data-slot="calendar-year-picker-trigger-heading"]').text(),
     ).toBe('September 2028')
     expect(
-      wrapper.get('[data-slot="calendar-year-picker-year-grid"]').attributes('data-open'),
+      wrapper.get('[data-slot="calendar-year-picker-grid"]').attributes('data-open'),
     ).toBeUndefined()
   })
 
@@ -102,7 +102,7 @@ describe('Calendar year picker', () => {
     await wrapper.get('[data-slot="calendar-year-picker-trigger"]').trigger('click')
     await nextTick()
 
-    const grid = wrapper.get('[data-slot="calendar-year-picker-year-grid"]')
+    const grid = wrapper.get('[data-slot="calendar-year-picker-grid"]')
     const cell = (year: number) =>
       wrapper.get(`[data-slot="calendar-year-picker-year-cell"][data-year="${year}"]`)
 

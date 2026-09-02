@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue'
 import { composeTwClasses } from '../../utils'
-import { CALENDAR_CONTEXT_KEY } from './context'
+import { CALENDAR_CONTEXT_KEY, calendarSlotName } from './context'
 
 interface CalendarHeadingProps {
   class?: string
@@ -32,10 +32,11 @@ const label = computed(() => {
     ? `${format(first, false)} – ${format(last, true)}`
     : `${format(first, true)} – ${format(last, true)}`
 })
+const slotName = computed(() => calendarSlotName(context, 'heading'))
 </script>
 
 <template>
-  <h2 :class="headingClass" data-slot="calendar-heading">
+  <h2 :class="headingClass" :data-slot="slotName">
     <slot :label="label">{{ label }}</slot>
   </h2>
 </template>

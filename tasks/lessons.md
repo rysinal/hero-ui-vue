@@ -67,3 +67,80 @@
 **How to apply**：
 - 不要因为装了 morph-compact 就以为上下文有兜底，它不改变窗口上限，超限时 `/compact morph` 一样 400
 - 该插件要求 `bun`，`PreCompact` 阶段会跑 `bun install`，压缩链路上多一个失败点
+
+---
+
+# 迁移工作教训（2026-09-02 日期族收尾）
+
+## L5 · `data-slot` 是对外契约，必须逐名比对，不能只看渲染效果
+
+**发现的三个真实缺陷**（都不影响"能渲染"，但破坏样式/集成契约）：
+1. `CalendarYearPickerGrid` 我按 CSS 类名（`__year-grid`）命名了 `data-slot`，
+   但 React 用的是 `calendar-year-picker-grid`。**CSS 类名 ≠ data-slot 名**，两者独立。
+2. `CalendarNavButton` 内的 svg 漏了 `data-slot="calendar-nav-button-icon"`。
+3. **最严重**：RangeCalendar 复用 Calendar 子部件，全部发出 `calendar-*`，
+   但 React 发 `range-calendar-*`，且预移植的 `calendar-year-picker.css:35,46` 选择器写的是
+   `[data-slot="range-calendar-grid"]` → Vue 从不发出该名字 →
+   **RangeCalendar 里年份选择器的淡入淡出完全失效**。
+
+**How to apply**：
+- 每实现完一个组件，跑一次 data-slot 契约审计（从 React 源码 grep `data-slot="..."` 与 Vue 产物比对），
+  不要只看"页面能不能打开"
+- **复用子部件时警惕命名**：React 若为变体准备了独立命名，Vue 复用就必须让部件按上下文改名
+  （本次做法：context 加 `slotPrefix`，部件用 `calendarSlotName(context, part)` 派生）
+- 用生产构建产物（`.vitepress/dist/**/*.html`）审计，dev server 是客户端渲染，SSR 里看不到 DOM
+
+## L6 · Vue 布尔 prop 缺省是 `false` 不是 `undefined`，`??` 回退会失效
+
+**事故**：`DatePickerTrigger` 写 `props.isDisabled ?? field?.isDisabled.value ?? false`，
+期望「未传 prop 时继承字段的禁用态」。但 Vue 对声明为 `boolean` 的 prop 缺省注入 `false`，
+`??` 只在 `null/undefined` 时回退 → 永远取到 `false`，继承逻辑完全失效。
+
+**修法**：显式声明 `withDefaults(defineProps<P>(), { isDisabled: undefined })`。
+
+**How to apply**：任何「prop 未传时回退到 context」的布尔属性，都必须显式把默认值设为 `undefined`。
+写完立刻加一条「父级禁用 → 子部件也禁用」的测试，这类 bug 不写测试根本发现不了。
+
+## L7 · `Intl.DateTimeFormat` 必须与参考时刻的时区一致
+
+**事故**：`buildSegments` 用 `Date.UTC(...)` 造参考时刻，但 formatter 没传 `timeZone`，
+于是按本机时区（UTC+8）读回 → 小时偏移。且它把小时硬编码为 12，
+导致 DateField 在时间粒度下 `dayPeriod` **恒为 PM**，与真实值无关。
+另有 12 小时制显示直接 pad 0-23 原值 → 下午显示成 "20 PM"，午夜显示成 "00"。
+
+**How to apply**：
+- 用 `Date.UTC` 造时刻，formatter 就必须 `timeZone: 'UTC'`，两者成对出现
+- 参考时刻的时间部分要取真实值，不能硬编码（否则被格式化读回的 `dayPeriod` 是假的）
+- 12 小时制显示要换算：`h % 12 === 0 ? 12 : h % 12`；值仍存 0-23
+- 这类 bug 在 UTC+0 机器上不复现，**必须写断言而不是靠眼看**
+
+## L8 · 同名 context 会被内层组件覆盖
+
+**事故**：`DateRangePicker` provide 了 `DATE_INPUT_GROUP_KEY`（带 `segmentsFor`），
+但 demo 里用的 `DateField.Group` 内部又 provide 了同一个 key，
+**把外层覆盖掉且丢失了 `segmentsFor`** → 两个 input 渲染出零个 segment。
+
+**How to apply**：写「内层会重新 provide 同 key」的组件时，先 inject 同 key 拿到外层值再合并转发
+（本次做法：`DateInputGroup` 先 `inject(DATE_INPUT_GROUP_KEY)` 作为 host，
+字段优先、否则回退 host）。渲染为空先怀疑 context 被覆盖，而不是数据生成有问题。
+
+## L9 · 陈旧的 tsbuildinfo 会让 vue-tsc 静默不产出声明
+
+**事故**：`vue-tsc --declaration --emitDeclarationOnly` 退出码 0 但 `dist/index.d.ts` 不生成，
+一度误判为自己的改动引入。根因是 `packages/vue/tsconfig.tsbuildinfo` 增量缓存陈旧
+（`vite build` 清空 dist 后，tsc 认为无需重新产出）。删掉缓存即恢复。
+
+**How to apply**：声明产物异常先 `rm -f packages/vue/tsconfig.tsbuildinfo` 再判断，
+不要急着回滚代码。另：判断「是否我引入的」要用 `git stash` 对照干净树实测。
+
+## L10 · 子代理产出必须复验（本次 0 前科，但流程要保持）
+
+本次 4 个子代理写了 51 个 demo，我逐项查了：幻觉 API（`@gravity-ui/icons` / `I18nProvider` /
+`useLocale` / `onPress`）、`ref` 误用（应为 `shallowRef`）、slot 契约是否漏用 —— 全部干净。
+**检查成本很低（几条 grep），但一旦漏检就会写进 commit。**
+
+## L11 · demo 依赖要落到 demo 所在的包
+
+`apps/docs` 缺 `@internationalized/date` 依赖，导致所有日期 demo 一编译就
+`Rollup failed to resolve import`。React 侧 demo 也是直接 import 这个库的，
+真实使用者同样要装 → 加到 `apps/docs/package.json` 是正确解法，不是绕路。

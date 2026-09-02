@@ -18,6 +18,14 @@ describe('Calendar', () => {
     expect(wrapper.findAll('[data-slot="calendar-cell"]').length % 7).toBe(0)
   })
 
+  // React names the default chevron, so styling hooks match across both sides.
+  it('names the default nav button icon', async () => {
+    const wrapper = mount(BasicCalendar, { attachTo: document.body })
+    await nextTick()
+
+    expect(wrapper.findAll('[data-slot="calendar-nav-button-icon"]')).toHaveLength(2)
+  })
+
   it('names the visible month', async () => {
     const wrapper = mount(BasicCalendar, { attachTo: document.body })
     await nextTick()

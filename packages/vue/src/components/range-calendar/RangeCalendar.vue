@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, ref, shallowRef } from 'vue'
+import { computed, inject, provide, ref, shallowRef } from 'vue'
 import {
   CalendarDate,
   getLocalTimeZone,
@@ -12,6 +12,7 @@ import { rangeCalendarVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, getGregorianYearOffset } from '../../utils'
 import { YEAR_PICKER_CONTEXT_KEY } from '../calendar-year-picker/context'
 import { CALENDAR_CONTEXT_KEY } from '../calendar/context'
+import { RANGE_SELECTION_HOST_KEY } from './context'
 
 export interface DateRange {
   start: DateValue
@@ -63,9 +64,13 @@ const toCalendar = (date: DateValue): CalendarDate =>
   new CalendarDate(date.year, date.month, date.day)
 
 const internalValue = shallowRef<DateRange | null>(props.defaultValue)
-const value = computed(() =>
-  props.modelValue === undefined ? internalValue.value : props.modelValue,
-)
+// A host such as DateRangePicker owns the range and merely borrows this
+// calendar to present it; without one the calendar keeps its own.
+const host = inject(RANGE_SELECTION_HOST_KEY, null)
+const value = computed(() => {
+  if (host) return host.value.value
+  return props.modelValue === undefined ? internalValue.value : props.modelValue
+})
 
 /** The first click of a new range, before the second click completes it. */
 const anchor = shallowRef<CalendarDate | null>(null)
@@ -101,6 +106,10 @@ const setFocusedDate = (date: CalendarDate) => {
 }
 
 const commit = (range: DateRange) => {
+  if (host) {
+    host.select(range)
+    return
+  }
   if (props.modelValue === undefined) internalValue.value = range
   emit('update:modelValue', range)
   emit('change', range)
@@ -183,6 +192,7 @@ provide(CALENDAR_CONTEXT_KEY, {
   locale: computed(() => props.locale),
   select,
   setFocusedDate,
+  slotPrefix: computed(() => 'range-calendar' as const),
   slots: computed(() => slots.value as never),
   visibleMonths,
 })

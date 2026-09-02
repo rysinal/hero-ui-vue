@@ -3,7 +3,7 @@
 import { computed, inject } from 'vue'
 import { getLocalTimeZone, isSameDay, isSameMonth, today, type CalendarDate } from '@internationalized/date'
 import { composeTwClasses, dataAttr, useInteractionStates } from '../../utils'
-import { CALENDAR_CONTEXT_KEY, CALENDAR_GRID_CONTEXT_KEY } from './context'
+import { CALENDAR_CONTEXT_KEY, CALENDAR_GRID_CONTEXT_KEY, calendarSlotName } from './context'
 
 interface CalendarCellProps {
   class?: string
@@ -33,6 +33,29 @@ const isRangeEnd = computed(() => context?.isRangeEnd?.(props.date) ?? false)
 const { interactionAttrs, interactionHandlers } = useInteractionStates(() => isDisabled.value)
 
 const cellClass = computed(() => composeTwClasses(props.class, context?.slots.value.cell()))
+const slotName = computed(() => calendarSlotName(context, 'cell'))
+
+/**
+ * RangeCalendar nests an inner span in every cell and range-calendar.css hangs
+ * the circle, focus ring, today marker and hover states off it. A plain
+ * Calendar has no such layer, so this only appears when the calendar offers the
+ * slot, exactly as React splits the two cells.
+ */
+const cellButtonClass = computed(() => {
+  const slots = context?.slots.value as { cellButton?: () => string } | undefined
+  return slots?.cellButton?.()
+})
+const cellButtonSlotName = computed(() => calendarSlotName(context, 'cell-button'))
+
+/** Shared so both branches of the template hand out the same scope. */
+const slotProps = computed(() => ({
+  date: props.date,
+  formattedDate: props.date.day,
+  isDisabled: isDisabled.value,
+  isSelected: isSelected.value,
+  isToday: isToday.value,
+  isUnavailable: isUnavailable.value,
+}))
 
 const choose = () => {
   if (isDisabled.value) return
@@ -59,22 +82,23 @@ const handleKeydown = (event: KeyboardEvent) => {
     :data-today="dataAttr(isToday)"
     :data-unavailable="dataAttr(isUnavailable)"
     :tabindex="isDisabled ? undefined : 0"
-    data-slot="calendar-cell"
+    :data-slot="slotName"
     role="gridcell"
     v-bind="interactionAttrs"
     @click="choose"
     @keydown="handleKeydown"
     v-on="interactionHandlers"
   >
-    <slot
-      :date="props.date"
-      :formatted-date="props.date.day"
-      :is-disabled="isDisabled"
-      :is-selected="isSelected"
-      :is-today="isToday"
-      :is-unavailable="isUnavailable"
+    <!-- Range cells carry an inner span the CSS styles; plain cells do not. -->
+    <span
+      v-if="cellButtonClass"
+      :class="cellButtonClass"
+      :data-disabled="dataAttr(isDisabled)"
+      :data-selected="dataAttr(isRangeStart || isRangeEnd)"
+      :data-slot="cellButtonSlotName"
     >
-      {{ props.date.day }}
-    </slot>
+      <slot v-bind="slotProps">{{ props.date.day }}</slot>
+    </span>
+    <slot v-else v-bind="slotProps">{{ props.date.day }}</slot>
   </td>
 </template>

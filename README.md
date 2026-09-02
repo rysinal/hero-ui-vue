@@ -109,19 +109,24 @@ Visit the [documentation site](https://hero-ui-vue.pages.dev) for full documenta
 
 ## Component Coverage
 
-Baseline: HeroUI React v3.0.4 docs list 71 React components. HeroUI Vue currently has docs-backed parity entries for 69 of those components, plus 5 additional Vue primitives used by the docs.
+Baseline: HeroUI React v3.0.4 docs list 71 React components. HeroUI Vue currently has docs-backed parity entries for all 71, plus 5 additional Vue primitives used by the docs.
 
-### React parity implemented (69/71)
+### React parity implemented (71/71)
 
-Accordion, Alert, AlertDialog, Autocomplete, Avatar, Badge, Breadcrumbs, Button, ButtonGroup, Calendar, Card, Checkbox, CheckboxGroup, Chip, CloseButton, ColorArea, ColorField, ColorPicker, ColorSlider, ColorSwatch, ColorSwatchPicker, ComboBox, DateField, Description, Disclosure, DisclosureGroup, Drawer, Dropdown, ErrorMessage, FieldError, Fieldset, Form, Input, InputGroup, InputOTP, Kbd, Label, Link, ListBox, Meter, Modal, NumberField, Pagination, Popover, ProgressBar, ProgressCircle, RadioGroup, RangeCalendar, ScrollShadow, SearchField, Select, Separator, Skeleton, Slider, Spinner, Surface, Switch, Table, Tabs, TagGroup, Text, TextArea, TextField, TimeField, Toast, Toolbar, ToggleButton, ToggleButtonGroup, Tooltip.
+Accordion, Alert, AlertDialog, Autocomplete, Avatar, Badge, Breadcrumbs, Button, ButtonGroup, Calendar, Card, Checkbox, CheckboxGroup, Chip, CloseButton, ColorArea, ColorField, ColorPicker, ColorSlider, ColorSwatch, ColorSwatchPicker, ComboBox, DateField, DatePicker, DateRangePicker, Description, Disclosure, DisclosureGroup, Drawer, Dropdown, ErrorMessage, FieldError, Fieldset, Form, Input, InputGroup, InputOTP, Kbd, Label, Link, ListBox, Meter, Modal, NumberField, Pagination, Popover, ProgressBar, ProgressCircle, RadioGroup, RangeCalendar, ScrollShadow, SearchField, Select, Separator, Skeleton, Slider, Spinner, Surface, Switch, Table, Tabs, TagGroup, Text, TextArea, TextField, TimeField, Toast, Toolbar, ToggleButton, ToggleButtonGroup, Tooltip.
 
 ### Additional Vue docs components
 
 EmptyState, Header, Radio, SwitchGroup, Tag.
 
-### Remaining React parity gaps (2)
+### Known gaps
 
-DatePicker, DateRangePicker.
+Every React component has a Vue counterpart with a docs page. Two areas still
+differ from upstream:
+
+- **Autocomplete** is missing 7 of its React demos, which depend on composable
+  sub-parts and a `useFilter` equivalent that Vue does not have yet.
+- **`ripple-effect`** is intentionally not ported.
 
 ## Development
 

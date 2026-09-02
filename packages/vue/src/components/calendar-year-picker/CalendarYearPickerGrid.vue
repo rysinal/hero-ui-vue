@@ -168,7 +168,7 @@ provide(YEAR_PICKER_GRID_CONTEXT_KEY, {
     ref="gridRef"
     :class="gridClass"
     :data-open="dataAttr(isOpen)"
-    data-slot="calendar-year-picker-year-grid"
+    data-slot="calendar-year-picker-grid"
     role="grid"
     @keydown="handleKeydown"
   >
