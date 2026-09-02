@@ -287,3 +287,34 @@ prop-parity 检查上线第一次跑就报 `isYearPickerOpen` / `defaultYearPick
 React 允许外部驱动年份面板,Vue 侧只能从自己的 trigger 打开。已补齐并加受控/非受控双路测试。
 
 **这说明「我实现的东西」同样需要机器复核,不能因为是自己写的就跳过。**
+
+## L21 · 给出"照抄这个范例"的指导前,先核对 CSS 选择器的形状
+
+**我犯的错**：修 `toast-default-icon` 时,我让子代理"照抄 `SelectIndicator.vue` 的三元模式"
+（`:data-slot="hasCustom ? 'x' : 'x-default'"`,即 slot 打在 wrapper 自身)。
+**照抄会修不好这个 bug**,子代理指出并纠正了我。
+
+**根因是两处 CSS 选择器形状不同**：
+
+| 组件 | CSS 写法 | 含义 | slot 该打在哪 |
+|---|---|---|---|
+| select.css:132 | `&[data-slot="select-default-indicator"]` | **自身** | wrapper 上（三元切换）|
+| toast.css:104 | `.toast__indicator { [data-slot="toast-default-icon"] {...} }` | **后代**（嵌套 CSS 裸 `[attr]` 隐含 `& [attr]`）| **内部图标元素**上 |
+
+combo-box.css:81/86 与 toast 同形。
+
+**我用浏览器证伪确认了这一点**（造了个最小页面同时渲染两种写法）：
+- slot 打在 wrapper 自身 → `width: auto`,**规则未命中**（`box-sizing` 只是继承来的,看着像生效）
+- slot 打在内部 svg → `width: 16px`,**规则命中**
+
+`box-sizing` 会继承这一点特别容易骗人 —— 只看 `boxSizing` 两者都是 `content-box`,
+**必须同时看一个不继承的属性（如 `width`）才能判断规则是否真的命中**。
+
+仓内本来就有正确范例：`AlertIndicator.vue` 的 `<component :is="defaultIcon" data-slot="alert-default-icon" />`。
+我推荐了形状不匹配的那个。
+
+**How to apply**：
+- 指导别人"照抄 X"之前,先确认 X 与目标的 CSS 选择器形状一致（自身 vs 后代）
+- 判断 CSS 规则是否命中,要挑**不可继承**的属性验证（`width`/`padding` 而非 `box-sizing`/`color`）
+- 嵌套 CSS 里的裸 `[attr] {}` 是**后代**选择器,不是自身；要选自身必须写 `&[attr]`
+- 子代理提出"你给的方案在这里不适用"时,先验证再判断 —— 这次它是对的
