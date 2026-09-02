@@ -34,8 +34,9 @@ const slotName = computed(() => calendarSlotName(context, 'grid'))
 /** Whole weeks covering the month, so the grid is always rectangular. */
 const weeks = computed(() => {
   const locale = context?.locale.value ?? 'en-US'
-  const first = startOfWeek(month.value, locale)
-  const count = getWeeksInMonth(month.value, locale)
+  const firstDayOfWeek = context?.firstDayOfWeek?.value
+  const first = startOfWeek(month.value, locale, firstDayOfWeek)
+  const count = getWeeksInMonth(month.value, locale, firstDayOfWeek)
 
   return Array.from({ length: count }, (_, weekIndex) =>
     Array.from({ length: 7 }, (_, dayIndex) => first.add({ days: weekIndex * 7 + dayIndex })),
@@ -44,7 +45,7 @@ const weeks = computed(() => {
 
 const weekdays = computed(() => {
   const locale = context?.locale.value ?? 'en-US'
-  const first = startOfWeek(month.value, locale)
+  const first = startOfWeek(month.value, locale, context?.firstDayOfWeek?.value)
   const formatter = new Intl.DateTimeFormat(locale, { weekday: 'narrow' })
   return Array.from({ length: 7 }, (_, index) =>
     formatter.format(first.add({ days: index }).toDate('UTC')),

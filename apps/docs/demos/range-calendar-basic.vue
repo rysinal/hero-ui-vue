@@ -1,5 +1,5 @@
 <template>
-  <RangeCalendar aria-label="Trip dates">
+  <RangeCalendar aria-label="Trip dates" first-day-of-week="mon">
     <RangeCalendar.Header>
       <RangeCalendar.Heading />
       <RangeCalendar.NavButton slot="previous" />

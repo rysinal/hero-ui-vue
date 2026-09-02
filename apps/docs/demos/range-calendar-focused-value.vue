@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-col items-center gap-4">
-    <RangeCalendar v-model:focused-value="focusedDate" aria-label="Trip dates">
+    <RangeCalendar
+      v-model:focused-value="focusedDate"
+      aria-label="Trip dates"
+      first-day-of-week="mon"
+    >
       <RangeCalendar.Header>
         <RangeCalendar.Heading />
         <RangeCalendar.NavButton slot="previous" />

@@ -23,7 +23,7 @@ const weekdays = computed(() => {
   const month = grid?.month.value
   if (!month) return []
 
-  const first = startOfWeek(month, locale)
+  const first = startOfWeek(month, locale, context?.firstDayOfWeek?.value)
   const formatter = new Intl.DateTimeFormat(locale, { weekday: 'narrow' })
   const long = new Intl.DateTimeFormat(locale, { weekday: 'long' })
 

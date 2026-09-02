@@ -3,6 +3,7 @@
     <RangeCalendar
       aria-label="Trip dates"
       :default-value="{ end: now.add({ days: 9 }), start: now.add({ days: 6 }) }"
+      first-day-of-week="mon"
       :is-date-unavailable="isDateUnavailable"
     >
       <RangeCalendar.Header>

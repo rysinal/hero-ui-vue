@@ -170,3 +170,39 @@ filter/indicator/popover/trigger/value/clearButton 全部 slots，说明样式�
 
 **How to apply**：架构级改动即使在「自主推进」授权下也值得停一次，
 但停下来时必须带着结论和证据，而不是问「要不要做」。
+
+## L14 · 「底层库支持」要查到 export 层，别只查签名
+
+交接说明写「`DayOfWeek` 是 `@internationalized/date` 导出的类型」，签名里确实到处在用它
+（`startOfWeek`/`getWeeksInMonth`/`endOfWeek` 的第三参都是它），但 v3.12.1 的 `index.d.ts`
+**从未 re-export 这个名字**——它只在 `queries.d.ts` 里 `type DayOfWeek = ...` 局部声明。
+照着交接写完，typecheck 直接 4 个 TS2724。改成在 `calendar/context.ts` 本地声明该联合类型
+并从 `calendar/index.ts` 对外导出，作为单一来源给三个消费方复用。
+
+**How to apply**：
+- 验「库支持某能力」要分两层：**签名接受**（grep .d.ts 函数声明）和**名字可导入**
+  （grep 入口 `index.d.ts` 的 `export type {...}`），前者成立不代表后者成立
+- 类型不可导入时，本地声明 + 单点导出，别在多个文件各写一份
+
+## L15 · 测试要证伪，不能只看它变绿
+
+给 firstDayOfWeek 写「整月覆盖」断言时，我先用的是九月 2026——但实测
+`getWeeksInMonth(2026-09, 'en-US', 'sun'|'mon'|'sat')` 全是 5，**这个月根本区分不出漏传第三参**，
+测试即便在有 bug 的代码上也会绿。换成 2026-02/03/11（sun 与 mon 差一周）后，
+故意把 `getWeeksInMonth` 的第三参删掉复跑，3 个用例失败，才确认这是真守卫。
+
+**How to apply**：
+- 写完防回归断言，**先把修复删掉跑一遍**，看它是否真的红；不红就是空测试
+- 选测试数据前先跑一次探针脚本确认「不同输入真的产生不同输出」，别凭直觉挑月份
+
+## L16 · 并发改同一仓库时，全局指标要按目录归因
+
+我做完 calendar 后跑 lint 得 194（基线 214），typecheck 还报了个 autocomplete 的 TS2614——
+都不是我的改动，是队友 task #7 的在途工作。用 `git worktree add /tmp/hv-base HEAD`
+建干净基线（软链 node_modules 复用依赖），对同一组 `--ignore-pattern` 排除队友目录后两边都是 188，
+才把「我加了 0 个问题」证到数字上。
+
+**How to apply**：
+- 全局指标（lint 总数/typecheck）在多代理并发下不可直接与交接给的基线比
+- 用 `git worktree` 建 HEAD 基线做对照，比 `git stash` 干净（不动队友的工作树）
+- 归因公式要能对上账：基线全量 214 = 排除队友目录 188 + 队友目录 26

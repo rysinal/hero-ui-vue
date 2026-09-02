@@ -12,7 +12,7 @@ import {
 import { calendarVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, getGregorianYearOffset } from '../../utils'
 import { YEAR_PICKER_CONTEXT_KEY } from '../calendar-year-picker/context'
-import { CALENDAR_CONTEXT_KEY, DATE_SELECTION_HOST_KEY } from './context'
+import { CALENDAR_CONTEXT_KEY, DATE_SELECTION_HOST_KEY, type DayOfWeek } from './context'
 
 interface CalendarProps {
   class?: string
@@ -31,11 +31,14 @@ interface CalendarProps {
   /** How many months to show side by side. */
   visibleMonths?: number
   locale?: string
+  /** Starts each week on this day instead of the one the locale implies. */
+  firstDayOfWeek?: DayOfWeek
 }
 
 const props = withDefaults(defineProps<CalendarProps>(), {
   defaultFocusedValue: undefined,
   defaultValue: null,
+  firstDayOfWeek: undefined,
   focusedValue: undefined,
   isDateUnavailable: undefined,
   isDisabled: false,
@@ -128,6 +131,7 @@ const canGoNext = computed(() => {
 provide(CALENDAR_CONTEXT_KEY, {
   canGoNext,
   canGoPrevious,
+  firstDayOfWeek: computed(() => props.firstDayOfWeek),
   focusedDate,
   goToNextMonth: () => {
     if (canGoNext.value) setFocusedDate(startOfMonth(focusedDate.value).add({ months: 1 }))

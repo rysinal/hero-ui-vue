@@ -2,6 +2,13 @@ import type { ComputedRef, InjectionKey } from 'vue'
 import type { CalendarDate, DateValue } from '@internationalized/date'
 import type { calendarVariants } from '@rysinal/heroui-vue-styles'
 
+/**
+ * Week start accepted by `startOfWeek`/`getWeeksInMonth`. Declared here because
+ * `@internationalized/date` takes this union in its signatures but never
+ * re-exports the name from its entry point.
+ */
+export type DayOfWeek = 'sun' | 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat'
+
 export interface CalendarContextValue {
   slots: ComputedRef<ReturnType<typeof calendarVariants>>
   /**
@@ -25,6 +32,8 @@ export interface CalendarContextValue {
   canGoPrevious: ComputedRef<boolean>
   canGoNext: ComputedRef<boolean>
   locale: ComputedRef<string>
+  /** Overrides the locale's own week start, as React's firstDayOfWeek does. */
+  firstDayOfWeek?: ComputedRef<DayOfWeek | undefined>
   /** Range highlighting, set by RangeCalendar. */
   isInRange?: (date: DateValue) => boolean
   isRangeStart?: (date: DateValue) => boolean

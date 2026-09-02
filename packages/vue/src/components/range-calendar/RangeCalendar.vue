@@ -12,7 +12,7 @@ import {
 import { rangeCalendarVariants } from '@rysinal/heroui-vue-styles'
 import { composeTwClasses, dataAttr, getGregorianYearOffset } from '../../utils'
 import { YEAR_PICKER_CONTEXT_KEY } from '../calendar-year-picker/context'
-import { CALENDAR_CONTEXT_KEY } from '../calendar/context'
+import { CALENDAR_CONTEXT_KEY, type DayOfWeek } from '../calendar/context'
 import { RANGE_SELECTION_HOST_KEY } from './context'
 
 export interface DateRange {
@@ -37,12 +37,15 @@ interface RangeCalendarProps {
   allowsNonContiguousRanges?: boolean
   visibleMonths?: number
   locale?: string
+  /** Starts each week on this day instead of the one the locale implies. */
+  firstDayOfWeek?: DayOfWeek
 }
 
 const props = withDefaults(defineProps<RangeCalendarProps>(), {
   allowsNonContiguousRanges: false,
   defaultFocusedValue: undefined,
   defaultValue: null,
+  firstDayOfWeek: undefined,
   focusedValue: undefined,
   isDateUnavailable: undefined,
   isDisabled: false,
@@ -172,6 +175,7 @@ const inRange = (date: DateValue) => {
 provide(CALENDAR_CONTEXT_KEY, {
   canGoNext,
   canGoPrevious,
+  firstDayOfWeek: computed(() => props.firstDayOfWeek),
   focusedDate,
   goToNextMonth: () => {
     if (canGoNext.value) setFocusedDate(startOfMonth(focusedDate.value).add({ months: 1 }))

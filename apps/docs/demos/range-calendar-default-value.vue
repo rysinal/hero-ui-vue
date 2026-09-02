@@ -2,6 +2,7 @@
   <RangeCalendar
     aria-label="Trip dates"
     :default-value="{ end: parseDate('2025-02-12'), start: parseDate('2025-02-03') }"
+    first-day-of-week="mon"
   >
     <RangeCalendar.Header>
       <RangeCalendar.Heading />

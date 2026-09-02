@@ -12,7 +12,12 @@
       </Button>
     </ButtonGroup>
 
-    <RangeCalendar v-model="value" v-model:focused-value="focusedDate" aria-label="Trip dates">
+    <RangeCalendar
+      v-model="value"
+      v-model:focused-value="focusedDate"
+      aria-label="Trip dates"
+      first-day-of-week="mon"
+    >
       <RangeCalendar.Header>
         <RangeCalendar.Heading />
         <RangeCalendar.NavButton slot="previous" />

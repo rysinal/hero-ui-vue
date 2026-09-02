@@ -1,6 +1,11 @@
 <template>
   <div class="flex flex-col items-center gap-4">
-    <RangeCalendar v-model="value" aria-label="Trip dates" :is-invalid="isInvalid">
+    <RangeCalendar
+      v-model="value"
+      aria-label="Trip dates"
+      first-day-of-week="mon"
+      :is-invalid="isInvalid"
+    >
       <RangeCalendar.Header>
         <RangeCalendar.Heading />
         <RangeCalendar.NavButton slot="previous" />
